@@ -9,7 +9,9 @@ import javax.servlet.http.*;
 public class GGP_WebsiteServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        writeStaticPage(resp, "SplashPage.html");
+        if (req.getRequestURI().equals("/")) {
+            writeStaticPage(resp, "SplashPage.html");
+        }
     }
     
     public void writeStaticPage(HttpServletResponse resp, String thePage) throws IOException {
