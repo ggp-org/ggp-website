@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 	<application>ggp-website</application>
-	<version>1</version>
+	<version>4</version>
 	
 	<!-- Configure java.util.logging -->
 	<system-properties>
@@ -10,11 +10,11 @@
 
 	<resource-files>
         <include path="/root/**" />
+        <include path="scripts/**" />
     </resource-files>
 
     <static-files>
-        <include path="favicon.ico" />
-        <include path="scripts/**" />
+        <include path="favicon.ico" />        
     </static-files>
 
 </appengine-web-app>

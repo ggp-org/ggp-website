@@ -9,7 +9,7 @@ if (typeof Object.create !== 'function') {
 // This allows you to construct a SpectatorView on a web page.
 // This requires the following includes in the HEAD of the page:
 //   * Channel API: "/_ah/channel/jsapi"
-//   * jQuery Library: "<script type="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"
+//   * jQuery Library: "//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"
 //
 // This also requires the acquisition of a channel token, which
 // is stored in the global variable "theChannelToken". This is the
@@ -74,11 +74,12 @@ var SpectatorView = {
     // a DIV that holds the previous state of the game, which is needed for
     // smooth transitions between states.
     var topDiv = document.createElement('div');
-    topDiv.style.cssText = "position: relative;";
+    topDiv.style.cssText = "position: relative; background: black";
     var firstSubDiv = document.createElement('div');
     var secondSubDiv = document.createElement('div');
-    firstSubDiv.style.cssText = "position: absolute; top:0; left:0; width: 100%; z-index:1;";
-    secondSubDiv.style.cssText = "position: absolute; top:0; left:0; width: 100%; z-index:2;";
+    
+    firstSubDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:1;";
+    secondSubDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:2;";
     this.gameVizDiv = document.createElement('div');
     this.gameOldVizDiv = document.createElement('div');   
     
@@ -124,6 +125,7 @@ var SpectatorView = {
 
       if (newMatchData.isCompleted) {
         // TODO(schreib): Better reflect that the match is over.
+        // TODO(schreib): Also, do so even when we never get an update.
         var name_div = document.getElementById('name_div');
         name_div.innerHTML += ' ... GAME OVER'
         return;
