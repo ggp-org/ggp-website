@@ -45,7 +45,7 @@ var SpectatorView = {
     if (height < width) width = height;
       
     this.gameOldVizDiv.innerHTML = this.gameVizDiv.innerHTML;
-    this.gameOldVizDiv.style.cssText = '';
+    this.gameOldVizDiv.style.cssText = this.gameOldVizDiv.style.cssText.replace('display: none; ', '');
 
     this.gameVizDiv.innerHTML = '';
     StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.gameVizDiv, width, height);
@@ -75,18 +75,15 @@ var SpectatorView = {
     // smooth transitions between states.
     var topDiv = document.createElement('div');
     topDiv.style.cssText = "position: relative; background: black";
-    var firstSubDiv = document.createElement('div');
-    var secondSubDiv = document.createElement('div');
     
-    firstSubDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:1;";
-    secondSubDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:2;";
     this.gameVizDiv = document.createElement('div');
-    this.gameOldVizDiv = document.createElement('div');   
+    this.gameOldVizDiv = document.createElement('div');
     
-    firstSubDiv.appendChild(this.gameVizDiv);
-    secondSubDiv.appendChild(this.gameOldVizDiv);
-    topDiv.appendChild(firstSubDiv);
-    topDiv.appendChild(secondSubDiv);
+    this.gameVizDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:1;";
+    this.gameOldVizDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:2;";
+    
+    topDiv.appendChild(this.gameVizDiv);
+    topDiv.appendChild(this.gameOldVizDiv);
     spectator_div.appendChild(topDiv);
     
     // Next, load the resources for the match. We need to load the current state,
