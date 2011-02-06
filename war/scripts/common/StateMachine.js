@@ -87,7 +87,7 @@ var StateMachine = {
   },
 
   get_goal: function (state, role) {
-    return this.internals.findreward(role, this.internals.truify(state), this.library)
+    return 1*(this.internals.findreward(role, this.internals.truify(state), this.library));
   },
   
   get_goals: function (state) {
