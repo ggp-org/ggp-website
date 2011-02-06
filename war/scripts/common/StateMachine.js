@@ -63,8 +63,8 @@ var StateMachine = {
   },
 
   get_random_joint_moves: function (state) {
-    var moves = seq()
-    var roles = this.internals.findroles(this.library)
+    var moves = seq();
+    var roles = this.get_roles();
     for (var i=0; i<roles.length; i++) {
       var legals = this.internals.findlegals(roles[i], this.internals.truify(state), this.library);  
       moves.push(legals[this.internals.random_index(legals.length)])
@@ -88,6 +88,15 @@ var StateMachine = {
 
   get_goal: function (state, role) {
     return this.internals.findreward(role, this.internals.truify(state), this.library)
+  },
+  
+  get_goals: function (state) {
+    var goals = [];
+    var roles = this.get_roles();    
+    for (var i=0; i<roles.length; i++) {
+      goals.push(this.get_goal(state, roles[i]));
+    }
+    return goals;
   },
 
   get_roles: function () {
