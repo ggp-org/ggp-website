@@ -14,7 +14,7 @@ public class GGP_WebsiteServlet extends HttpServlet {
             throws IOException {
         String reqURI = req.getRequestURI();
 
-        if (req.getServerName().contains("kiosk.ggp.org")) {
+        if (req.getServerName().contains("kiosk.ggp.org") && reqURI.equals("/")) {
             reqURI = "/kiosk/";
         }
 
