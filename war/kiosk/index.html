@@ -1,0 +1,63 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>GGP WebKiosk</title>
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine:bold">
+  <style>
+    body {
+      margin: 2%;      
+      background: #EEE;
+    }
+    h1 {
+      font-family: 'Tangerine', bold;
+      color: #212121;
+      font-size: 48px;
+      text-shadow: #414141 0px 0px 5px;
+      margin: 2px;
+    }
+    h2 {
+      font-family: 'Tangerine', bold;
+      color: #212121;
+      font-size: 36px;
+      text-shadow: #414141 0px 0px 5px;
+      margin: 2px;
+    }
+  </style>
+</head>
+<body>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/compulog.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/AJAXSLT.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/SpectatorPublisher.js'></script> 
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/StateRenderer.js'></script> 
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/StateMachine.js'></script>   
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/SymbolList.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
+  <script type='text/javascript' src='scripts/KioskGameHandler.js'></script>
+
+  <center>
+  <h1>General Game Playing WebKiosk</h1>
+  <h2>You can play any of the following games as the first player:</h2>
+  <br>
+  <div id='new_game_div'>
+    <b>Shall we start a <select id='gameChooser' style='width:300'></select> match against random opponents?</b>
+    <button onclick="startNewGame()">Start!</button>
+  </div>
+  <br>
+  <div id='desc_div' style='width: 75%'></div><br>
+  <div id='game_div'></div>
+  </center>
+
+  <script type="text/javascript" language="javascript">
+    var repo_prefix = 'http://games.ggp.org/';  
+
+    var selector = document.getElementById("gameChooser");
+    setTimeout("UserInterface.loadRepositoryGamesIntoMenu(repo_prefix, selector, true)", 1);
+
+    function startNewGame() {
+      var gameChooser = document.getElementById("gameChooser");
+      load_game(repo_prefix, gameChooser.value, 0, document.getElementById("game_div"), 400, 400);
+    }
+  </script>
+</body>
+</html>

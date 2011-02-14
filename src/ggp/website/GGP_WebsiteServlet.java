@@ -1,25 +1,52 @@
 package ggp.website;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+
 import javax.servlet.http.*;
 
 @SuppressWarnings("serial")
 public class GGP_WebsiteServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        if (req.getRequestURI().equals("/")) {
-            writeStaticPage(resp, "root/SplashPage.html");
+        String reqURI = req.getRequestURI();
+
+        if (reqURI.endsWith("/"))
+            reqURI += "index.html";
+
+        boolean writeAsBinary = false;        
+        if (reqURI.endsWith(".html")) {
             resp.setContentType("text/html");
+        } else if (reqURI.endsWith(".xml")) {
+            resp.setContentType("application/xml");
+        } else if (reqURI.endsWith(".xsl")) {
+            resp.setContentType("application/xml");
+        } else if (reqURI.endsWith(".js")) {
+            resp.setContentType("text/javascript");   
+        } else if (reqURI.endsWith(".json")) {
+            resp.setContentType("text/javascript");
+        } else if (reqURI.endsWith(".png")) {
+            resp.setContentType("image/png");
+            writeAsBinary = true;
+        } else if (reqURI.endsWith(".ico")) {
+            resp.setContentType("image/png");
+            writeAsBinary = true;
         } else {
-            writeStaticPage(resp, req.getRequestURI().substring(1));
-            resp.setContentType("application/x-javascript");
+            resp.setContentType("text/plain");
+        }
+
+        if (writeAsBinary) {
+            writeStaticBinaryPage(resp, reqURI.substring(1));
+        } else {
+            writeStaticTextPage(resp, reqURI.substring(1));
         }
     }
-    
-    public void writeStaticPage(HttpServletResponse resp, String thePage) throws IOException {
-        FileReader fr = new FileReader(thePage);
+
+    public void writeStaticTextPage(HttpServletResponse resp, String theURI) throws IOException {
+        FileReader fr = new FileReader(theURI);
         BufferedReader br = new BufferedReader(fr);
         StringBuffer response = new StringBuffer();
         
@@ -29,5 +56,14 @@ public class GGP_WebsiteServlet extends HttpServlet {
         }
                 
         resp.getWriter().println(response.toString());
-    }    
+    }
+    
+    public void writeStaticBinaryPage(HttpServletResponse resp, String theURI) throws IOException {
+        InputStream in = new FileInputStream(theURI);
+        byte[] buf = new byte[1024];
+        while (in.read(buf) > 0) {
+            resp.getOutputStream().write(buf);
+        }
+        in.close();        
+    }
 }

@@ -9,12 +9,6 @@
 	</system-properties>
 
 	<resource-files>
-        <include path="/root/**" />
-        <include path="scripts/**" />
+        <include path="**" />
     </resource-files>
-
-    <static-files>
-        <include path="favicon.ico" />        
-    </static-files>
-
 </appengine-web-app>
