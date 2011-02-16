@@ -142,9 +142,15 @@ var MatchHosting = {
       jointMove = this.machine.get_random_joint_moves(this.state);
       for(var i = 0; i < this.matchData.gameRoleNames.length; i++) {
         if (this.playerResponses[i]) {
-          jointMove[i] = this.playerResponses[i];
+          var legalMoves = this.machine.get_legal_moves(this.state, this.matchData.gameRoleNames[i]);
+          for (j in legalMoves) { legalMoves[j] = SymbolList.arrayIntoSymbolList(legalMoves[j]); }
+          if (legalMoves.indexOf(SymbolList.arrayIntoSymbolList(this.playerResponses[i])) > -1) {
+            jointMove[i] = this.playerResponses[i];
+          } else {
+            console.log('Got illegal move ' + this.playerResponses[i] + '. Choosing random move for player ' + i);
+          }
         } else {
-          console.log('Choosing random move for player ' + i);
+          console.log('Got null response. Choosing random move for player ' + i);
         }
       }
       // Advance to the next state
@@ -180,13 +186,18 @@ var MatchHosting = {
   },
   
   writeToPlayer: function (playerIndex, messageArray, timeout) {
-    parent.ResourceLoader.load_raw_async_with_timeout(this.playerURLs[playerIndex] + encodeURIComponent(SymbolList.arrayIntoSymbolList(messageArray)), this.getResponseCallbackForPlayer(playerIndex), timeout);
+    //parent.ResourceLoader.post_raw_async_with_timeout(this.playerURLs[playerIndex], SymbolList.arrayIntoSymbolList(messageArray), this.getResponseCallbackForPlayer(playerIndex), timeout);
+    parent.ResourceLoader.load_raw_async_with_timeout(this.playerURLs[playerIndex] + encodeURIComponent(SymbolList.arrayIntoSymbolList(messageArray)), this.getResponseCallbackForPlayer(playerIndex), timeout);    
   },
   
   getResponseCallbackForPlayer: function (playerIndex) {
     var x = this;
     return function (response) {
-      x.playerResponses[playerIndex] = SymbolList.symbolListIntoArray(response);
+      if (response) {
+        x.playerResponses[playerIndex] = SymbolList.symbolListIntoArray(response);
+      } else {
+        x.playerResponses[playerIndex] = null;
+      }
     };
   }
 }

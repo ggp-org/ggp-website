@@ -54,6 +54,25 @@ var ResourceLoader = {
     this.internals.load_raw_async(url, doneCallback);
   },
   
+  post_raw_async_with_timeout: function (url, content, callback, timeout) {
+      var doneCallback, timeoutCallback;
+      {
+        var completed = false;
+        doneCallback = function (response) {
+          if (completed) return;
+          completed = true;
+          callback(response);
+        }
+        timeoutCallback = function () {
+          if (completed) return;
+          completed = true;
+          callback(null);
+        }      
+      }
+      setTimeout(timeoutCallback, timeout);
+      this.internals.post_raw_async(url, content, doneCallback);
+  },  
+  
   // For stylesheets, we load both the raw text, and the XML document.
   load_stylesheet: function (url) {
     return this.internals.load_data(url);
@@ -85,6 +104,24 @@ var ResourceLoader = {
       xhttp.open("GET", url, true);        
       xhttp.send("");        
     },
+    
+    post_raw_async: function (url, content, callback) {
+        var handler = function() {
+          if(this.readyState == 4 && this.status == 200) {
+            callback(xhttp.responseText);
+          } else if (this.readyState == 4 && this.status != 200) {
+            callback(null);
+          }
+        }
+        
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = handler;
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.setRequestHeader("Content-length", content.length);
+        xhttp.setRequestHeader("Connection", "close");        
+        xhttp.send(content);        
+    },    
   
     importkif: function (url) {
       var rulesheet = this.load_data(url)[0];
@@ -106,7 +143,3 @@ var ResourceLoader = {
     }
   }
 }
-
-/// f('(START match2.test jumper (' + gameHandler.rulesheet + ') 5 5)')
-/// q = f('(PLAY match2.test (' + q + ') )')
-/// function (z) { return ResourceLoader.load_raw('http://127.0.0.1:9147/' + encodeURIComponent(z)); }
