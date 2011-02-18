@@ -92,7 +92,7 @@ var KioskGameHandler = {
     this.matchData.stateTimes.push(new Date().getTime());
     if(this.machine.is_terminal(state)) {
       this.matchData.isCompleted = true;
-      this.matchData.goalValues = this.machine.get_goals(state);          
+      this.matchData.goalValues = this.machine.get_goals(state);
     }
   },
 
