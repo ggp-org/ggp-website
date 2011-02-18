@@ -45,6 +45,7 @@ var KioskGameHandler = {
     var rules_url = gameURL + metadata.rulesheet;
     var style_url = gameURL + metadata.stylesheet;
     var inter_url = gameURL + metadata.user_interface;
+    var gameVersionedURL = gameURL + 'v' + metadata.version + "/";
 
     this.myRole = myRole;
     this.gameDiv = gameDiv;
@@ -65,7 +66,7 @@ var KioskGameHandler = {
     this.matchData.randomToken = '' + Math.floor(Math.random()*Math.pow(2,64));
     this.matchData.matchId = 'webkiosk.' + gameName + '.' + new Date().getTime();
     this.matchData.startTime = new Date().getTime();
-    this.matchData.gameMetaURL = gameURL;
+    this.matchData.gameMetaURL = gameVersionedURL;
     this.matchData.startClock = 0;
     this.matchData.playClock = 0;    
     this.matchData.gameRoleNames = this.machine.get_roles();
