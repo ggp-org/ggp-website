@@ -14,10 +14,6 @@ public class GGP_WebsiteServlet extends HttpServlet {
             throws IOException {
         String reqURI = req.getRequestURI();
 
-        if (req.getServerName().contains("kiosk.ggp.org") && reqURI.equals("/")) {
-            reqURI = "/kiosk/";
-        }
-
         if (reqURI.endsWith("/")) {
             reqURI += "index.html";
         }
@@ -46,6 +42,9 @@ public class GGP_WebsiteServlet extends HttpServlet {
         if (writeAsBinary) {
             writeStaticBinaryPage(resp, reqURI.substring(1));
         } else {
+            // Temporary limits on caching, for during development.
+            resp.setHeader("Cache-Control", "no-cache");
+            resp.setHeader("Pragma", "no-cache");
             writeStaticTextPage(resp, reqURI.substring(1));
         }
     }
