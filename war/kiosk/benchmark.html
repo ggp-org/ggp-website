@@ -1,0 +1,101 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>GGP Benchmark Suite</title>
+  <style>
+    body {
+      margin: 2%;      
+      background: #EEE;
+    }
+    h1 {
+      color: #212121;
+      font-size: 48px;
+      text-shadow: #414141 0px 0px 5px;
+      margin: 2px;
+    }
+    h2 {
+      color: #212121;
+      font-size: 36px;
+      text-shadow: #414141 0px 0px 5px;
+      margin: 2px;
+    }
+  </style>
+</head>
+<body>
+  <script type='text/javascript' src='http://www.ggp.org/scripts/common/compulog.js'></script>
+  <script type='text/javascript' src='http://www.ggp.org/scripts/common/ResourceLoader.js'></script>
+  <script type='text/javascript' src='http://www.ggp.org/scripts/common/StateMachine.js'></script>   
+  <script type='text/javascript' src='http://www.ggp.org/scripts/common/SymbolList.js'></script>
+
+  <center>
+  <h1>General Game Playing Benchmark Suite</h1>
+  <h2>Javascript gaming library benchmark for your browser.</h2>
+  <br>
+  <div id='table_div'>
+    <table cellspacing=15>
+    <tbody id="bench_table">
+      <tr>
+        <th align=left>Game Name</th>    
+        <th align=left>Rounds</th>
+        <th align=left>Total Match Time</th>
+        <th align=left>Avg Match Time</th>
+        <th align=left>Score</th>
+      </tr>
+    </tbody>
+    </table>
+  </div><br>
+  <div id='score_div'></div>
+  </center>
+
+  <script type="text/javascript" language="javascript">
+    var repo_prefix = 'http://games.ggp.org/';
+    var totalScore = 0;        
+    
+    function makeTable(gameNames) {
+      var bench_table = document.getElementById("bench_table");
+      for (var i = 0; i < gameNames.length; i++) {
+        var benchRow = document.createElement('tr');
+        benchRow.id = "benchrow_" + gameNames[i];
+        benchRow.innerHTML = "<td><b>" + gameNames[i] + "</b></td> <td colspan=5>Waiting for benchmark to start...</td>";
+        bench_table.appendChild(benchRow);      
+      }
+    }
+
+    function benchGame(gameName, rounds, expAvgTime) {
+      var gameURL = repo_prefix + "games/" + gameName + "/";
+      var metadata = ResourceLoader.load_json(gameURL);
+      var rules_url = gameURL + metadata.rulesheet;
+      var rule_compound = ResourceLoader.load_rulesheet(rules_url);
+      var machine = load_machine(rule_compound[0]);
+            
+      var benchRow = document.getElementById("benchrow_" + gameName);
+      benchRow.innerHTML = "<td><b>" + gameName + "</b></td> <td>" + rounds + "</td> <td colspan=4>Benchmarking...</td>";      
+    
+      var x = machine.run_timing_analysis(rounds);
+      var runTime = Math.round(100 * x[0]) / 100.0;
+      var avgRunTime = Math.round(100 * x[0] / rounds) / 100.0;
+      //var avgGoals = x[1];
+      
+      var theScore = Math.round(100 * avgRunTime / expAvgTime) / 100.0;
+      benchRow.innerHTML = "<td><b>" + gameName + "</b></td> <td>" + rounds + "</td> <td>" + runTime + "</td> <td>" + avgRunTime + "</td> <td>" + theScore + "</td>";      
+      totalScore += theScore;      
+    }
+
+    // These two lists need to be kept in sync.
+    var gameNames = ["connectFour", "ticTacToe", "blocker", "maze", "asteroids"];    
+    function runBenchmark() {      
+      benchGame("connectFour",           15,    101.4);
+      benchGame("ticTacToe",            230,    5.23);
+      benchGame("blocker",              180,    7.7);
+      benchGame("maze",                 900,    1.24);
+      benchGame("asteroids",          13000,    0.08);
+      
+      var score_div = document.getElementById("score_div");
+      score_div.innerHTML = "Average benchmark score: " + (100 * totalScore / gameNames.length) + "%";
+    }
+
+    makeTable(gameNames);
+    setTimeout("runBenchmark()", 5);
+  </script>
+</body>
+</html>
