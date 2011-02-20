@@ -29,7 +29,7 @@ var MatchHosting = {
 
   parent: null,  
   
-  initialize: function (parent, serverName, gameName, gameDiv, width, height) {  
+  initialize: function (parent, serverName, gameName, myRole, gameDiv, width, height) {  
     this.width = width;
     this.height = height;
     this.parent = parent;
@@ -53,6 +53,7 @@ var MatchHosting = {
     var inter_url = gameURL + metadata.user_interface;    
     var gameVersionedURL = gameURL + 'v' + metadata.version + "/";
 
+    this.myRole = myRole;
     this.gameDiv = gameDiv;
 
     var rule_compound = parent.ResourceLoader.load_rulesheet(rules_url);
@@ -209,8 +210,8 @@ var MatchHosting = {
 
 // NOTE: This function *must* define gameHandler as a global variable.
 // Otherwise, sections of the above code will not work.
-function load_game (serverName, gameName, gameDiv, width, height) {  
+function load_game (serverName, gameName, myRole, gameDiv, width, height) {  
   gameHandler = Object.create(MatchHosting);
-  gameHandler.initialize(this, serverName, gameName, gameDiv, width, height);  
+  gameHandler.initialize(this, serverName, gameName, myRole, gameDiv, width, height);  
   return gameHandler;
 }
