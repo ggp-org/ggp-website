@@ -83,8 +83,13 @@ var MatchHosting = {
     this.matchData.stateTimes = [];
     this.matchData.isCompleted = false;
 
-    this.updateState(this.machine.get_initial_state());
+    this.updateState(this.machine.get_initial_state());    
     
+    this.spectator = make_spectator();
+    this.spectator.publish(this.matchData);
+    this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
+    
+    // Load the URLs for the other players
     this.playerURLs = [];
     this.playerResponses = [];
     for (var i=0; i < this.matchData.gameRoleNames.length; i++) {
@@ -92,15 +97,11 @@ var MatchHosting = {
         this.playerResponses.push(null);
     }
     
-    this.spectator = make_spectator();
-    this.spectator.publish(this.matchData);
-    this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
-
-    this.renderCurrentState();
-    
     // Start the match
     this.writeStartMessages(this.startClock*1000);
     setTimeout("gameHandler.processResponsesForMatch(true);", 500+this.startClock*1000);
+        
+    this.renderCurrentState();
   },
   
   updateState: function (state) {

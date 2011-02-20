@@ -83,13 +83,14 @@ var KioskGameHandler = {
     this.matchData.stateTimes = [];
     this.matchData.isCompleted = false;
         
-    this.updateState(this.machine.get_initial_state());
+    this.updateState(this.machine.get_initial_state());    
     
     this.spectator = make_spectator();
     this.spectator.publish(this.matchData);
     this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
     
-    this.user_interface = parent.ResourceLoader.load_js(inter_url);
+    // Load the user interface
+    this.user_interface = parent.ResourceLoader.load_js(inter_url);    
     this.renderCurrentState();
   },
   
