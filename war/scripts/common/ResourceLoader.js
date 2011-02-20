@@ -113,14 +113,11 @@ var ResourceLoader = {
             callback(null);
           }
         }
-        
+
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = handler;
         xhttp.open("POST", url, true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.setRequestHeader("Content-length", content.length);
-        xhttp.setRequestHeader("Connection", "close");        
-        xhttp.send(content);        
+        xhttp.send(content);
     },    
   
     importkif: function (url) {

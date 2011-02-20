@@ -188,8 +188,8 @@ var MatchHosting = {
   },
   
   writeToPlayer: function (playerIndex, messageArray, timeout) {
-    //parent.ResourceLoader.post_raw_async_with_timeout(this.playerURLs[playerIndex], SymbolList.arrayIntoSymbolList(messageArray), this.getResponseCallbackForPlayer(playerIndex), timeout);
-    parent.ResourceLoader.load_raw_async_with_timeout(this.playerURLs[playerIndex] + encodeURIComponent(SymbolList.arrayIntoSymbolList(messageArray)), this.getResponseCallbackForPlayer(playerIndex), timeout);    
+    parent.ResourceLoader.post_raw_async_with_timeout(this.playerURLs[playerIndex], SymbolList.arrayIntoSymbolList(messageArray), this.getResponseCallbackForPlayer(playerIndex), timeout);
+    //parent.ResourceLoader.load_raw_async_with_timeout(this.playerURLs[playerIndex] + encodeURIComponent(SymbolList.arrayIntoSymbolList(messageArray)), this.getResponseCallbackForPlayer(playerIndex), timeout);    
   },
   
   getResponseCallbackForPlayer: function (playerIndex) {
