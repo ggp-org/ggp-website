@@ -7,21 +7,27 @@ var KioskGameHandler = {
   vizDiv: null,
   gameDiv: null,
   spectatorDiv: null,
+
+  playClock: 2, // not really used
+  startClock: 5, // not really used
   
   rulesheet: null,  
   stylesheet: null,
   user_interface: null,
   
   state: null,
+  machine: null,  
+  
   myRole: null,
-  machine: null,
   selectedMove: null,
   
+  playerURLs: null, // not really used
+  playerResponses: null, // not really used
+
   matchData: null,
+  spectator: null,
   
   parent: null,
-  
-  spectator: null,
 
   initialize: function (parent, serverName, gameName, myRole, gameDiv, width, height) {  
     this.width = width;
@@ -67,8 +73,8 @@ var KioskGameHandler = {
     this.matchData.matchId = 'webkiosk.' + gameName + '.' + new Date().getTime();
     this.matchData.startTime = new Date().getTime();
     this.matchData.gameMetaURL = gameVersionedURL;
-    this.matchData.startClock = 0;
-    this.matchData.playClock = 0;    
+    this.matchData.startClock = this.startClock;
+    this.matchData.playClock = this.playClock;    
     this.matchData.gameRoleNames = this.machine.get_roles();
     this.matchData.gameName = metadata.gameName;
     // All of the following will change over the course of the match

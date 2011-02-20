@@ -13,19 +13,22 @@ var MatchHosting = {
   
   rulesheet: null,  
   stylesheet: null,
+  user_interface: null,  
+
+  state: null,
+  machine: null,
+  
+  myRole: null, // not really used
+  selectedMove: null, // not really used
   
   playerURLs: null,
   playerResponses: null,
   
-  state: null,
-  machine: null,
-  
   matchData: null,
-  
-  parent: null,
-  
   spectator: null,
 
+  parent: null,  
+  
   initialize: function (parent, serverName, gameName, gameDiv, width, height) {  
     this.width = width;
     this.height = height;
@@ -69,8 +72,8 @@ var MatchHosting = {
     this.matchData.matchId = 'webggp.' + gameName + '.' + new Date().getTime();
     this.matchData.startTime = new Date().getTime();
     this.matchData.gameMetaURL = gameVersionedURL;
-    this.matchData.startClock = 0;
-    this.matchData.playClock = 0;    
+    this.matchData.startClock = this.startClock;
+    this.matchData.playClock = this.playClock;    
     this.matchData.gameRoleNames = this.machine.get_roles();
     this.matchData.gameName = metadata.gameName;
     // All of the following will change over the course of the match
