@@ -16,14 +16,15 @@ if (typeof Object.create !== 'function') {
 // only thing preventing you from instantiating multiple SpectatorViews
 // on a single web page; hopefully that will be fixed at some point.
 var SpectatorView = {
+  topDiv: null,
   gameVizDiv: null,
-  gameOldVizDiv: null,
+  gameOldVizDiv: null,  
   
   rendering: false,
   pending_render: false,
   
-  getHeight: function () { return (window.innerHeight - 125) * 0.95; },
-  getWidth: function () { return (window.innerWidth - 125) * 0.95; },
+  getHeight: function () { return (window.innerHeight - 140) * 0.95; },
+  getWidth: function () { return (window.innerWidth - 140) * 0.95; },
   
   state: null,  
   matchData: null,
@@ -43,7 +44,9 @@ var SpectatorView = {
     if (width < 100) width = 100;    
     if (width < height) height = width;
     if (height < width) width = height;
-      
+
+    this.topDiv.style.cssText = "width: " + (width*1.05) + "px; height: " + (height*1.05) + "px";
+    
     this.gameOldVizDiv.innerHTML = this.gameVizDiv.innerHTML;
     this.gameOldVizDiv.style.cssText = this.gameOldVizDiv.style.cssText.replace('display: none; ', '');
 
@@ -73,8 +76,11 @@ var SpectatorView = {
     // This consists of a DIV for the game visualization (gameVizDiv) and
     // a DIV that holds the previous state of the game, which is needed for
     // smooth transitions between states.
-    var topDiv = document.createElement('div');
-    topDiv.style.cssText = "position: relative; background: black";
+    this.topDiv = document.createElement('div');
+    this.topDiv.style.cssText = "";
+    
+    var midDiv = document.createElement('div');    
+    midDiv.style.cssText = "position: relative; width: 100%; height: 100%";
     
     this.gameVizDiv = document.createElement('div');
     this.gameOldVizDiv = document.createElement('div');
@@ -82,9 +88,10 @@ var SpectatorView = {
     this.gameVizDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:1;";
     this.gameOldVizDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:2;";
     
-    topDiv.appendChild(this.gameVizDiv);
-    topDiv.appendChild(this.gameOldVizDiv);
-    spectator_div.appendChild(topDiv);
+    midDiv.appendChild(this.gameVizDiv);
+    midDiv.appendChild(this.gameOldVizDiv);
+    this.topDiv.appendChild(midDiv);
+    spectator_div.appendChild(this.topDiv);
     
     // Next, load the resources for the match. We need to load the current state,
     // and also the stylesheet associated with the game being played. First, load
@@ -128,11 +135,11 @@ var SpectatorView = {
         return;
       }
     }
-    
+
     // Open a Browser Channel to the Spectator Server.
     // We will receive updates to the match state over this channel.
     var channel = new goog.appengine.Channel(theChannelToken);
-    channel.open().onmessage = update_state_via_channel;   
+    channel.open().onmessage = update_state_via_channel;
   },
   
   // Constructor, to make new SpectatorViews.
