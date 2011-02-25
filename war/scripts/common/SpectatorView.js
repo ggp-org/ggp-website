@@ -45,13 +45,13 @@ var SpectatorView = {
     if (width < height) height = width;
     if (height < width) width = height;
 
-    this.topDiv.style.cssText = "width: " + (width*1.05) + "px; height: " + (height*1.05) + "px";
-    
     this.gameOldVizDiv.innerHTML = this.gameVizDiv.innerHTML;
     this.gameOldVizDiv.style.cssText = this.gameOldVizDiv.style.cssText.replace('display: none; ', '');
 
     this.gameVizDiv.innerHTML = '';
     StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.gameVizDiv, width, height);
+
+    this.topDiv.style.height = this.gameVizDiv.children[0].clientHeight + 'px';
 
     var thisRef = this;
     this.rendering = true;    
@@ -85,8 +85,8 @@ var SpectatorView = {
     this.gameVizDiv = document.createElement('div');
     this.gameOldVizDiv = document.createElement('div');
     
-    this.gameVizDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:1;";
-    this.gameOldVizDiv.style.cssText = "position: absolute; top: auto; left: auto; margin-left: 2%; margin-top: 2%; width: 96%; height: 96%; z-index:2;";
+    this.gameVizDiv.style.cssText = "position: absolute; top: auto; left: auto; width: 100%; height: 100%; z-index:1;";
+    this.gameOldVizDiv.style.cssText = "position: absolute; top: auto; left: auto; width: 100%; height: 100%; z-index:2;";
     
     midDiv.appendChild(this.gameVizDiv);
     midDiv.appendChild(this.gameOldVizDiv);
