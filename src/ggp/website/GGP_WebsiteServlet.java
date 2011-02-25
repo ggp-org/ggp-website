@@ -39,13 +39,17 @@ public class GGP_WebsiteServlet extends HttpServlet {
             resp.setContentType("text/plain");
         }
 
-        if (writeAsBinary) {
-            writeStaticBinaryPage(resp, reqURI.substring(1));
-        } else {
-            // Temporary limits on caching, for during development.
-            resp.setHeader("Cache-Control", "no-cache");
-            resp.setHeader("Pragma", "no-cache");
-            writeStaticTextPage(resp, reqURI.substring(1));
+        try {
+            if (writeAsBinary) {
+                writeStaticBinaryPage(resp, reqURI.substring(1));
+            } else {
+                // Temporary limits on caching, for during development.
+                resp.setHeader("Cache-Control", "no-cache");
+                resp.setHeader("Pragma", "no-cache");
+                writeStaticTextPage(resp, reqURI.substring(1));
+            }
+        } catch (IOException e) {
+            resp.setStatus(404);
         }
     }
 
