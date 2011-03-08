@@ -35,6 +35,10 @@ var ResourceLoader = {
     return this.internals.load_data(url)[0];
   },
   
+  post_raw: function (url, content) {
+    return this.internals.post_data(url, content)[0];
+  },
+  
   load_raw_async_with_timeout: function (url, callback, timeout) {
     var doneCallback, timeoutCallback;
     {
@@ -89,6 +93,17 @@ var ResourceLoader = {
       alert('Cannot load: ' + url);
       return false
     },
+    
+    post_data: function (url, content) {
+        var xhttp = new XMLHttpRequest();      
+        xhttp.open("POST", url, false);
+        xhttp.send(content);
+        if (xhttp.responseText) {
+          return [xhttp.responseText, xhttp.responseXML]
+        }
+        alert('Cannot post: ' + url);
+        return false
+    },    
     
     load_raw_async: function (url, callback) {
       var handler = function() {
