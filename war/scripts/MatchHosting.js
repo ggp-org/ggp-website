@@ -44,7 +44,7 @@ var MatchHosting = {
     } else {
         var desc_div = document.getElementById('desc_div');
         if (desc_div) {
-            this.emptyDiv(desc_div);
+            UserInterface.emptyDiv(desc_div);
         }
     }
     
@@ -60,8 +60,8 @@ var MatchHosting = {
     this.stylesheet = parent.ResourceLoader.load_stylesheet(style_url);
     this.rulesheet = rule_compound[1];
 
-    this.emptyDiv(this.gameDiv);
-    this.gameDiv.innerHTML = "<table><tr><td><div id='game_viz_div'></div></td></tr><tr><td><div id='score_div'></div></td></tr><tr><td><div id='spectator_link_div'></div></td></tr></table>";
+    UserInterface.emptyDiv(this.gameDiv);
+    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id='status_bar_div'></div></td><td align='right><div id='button_div'></div></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
     this.vizDiv = document.getElementById("game_viz_div");   
     this.spectatorDiv = document.getElementById("spectator_link_div");
     
@@ -114,19 +114,11 @@ var MatchHosting = {
     }
   },
 
-  emptyDiv: function (divToClear) {
-    var i;
-    while (i = divToClear.childNodes[0]){
-      if (i.nodeType == 1 || i.nodeType == 3){
-        divToClear.removeChild(i);
-      }
-    }
-  },
-
   renderCurrentState: function () {
     var gameOver = this.machine.is_terminal(this.state);
+    var legals; // not used
 
-    this.emptyDiv(this.vizDiv);
+    UserInterface.emptyDiv(this.vizDiv);
     this.parent.StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.vizDiv, this.width, this.height);  
   
     if (gameOver) {
@@ -137,7 +129,7 @@ var MatchHosting = {
           scoreText += roles[i] + "(" + this.machine.get_goal(this.state, roles[i]) + ") ";
       }
     
-      document.getElementById("score_div").innerHTML = scoreText + "</b>";      
+      document.getElementById("status_bar_div").innerHTML = scoreText + "</b>";      
     }
   },
   

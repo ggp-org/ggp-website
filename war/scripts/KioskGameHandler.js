@@ -44,7 +44,7 @@ var KioskGameHandler = {
     } else {
         var desc_div = document.getElementById('desc_div');
         if (desc_div) {
-            this.emptyDiv(desc_div);
+            UserInterface.emptyDiv(desc_div);
         }
     }
     
@@ -60,17 +60,18 @@ var KioskGameHandler = {
     this.stylesheet = parent.ResourceLoader.load_stylesheet(style_url);
     this.rulesheet = rule_compound[1];
 
-    this.emptyDiv(this.gameDiv);
-    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id=selected_move_div><b>Selected Move: </b></div></td><td align='right'><table><tr><td><button type='button' id='clear_move_button' disabled='true' onclick='gameHandler.clearMove()'>Clear Move</button></td><td><button type='button' id='select_move_button' disabled='true' onclick='gameHandler.submitMove()'>Submit Move</button></td></tr></table></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
+    UserInterface.emptyDiv(this.gameDiv);
+    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id='status_bar_div'></div></td><td align='right'><div id='button_div'></div></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
     this.vizDiv = document.getElementById("game_viz_div");   
     this.spectatorDiv = document.getElementById("spectator_link_div");
+    document.getElementById("button_div").innerHTML = "<table><tr><td><button type='button' id='clear_move_button' disabled='true' onclick='gameHandler.clearMove()'>Clear Move</button></td><td><button type='button' id='select_move_button' disabled='true' onclick='gameHandler.submitMove()'>Submit Move</button></td></tr></table>";
     
     this.machine = load_machine(rule_compound[0])
     
     this.matchData = {}
     // All of the following remain constant throughout the match
     this.matchData.randomToken = '' + Math.floor(Math.random()*Math.pow(2,64));
-    this.matchData.matchId = 'webkiosk.' + gameName + '.' + new Date().getTime();
+    this.matchData.matchId = 'webggp.' + gameName + '.' + new Date().getTime();
     this.matchData.startTime = new Date().getTime();
     this.matchData.gameMetaURL = gameVersionedURL;
     this.matchData.startClock = this.startClock;
@@ -90,7 +91,8 @@ var KioskGameHandler = {
     this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
     
     // Load the user interface
-    this.user_interface = parent.ResourceLoader.load_js(inter_url);    
+    this.user_interface = parent.ResourceLoader.load_js(inter_url);
+    
     this.renderCurrentState();
   },
   
@@ -101,15 +103,6 @@ var KioskGameHandler = {
     if(this.machine.is_terminal(state)) {
       this.matchData.isCompleted = true;
       this.matchData.goalValues = this.machine.get_goals(state);
-    }
-  },
-
-  emptyDiv: function (divToClear) {
-    var i;
-    while (i = divToClear.childNodes[0]){
-      if (i.nodeType == 1 || i.nodeType == 3){
-        divToClear.removeChild(i);
-      }
     }
   },
 
@@ -126,7 +119,7 @@ var KioskGameHandler = {
       }
     }
 
-    this.emptyDiv(this.vizDiv);
+    UserInterface.emptyDiv(this.vizDiv);
     this.parent.StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.vizDiv, this.width, this.height);  
   
     if (!gameOver) {
@@ -141,7 +134,7 @@ var KioskGameHandler = {
         document.getElementById("select_move_button").disabled = !move;
 
         game_parent.selectedMove = move;
-        document.getElementById("selected_move_div").innerHTML = "<b>Selected Move: </b>" + move;
+        document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>" + move;
       }
       this.user_interface.attach(inner_args);
     } else {
@@ -149,14 +142,14 @@ var KioskGameHandler = {
     
       document.getElementById("select_move_button").disabled = true;
       document.getElementById("clear_move_button").disabled = true;
-      document.getElementById("selected_move_div").innerHTML = "<b>Game Over! Score: " + goal + "</b>";      
+      document.getElementById("status_bar_div").innerHTML = "<b>Game Over! Score: " + goal + "</b>";      
     }
   },
 
   submitMove: function () {
     if(!this.selectedMove) return;
 
-    document.getElementById("selected_move_div").innerHTML = "<b>Selected Move: </b>";
+    document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>";
 
     var jointMove = this.machine.get_random_joint_moves(this.state);
     jointMove[this.myRole] = this.selectedMove;
