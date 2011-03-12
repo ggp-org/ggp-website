@@ -117,6 +117,15 @@ var MatchHosting = {
   renderCurrentState: function () {
     var gameOver = this.machine.is_terminal(this.state);
     var legals; // not used
+    
+    if (!gameOver) {
+    //legals = this.machine.get_legal_moves(this.state, this.machine.get_roles()[this.myRole]);
+    //if (legals.length <= 1) {              <--- not used here, since myRole == null
+    //  this.selectedMove = legals[0];
+    //  this.submitMove();
+    //  return;
+    //}
+    }    
 
     UserInterface.emptyDiv(this.vizDiv);
     this.parent.StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.vizDiv, this.width, this.height);  
@@ -126,10 +135,14 @@ var MatchHosting = {
       var goals = [];
       var roles = this.machine.get_roles();
       for (var i = 0; i < roles.length; i++) {
-          scoreText += roles[i] + "(" + this.machine.get_goal(this.state, roles[i]) + ") ";
+        if (i == this.myRole) {
+          scoreText += "You";
+        } else {
+          scoreText += roles[i];
+        }
+        scoreText += "(" + this.machine.get_goal(this.state, roles[i]) + ") ";
       }
-    
-      document.getElementById("status_bar_div").innerHTML = scoreText + "</b>";      
+      document.getElementById("status_bar_div").innerHTML = scoreText + "</b>";
     }
   },
   

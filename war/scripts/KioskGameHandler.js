@@ -122,7 +122,23 @@ var KioskGameHandler = {
     UserInterface.emptyDiv(this.vizDiv);
     this.parent.StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.vizDiv, this.width, this.height);  
   
-    if (!gameOver) {
+    if (gameOver) {
+      var scoreText = "<b>Game Over! Scores: ";
+      var goals = [];
+      var roles = this.machine.get_roles();
+      for (var i = 0; i < roles.length; i++) {
+        if (i == this.myRole) {
+          scoreText += "You";
+        } else {
+          scoreText += roles[i];
+        }
+        scoreText += "(" + this.machine.get_goal(this.state, roles[i]) + ") ";
+      }
+      document.getElementById("status_bar_div").innerHTML = scoreText + "</b>";
+      
+      document.getElementById("select_move_button").disabled = true;
+      document.getElementById("clear_move_button").disabled = true;      
+    } else {
       var inner_args = {};
       var game_parent = this;
       inner_args.viz_div = this.vizDiv;
@@ -132,17 +148,10 @@ var KioskGameHandler = {
         
         document.getElementById("clear_move_button").disabled = !move;
         document.getElementById("select_move_button").disabled = !move;
-
-        game_parent.selectedMove = move;
+         game_parent.selectedMove = move;
         document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>" + move;
       }
-      this.user_interface.attach(inner_args);
-    } else {
-      var goal = this.machine.get_goal(this.state, this.machine.get_roles()[this.myRole]);
-    
-      document.getElementById("select_move_button").disabled = true;
-      document.getElementById("clear_move_button").disabled = true;
-      document.getElementById("status_bar_div").innerHTML = "<b>Game Over! Score: " + goal + "</b>";      
+      this.user_interface.attach(inner_args);        
     }
   },
 
