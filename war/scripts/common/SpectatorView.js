@@ -12,9 +12,11 @@ if (typeof Object.create !== 'function') {
 //   * jQuery Library: "//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"
 //
 // This also requires the acquisition of a channel token, which
-// is stored in the global variable "theChannelToken". This is the
-// only thing preventing you from instantiating multiple SpectatorViews
-// on a single web page; hopefully that will be fixed at some point.
+// is stored in the global variable "theChannelToken". This can be
+// acquired by including the "channel.js" script in a match directory
+// on the spectator server, or by including the "channel.js" in the
+// root "matches/" directory on the spectator server (latter method
+// is preferred).
 var SpectatorView = {
   topDiv: null,
   gameVizDiv: null,
@@ -135,6 +137,10 @@ var SpectatorView = {
         return;
       }
     }
+    
+    // Make sure that we're registered to view this match.
+    if (match_url[match_url.length-1] != '/') { match_url += '/'; }
+    ResourceLoader.load_raw(match_url + 'clientId=' + theChannelID + '/channel.js');
 
     // Open a Browser Channel to the Spectator Server.
     // We will receive updates to the match state over this channel.
