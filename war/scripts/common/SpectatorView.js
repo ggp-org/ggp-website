@@ -57,7 +57,7 @@ var SpectatorView = {
 
     var thisRef = this;
     this.rendering = true;    
-    $(spectatorView.gameOldVizDiv).fadeOut('slow', function() {
+    $(this.gameOldVizDiv).fadeOut('slow', function() {
       thisRef.rendering = false;
       if (thisRef.pending_render) {
         thisRef.pending_render = false;
@@ -117,19 +117,26 @@ var SpectatorView = {
     }
     
     // TODO(schreib): Set the name_div in a more elegant way.
-    var name_div = document.getElementById('name_div');
-    name_div.innerHTML = 'Showing match: ' + this.matchData.matchId;
+    if (document.getElementById('name_div') != null) {
+      var name_div = document.getElementById('name_div');
+      name_div.innerHTML = 'Showing match: ' + this.matchData.matchId;
+    }
 
     // Create a callback that will update the match state based on
     // messages from the browser channel.
     var thisRef = this;
     function update_state_via_channel(channelMessage) {
-      var newMatchData = JSON.parse(channelMessage.data);      
+      var newMatchData = JSON.parse(channelMessage.data);
+      if ((newMatchData.matchId != thisRef.matchData.matchId) ||
+          (newMatchData.startTime != thisRef.matchData.startTime)) {
+        return;
+      }
+      
       thisRef.state = thisRef.getStateFromMatchData(newMatchData);
       thisRef.matchData = newMatchData;
       thisRef.render();
 
-      if (newMatchData.isCompleted) {
+      if (newMatchData.isCompleted && document.getElementById('name_div') != null) {
         // TODO(schreib): Better reflect that the match is over.
         // TODO(schreib): Also, do so even when we never get an update.
         var name_div = document.getElementById('name_div');
@@ -144,8 +151,18 @@ var SpectatorView = {
 
     // Open a Browser Channel to the Spectator Server.
     // We will receive updates to the match state over this channel.
-    var channel = new goog.appengine.Channel(theChannelToken);
-    channel.open().onmessage = update_state_via_channel;
+    // We share a global channel with anybody else interested in using
+    // a channel to communicate with the spectator server.
+    if (window.theGlobalChannel == undefined) {
+      window.theGlobalChannel = new goog.appengine.Channel(theChannelToken);
+      window.theGlobalChannelCallbacks = [];
+      window.theGlobalChannel.open().onmessage = function (x) {
+        for (var i = 0; i < window.theGlobalChannelCallbacks.length; i++) {
+          window.theGlobalChannelCallbacks[i](x);
+        }
+      }
+    }
+    window.theGlobalChannelCallbacks.push(update_state_via_channel);
   },
   
   // Constructor, to make new SpectatorViews.
