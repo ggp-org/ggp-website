@@ -27,15 +27,12 @@ var KioskGameHandler = {
   matchData: null,
   spectator: null,
   
-  parent: null,
-
-  initialize: function (parent, serverName, gameName, myRole, gameDiv, width, height) {  
+  initialize: function (serverName, gameName, myRole, gameDiv, width, height) {  
     this.width = width;
     this.height = height;
-    this.parent = parent;
     
     var gameURL = serverName + "games/" + gameName + "/";
-    var metadata = parent.ResourceLoader.load_json(gameURL);
+    var metadata = ResourceLoader.load_json(gameURL);
 
     if ("description" in metadata) {
         var description = ResourceLoader.load_raw(gameURL + metadata.description);
@@ -56,8 +53,8 @@ var KioskGameHandler = {
     this.myRole = myRole;
     this.gameDiv = gameDiv;
 
-    var rule_compound = parent.ResourceLoader.load_rulesheet(rules_url);
-    this.stylesheet = parent.ResourceLoader.load_stylesheet(style_url);
+    var rule_compound = ResourceLoader.load_rulesheet(rules_url);
+    this.stylesheet = ResourceLoader.load_stylesheet(style_url);
     this.rulesheet = rule_compound[1];
 
     UserInterface.emptyDiv(this.gameDiv);
@@ -91,7 +88,7 @@ var KioskGameHandler = {
     this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
     
     // Load the user interface
-    this.user_interface = parent.ResourceLoader.load_js(inter_url);
+    this.user_interface = ResourceLoader.load_js(inter_url);
     
     this.renderCurrentState();
   },
@@ -120,7 +117,7 @@ var KioskGameHandler = {
     }
 
     UserInterface.emptyDiv(this.vizDiv);
-    this.parent.StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.vizDiv, this.width, this.height);  
+    StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.vizDiv, this.width, this.height);  
   
     if (gameOver) {
       var scoreText = "<b>Game Over! Scores: ";
@@ -180,6 +177,6 @@ var KioskGameHandler = {
 // Otherwise, sections of the above code will not work.
 function load_game (serverName, gameName, myRole, gameDiv, width, height) {  
   gameHandler = Object.create(KioskGameHandler);  
-  gameHandler.initialize(this, serverName, gameName, myRole, gameDiv, width, height);  
+  gameHandler.initialize(serverName, gameName, myRole, gameDiv, width, height);  
   return gameHandler;
 }
