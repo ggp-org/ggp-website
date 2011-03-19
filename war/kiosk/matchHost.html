@@ -40,28 +40,25 @@
   <h1>General Game Playing Match Host</h1>
   <h2>You can start a match of any of the following games:</h2>
   <br>
-  <div id='new_game_div'></div> <br>
+  <div id='new_game_div'>
+    <b>Shall we start a <select id='gameChooser' style='width:300'></select> match with remote players?</b>
+    <button onclick="startNewGame()">Start!</button>
+  </div>
+  <br>
   <div id='desc_div' style='width: 75%'></div><br>
   <div id='game_div'></div>
   </center>
 
   <script type="text/javascript" language="javascript">
-    var repo_prefix = 'http://games.ggp.org/';
-    var games_listing = ResourceLoader.load_json(repo_prefix + 'games/');
-    games_listing.sort();
+    var repo_prefix = 'http://games.ggp.org/';  
 
-    var new_game_HTML = "<b>Would you like to start a match of <select id='gameChooser'>";
-    for (var i = 0; i < games_listing.length; i++) {
-      new_game_HTML += "<option value=\"" + games_listing[i] + "\">" + games_listing[i] + "</option>";
-    }
-    new_game_HTML += "</select> with remote players?</b> <button onclick=\"loadGame();\">Load!</button>";        
-    var new_game_div = document.getElementById("new_game_div");
-    new_game_div.innerHTML = new_game_HTML;
-
-    function loadGame() {
+    var selector = document.getElementById("gameChooser");
+    setTimeout("UserInterface.loadRepositoryGamesIntoMenu(repo_prefix, selector, true)", 1);  
+    
+    function startNewGame() {
       var gameChooser = document.getElementById("gameChooser");
       load_game(repo_prefix, gameChooser.value, null, document.getElementById("game_div"), 400, 400);
-    }
+    }    
   </script>
 </body>
 </html>
