@@ -21,7 +21,7 @@ var KioskGameHandler = {
   myRole: null,
   selectedMove: null,
   
-  playerURLs: null, // not really used
+  players: null, // not really used
   playerResponses: null, // not really used
 
   matchData: null,
@@ -58,10 +58,9 @@ var KioskGameHandler = {
     this.rulesheet = rule_compound[1];
 
     UserInterface.emptyDiv(this.gameDiv);
-    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id='status_bar_div'></div></td><td align='right'><div id='button_div'></div></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
+    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id='status_bar_div'></div></td><td align='right'><div id='button_div'><table><tr><td><button type='button' id='clear_move_button' disabled='true' onclick='gameHandler.clearMove()'>Clear Move</button></td><td><button type='button' id='select_move_button' disabled='true' onclick='gameHandler.submitMove()'>Submit Move</button></td></tr></table></div></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
     this.vizDiv = document.getElementById("game_viz_div");   
     this.spectatorDiv = document.getElementById("spectator_link_div");
-    document.getElementById("button_div").innerHTML = "<table><tr><td><button type='button' id='clear_move_button' disabled='true' onclick='gameHandler.clearMove()'>Clear Move</button></td><td><button type='button' id='select_move_button' disabled='true' onclick='gameHandler.submitMove()'>Submit Move</button></td></tr></table>";
     
     this.machine = load_machine(rule_compound[0])
     
@@ -89,6 +88,19 @@ var KioskGameHandler = {
     
     // Load the user interface
     this.user_interface = ResourceLoader.load_js(inter_url);
+
+    // Create the player instances for the game.
+    this.players = [];
+    this.playerResponses = [];
+    for (var i=0; i < this.matchData.gameRoleNames.length; i++) {
+    //    var playerURL = prompt("What is the URL for the '" + this.matchData.gameRoleNames[i] + "' player?", "");
+    //    this.players.push(create_player(playerURL, this.machine));
+        this.playerResponses.push(null);        
+    }
+    
+    // Start the match
+    //this.writeStartMessages(this.startClock*1000);
+    //setTimeout("gameHandler.processResponsesForMatch(true);", 500+this.startClock*1000);    
     
     this.renderCurrentState();
   },

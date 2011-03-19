@@ -15,12 +15,12 @@ var RandomPlayer = {
   writeToPlayer: function (state, messageArray, timeout, responseCallback) {
     if (messageArray[0] == "STOP") {
       return responseCallback("DONE");
-    }    
+    }
     if (messageArray[0] == "START") {
       this.myRole = messageArray[2];
       return responseCallback("READY");
     }
-    
+
     var legalMoves = this.machine.get_legal_moves(state, this.myRole);
     var randomMove = legalMoves[Math.floor(Math.random()*legalMoves.length)];
     var theResponse = SymbolList.arrayIntoSymbolList(randomMove);
@@ -98,7 +98,7 @@ var MatchHosting = {
     this.rulesheet = rule_compound[1];
 
     UserInterface.emptyDiv(this.gameDiv);
-    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id='status_bar_div'></div></td><td align='right><div id='button_div'></div></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
+    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id='status_bar_div'></div></td><td align='right'><div id='button_div'><table><tr><td><button type='button' id='clear_move_button' disabled='true' onclick='gameHandler.clearMove()'>Clear Move</button></td><td><button type='button' id='select_move_button' disabled='true' onclick='gameHandler.submitMove()'>Submit Move</button></td></tr></table></div></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
     this.vizDiv = document.getElementById("game_viz_div");   
     this.spectatorDiv = document.getElementById("spectator_link_div");
     
@@ -125,6 +125,9 @@ var MatchHosting = {
     this.spectator = make_spectator();
     this.spectator.publish(this.matchData);
     this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
+
+    // Load the user interface
+    this.user_interface = ResourceLoader.load_js(inter_url);    
     
     // Create the player instances for the game.
     this.players = [];
@@ -181,6 +184,23 @@ var MatchHosting = {
         scoreText += "(" + this.machine.get_goal(this.state, roles[i]) + ") ";
       }
       document.getElementById("status_bar_div").innerHTML = scoreText + "</b>";
+      
+      document.getElementById("select_move_button").disabled = true;
+      document.getElementById("clear_move_button").disabled = true;
+    } else {
+      //var inner_args = {};
+      //var game_parent = this;
+      //inner_args.viz_div = this.vizDiv;
+      //inner_args.legals = legals;
+      //inner_args.selection_callback = function selectionCallback(move) {
+      //  if(!move) move = "";
+
+      //  document.getElementById("clear_move_button").disabled = !move;
+      //  document.getElementById("select_move_button").disabled = !move;
+      //   game_parent.selectedMove = move;
+      //  document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>" + move;
+      //}
+      //this.user_interface.attach(inner_args);        
     }
   },
   
