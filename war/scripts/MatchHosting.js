@@ -1,5 +1,45 @@
 // Requires StateMachine.js as a dependency.
 
+var RemotePlayer = {
+  theURL: null,
+
+  writeToPlayer: function (state, messageArray, timeout, responseCallback) {
+    ResourceLoader.post_raw_async_with_timeout(this.theURL, SymbolList.arrayIntoSymbolList(messageArray), responseCallback, timeout);
+  }
+}
+
+var RandomPlayer = {
+  myRole: null,
+  machine: null,
+
+  writeToPlayer: function (state, messageArray, timeout, responseCallback) {
+    if (messageArray[0] == "STOP") {
+      return responseCallback("DONE");
+    }    
+    if (messageArray[0] == "START") {
+      this.myRole = messageArray[2];
+      return responseCallback("READY");
+    }
+    
+    var legalMoves = this.machine.get_legal_moves(state, this.myRole);
+    var randomMove = legalMoves[Math.floor(Math.random()*legalMoves.length)];
+    var theResponse = SymbolList.arrayIntoSymbolList(randomMove);
+    return responseCallback(theResponse);
+  }
+}
+
+function create_player (theURL, machine) {
+  var player;
+  if (theURL == "random") {
+    player = Object.create(RandomPlayer);
+    player.machine = machine;
+  } else {
+    player = Object.create(RemotePlayer);
+    player.theURL = theURL;
+  }
+  return player;
+}
+
 var MatchHosting = {
   width: null,
   height: null,
@@ -21,7 +61,7 @@ var MatchHosting = {
   myRole: null, // not really used
   selectedMove: null, // not really used
   
-  playerURLs: null,
+  players: null,
   playerResponses: null,
   
   matchData: null,
@@ -89,12 +129,13 @@ var MatchHosting = {
     this.spectator.publish(this.matchData);
     this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
     
-    // Load the URLs for the other players
-    this.playerURLs = [];
+    // Create the player instances for the game.
+    this.players = [];
     this.playerResponses = [];
     for (var i=0; i < this.matchData.gameRoleNames.length; i++) {
-        this.playerURLs.push(prompt("What is the URL for the '" + this.matchData.gameRoleNames[i] + "' player?", ""));
-        this.playerResponses.push(null);
+        var playerURL = prompt("What is the URL for the '" + this.matchData.gameRoleNames[i] + "' player?", "");
+        this.players.push(create_player(playerURL, this.machine));
+        this.playerResponses.push(null);        
     }
     
     // Start the match
@@ -186,20 +227,19 @@ var MatchHosting = {
   },
   
   writeToAllPlayers: function (messageArray, timeout) {
-    for(var i = 0; i < this.playerURLs.length; i++) {
+    for(var i = 0; i < this.players.length; i++) {
       this.writeToPlayer(i, messageArray, timeout);
     }
   },
   
   writeStartMessages: function (timeout) {
-    for(var i = 0; i < this.playerURLs.length; i++) {
+    for(var i = 0; i < this.players.length; i++) {
       this.writeToPlayer(i, ["START", this.matchData.matchId, this.matchData.gameRoleNames[i], "(" + this.rulesheet + ")", this.startClock, this.playClock], timeout);
     }
   },
   
   writeToPlayer: function (playerIndex, messageArray, timeout) {
-    parent.ResourceLoader.post_raw_async_with_timeout(this.playerURLs[playerIndex], SymbolList.arrayIntoSymbolList(messageArray), this.getResponseCallbackForPlayer(playerIndex), timeout);
-    //parent.ResourceLoader.load_raw_async_with_timeout(this.playerURLs[playerIndex] + encodeURIComponent(SymbolList.arrayIntoSymbolList(messageArray)), this.getResponseCallbackForPlayer(playerIndex), timeout);    
+    this.players[playerIndex].writeToPlayer(this.state, messageArray, timeout, this.getResponseCallbackForPlayer(playerIndex));
   },
   
   getResponseCallbackForPlayer: function (playerIndex) {
