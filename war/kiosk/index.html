@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>GGP WebKiosk</title>
+  <title>GGP Kiosk</title>
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine:bold">
   <style>
     body {
@@ -34,31 +34,35 @@
   <script type='text/javascript' src='//www.ggp.org/scripts/common/StateMachine.js'></script>   
   <script type='text/javascript' src='//www.ggp.org/scripts/common/SymbolList.js'></script>
   <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
-  <script type='text/javascript' src='//www.ggp.org/scripts/KioskGameHandler.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/Kiosk.js'></script>
 
   <center>
-  <h1>General Game Playing</h1>
-  <h2>You can play any of the following games as the first player:</h2>
+  <h1>General Game Playing Kiosk</h1>
+  <h2>You can host a match in your browser.</h2>
   <br>
   <div id='new_game_div'>
-    <b>Shall we start a <select id='gameChooser' style='width:300'></select> match against random opponents?</b>
+    <b>Shall we start a <select id='gameChooser' style='width:300'></select> match?</b>    
     <button onclick="startNewGame()">Start!</button>
+    <br>
+    <b>You can include remote players, random players, and a single human player.</b><br>
+    <b>This user interface is an early prototype and will be improved in the near future.</b><br>
   </div>
   <br>
   <div id='desc_div' style='width: 75%'></div><br>
   <div id='game_div'></div>
+  <div id='log_div' style="color: red;"></div>
   </center>
 
   <script type="text/javascript" language="javascript">
     var repo_prefix = 'http://games.ggp.org/';  
 
     var selector = document.getElementById("gameChooser");
-    setTimeout("UserInterface.loadRepositoryGamesIntoMenu(repo_prefix, selector, true)", 1);
-
+    setTimeout("UserInterface.loadRepositoryGamesIntoMenu(repo_prefix, selector, true)", 1);  
+    
     function startNewGame() {
       var gameChooser = document.getElementById("gameChooser");
-      load_game(repo_prefix, gameChooser.value, 0, document.getElementById("game_div"), 400, 400);
-    }
+      load_kiosk(repo_prefix, gameChooser.value, document.getElementById("game_div"), 400, 400);
+    }    
   </script>
 </body>
 </html>

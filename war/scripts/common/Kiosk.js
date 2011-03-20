@@ -108,7 +108,7 @@ function create_player (theURL, machine, vizDiv, user_interface, renderStateCall
   return player;
 }
 
-var MatchHosting = {
+var Kiosk = {
   width: null,
   height: null,
 
@@ -347,8 +347,8 @@ var MatchHosting = {
 
 // NOTE: This function *must* define gameHandler as a global variable.
 // Otherwise, sections of the above code will not work.
-function load_game (serverName, gameName, gameDiv, width, height) {  
-  gameHandler = Object.create(MatchHosting);
+function load_kiosk (serverName, gameName, gameDiv, width, height) {  
+  gameHandler = Object.create(Kiosk);
   gameHandler.initialize(serverName, gameName, gameDiv, width, height);  
   return gameHandler;
 }
