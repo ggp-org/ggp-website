@@ -87,7 +87,7 @@ var HumanPlayer = {
       
   clearMove: function () {
     this.user_interface.clearSelection();
-  },  
+  }
 }
 
 function create_player (theURL, machine, vizDiv, user_interface, renderStateCallback) {
