@@ -28,7 +28,7 @@ var UserInterface = {
       ResourceLoader.load_raw_async_with_timeout(theRepoPrefix + 'games/' + games_listing[i] + '/', curry(addGameToMenu, games_listing[i]), 60000);
     }
   },
-  
+
   emptyDiv: function (divToClear) {
     var i;
     while (i = divToClear.childNodes[0]){
@@ -36,5 +36,16 @@ var UserInterface = {
         divToClear.removeChild(i);
       }
     }
+  },
+
+  logError: function (x) {
+    console.log(x);
+    var logDiv = document.getElementById("log_div");
+    if (logDiv) logDiv.innerHTML += "<br>" + x;
+  },
+  
+  clearErrors: function () {
+    var logDiv = document.getElementById("log_div");
+    if (logDiv) logDiv.innerHTML = "";
   }
 }

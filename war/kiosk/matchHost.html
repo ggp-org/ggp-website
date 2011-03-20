@@ -47,6 +47,7 @@
   <br>
   <div id='desc_div' style='width: 75%'></div><br>
   <div id='game_div'></div>
+  <div id='log_div' style="color: red;"></div>
   </center>
 
   <script type="text/javascript" language="javascript">
@@ -57,7 +58,7 @@
     
     function startNewGame() {
       var gameChooser = document.getElementById("gameChooser");
-      load_game(repo_prefix, gameChooser.value, null, document.getElementById("game_div"), 400, 400);
+      load_game(repo_prefix, gameChooser.value, document.getElementById("game_div"), 400, 400);
     }    
   </script>
 </body>

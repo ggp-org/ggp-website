@@ -18,7 +18,7 @@ var RandomPlayer = {
       this.myRole = messageArray[2];
       return responseCallback("READY");
     }
-
+    
     var legalMoves = this.machine.get_legal_moves(state, this.myRole);
     var randomMove = legalMoves[Math.floor(Math.random()*legalMoves.length)];
     var theResponse = SymbolList.arrayIntoSymbolList(randomMove);
@@ -30,6 +30,11 @@ var HumanPlayer = {
   myRole: null,
   machine: null,
   vizDiv: null,
+  user_interface: null,
+  renderStateCallback: null,
+  
+  selectedMove: null,
+  liveSubmitCallback: null,
 
   writeToPlayer: function (state, messageArray, timeout, responseCallback) {
     if (messageArray[0] == "STOP") return responseCallback("DONE");
@@ -39,17 +44,63 @@ var HumanPlayer = {
     }
 
     var legalMoves = this.machine.get_legal_moves(state, this.myRole);
-    var randomMove = legalMoves[Math.floor(Math.random()*legalMoves.length)];
-    var theResponse = SymbolList.arrayIntoSymbolList(randomMove);
-    return responseCallback(theResponse);
-  }  
+    if (legalMoves.length == 1) {    
+      var theResponse = SymbolList.arrayIntoSymbolList(legalMoves[0]);
+      return responseCallback(theResponse);
+    }
+
+    this.selectedMove = null;
+    this.liveSubmitCallback = responseCallback;
+
+    // Create a user interface and attach it to the visualization      
+    var inner_args = {};
+    var game_parent = this;
+    inner_args.viz_div = this.vizDiv;
+    inner_args.legals = legalMoves;
+    inner_args.selection_callback = function selectionCallback(move) {
+      if(!move) move = "";
+
+      document.getElementById("clear_move_button").disabled = !move;
+      document.getElementById("select_move_button").disabled = !move;
+      game_parent.selectedMove = move;
+      document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>" + move;
+    }
+    this.user_interface.attach(inner_args);
+  },
+  
+  submitMove: function () {
+    if(!this.selectedMove) return;
+    document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>";
+    document.getElementById("clear_move_button").disabled = true;
+    document.getElementById("select_move_button").disabled = true;    
+    
+    var myMove = this.selectedMove;
+    var myCallback = this.liveSubmitCallback;
+
+    this.selectedMove = null;
+    this.liveSubmitCallback = null;    
+    
+    this.renderStateCallback();
+    
+    myCallback(SymbolList.arrayIntoSymbolList(myMove));
+  },
+      
+  clearMove: function () {
+    this.user_interface.clearSelection();
+  },  
 }
 
-function create_player (theURL, machine) {
+function create_player (theURL, machine, vizDiv, user_interface, renderStateCallback) {
   var player;
   if (theURL == "random") {
     player = Object.create(RandomPlayer);
     player.machine = machine;
+  } else if (theURL == "human") {
+    player = Object.create(HumanPlayer);
+    player.vizDiv = vizDiv;
+    player.machine = machine;
+    player.user_interface = user_interface;
+    player.renderStateCallback = renderStateCallback;
   } else {
     player = Object.create(RemotePlayer);
     player.theURL = theURL;
@@ -65,8 +116,8 @@ var MatchHosting = {
   gameDiv: null,
   spectatorDiv: null,
 
-  playClock: 2,
-  startClock: 5,  
+  playClock: 8,
+  startClock: 16,
 
   rulesheet: null,  
   stylesheet: null,
@@ -75,16 +126,17 @@ var MatchHosting = {
   state: null,
   machine: null,
 
-  myRole: null, // not really used
-  selectedMove: null, // not really used
+  humanPlayer: null,
 
   players: null,
   playerResponses: null,
 
   matchData: null,
   spectator: null,
+  
+  matchJustStarted: null,
 
-  initialize: function (serverName, gameName, myRole, gameDiv, width, height) {  
+  initialize: function (serverName, gameName, gameDiv, width, height) {  
     this.width = width;
     this.height = height;
 
@@ -107,7 +159,6 @@ var MatchHosting = {
     var inter_url = gameURL + metadata.user_interface;    
     var gameVersionedURL = gameURL + 'v' + metadata.version + "/";
 
-    this.myRole = myRole;
     this.gameDiv = gameDiv;
 
     var rule_compound = ResourceLoader.load_rulesheet(rules_url);
@@ -115,7 +166,7 @@ var MatchHosting = {
     this.rulesheet = rule_compound[1];
 
     UserInterface.emptyDiv(this.gameDiv);
-    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id='status_bar_div'></div></td><td align='right'><div id='button_div'><table><tr><td><button type='button' id='clear_move_button' disabled='true' onclick='gameHandler.clearMove()'>Clear Move</button></td><td><button type='button' id='select_move_button' disabled='true' onclick='gameHandler.submitMove()'>Submit Move</button></td></tr></table></div></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
+    this.gameDiv.innerHTML = "<table><tr><td colspan=2><div id='game_viz_div'></div></td></tr><tr><td><div id='status_bar_div'></div></td><td align='right'><div id='button_div'><table><tr><td><button type='button' id='clear_move_button' disabled='true' onclick='gameHandler.humanPlayer.clearMove()'>Clear Move</button></td><td><button type='button' id='select_move_button' disabled='true' onclick='gameHandler.humanPlayer.submitMove()'>Submit Move</button></td></tr></table></div></td></tr><tr><td colspan=2><div id='spectator_link_div'></div></td></tr></table>";
     this.vizDiv = document.getElementById("game_viz_div");   
     this.spectatorDiv = document.getElementById("spectator_link_div");
 
@@ -142,22 +193,29 @@ var MatchHosting = {
     this.spectator = make_spectator();
     this.spectator.publish(this.matchData);
     this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
+    
+    UserInterface.clearErrors();
 
     // Load the user interface
     this.user_interface = ResourceLoader.load_js(inter_url);    
 
     // Create the player instances for the game.
+    var parent = this;
     this.players = [];
     this.playerResponses = [];
     for (var i=0; i < this.matchData.gameRoleNames.length; i++) {
-        var playerURL = prompt("What is the URL for the '" + this.matchData.gameRoleNames[i] + "' player?", "");
-        this.players.push(create_player(playerURL, this.machine));
-        this.playerResponses.push(null);        
+      var playerURL = prompt("What is the URL for the '" + this.matchData.gameRoleNames[i] + "' player?", "");
+      var thePlayer = create_player(playerURL, this.machine, this.vizDiv, this.user_interface, function () { parent.renderCurrentState(); });
+      this.players.push(thePlayer);
+      this.playerResponses.push(null);
+      if (playerURL == "human") {
+        this.humanPlayer = thePlayer;
+      }
     }
 
     // Start the match
-    this.writeStartMessages(this.startClock*1000);
-    setTimeout("gameHandler.processResponsesForMatch(true);", 500+this.startClock*1000);
+    this.writeStartMessages(500+this.startClock*1000);
+    this.matchJustStarted = true;
 
     this.renderCurrentState();
   },
@@ -173,17 +231,7 @@ var MatchHosting = {
   },
 
   renderCurrentState: function () {
-    var gameOver = this.machine.is_terminal(this.state);
-    var legals; // not used
-    
-    if (!gameOver) {
-    //legals = this.machine.get_legal_moves(this.state, this.machine.get_roles()[this.myRole]);
-    //if (legals.length <= 1) {              <--- not used here, since myRole == null
-    //  this.selectedMove = legals[0];
-    //  this.submitMove();
-    //  return;
-    //}
-    }    
+    var gameOver = this.machine.is_terminal(this.state);   
 
     UserInterface.emptyDiv(this.vizDiv);
     StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.vizDiv, this.width, this.height);  
@@ -193,7 +241,7 @@ var MatchHosting = {
       var goals = [];
       var roles = this.machine.get_roles();
       for (var i = 0; i < roles.length; i++) {
-        if (i == this.myRole) {
+        if (this.humanPlayer && i == this.humanPlayer.myRole) {
           scoreText += "You";
         } else {
           scoreText += roles[i];
@@ -204,48 +252,35 @@ var MatchHosting = {
       
       document.getElementById("select_move_button").disabled = true;
       document.getElementById("clear_move_button").disabled = true;
-    } else {
-      //var inner_args = {};
-      //var game_parent = this;
-      //inner_args.viz_div = this.vizDiv;
-      //inner_args.legals = legals;
-      //inner_args.selection_callback = function selectionCallback(move) {
-      //  if(!move) move = "";
+    }
+  },
 
-      //  document.getElementById("clear_move_button").disabled = !move;
-      //  document.getElementById("select_move_button").disabled = !move;
-      //   game_parent.selectedMove = move;
-      //  document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>" + move;
-      //}
-      //this.user_interface.attach(inner_args);        
+  // === MATCH HANDLING ===
+  checkForAllMoves: function () {
+    var allMovesSubmitted = true;
+    for(var i = 0; i < this.playerResponses.length; i++) {
+      if (this.playerResponses[i] == null) {
+        allMovesSubmitted = false;
+      }
+    }
+    if (allMovesSubmitted && !this.waitingForProcessResponse) {
+      this.waitingForProcessResponse = true;
+      setTimeout("gameHandler.processResponsesForMatch();", 250);
     }
   },
   
-  submitMove: function () {
-    if(!this.selectedMove) return;
+  waitingForProcessResponse: false,
 
-    document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>";
+  processResponsesForMatch: function () {
+    this.waitingForProcessResponse = false;
+    if (this.matchData.isCompleted) return;
 
-    var jointMove = this.machine.get_random_joint_moves(this.state);
-    jointMove[this.myRole] = this.selectedMove;
-    this.matchData.moves.push(SymbolList.arrayIntoSymbolList(jointMove));
-    this.updateState(this.machine.get_next_state(this.state, jointMove));
-    this.spectator.publish(this.matchData);
-    this.spectatorDiv.innerHTML = 'Current match is being published to the <a href="' + this.spectator.link() + '">GGP Spectator Server</a>.';
-
-    this.selectedMove = null;
-    this.renderCurrentState();
-  },
-    
-  clearMove: function () {
-    this.user_interface.clearSelection();
-  },  
-  
-  // === MATCH HANDLING ===
-  processResponsesForMatch: function (justStarted) {
+    // If we haven't just started the match, we should take the player
+    // responses and formulate a joint move based on them. We should then
+    // advance the state of the match based on that joint move, and then
+    // broadcast the joint move to all of the players.
     var jointMove;
-    if (!justStarted) {
-      // Create the joint move, using random moves for null responses
+    if (!this.matchJustStarted) {
       jointMove = this.machine.get_random_joint_moves(this.state);
       for(var i = 0; i < this.matchData.gameRoleNames.length; i++) {
         if (this.playerResponses[i]) {
@@ -254,10 +289,10 @@ var MatchHosting = {
           if (legalMoves.indexOf(SymbolList.arrayIntoSymbolList(this.playerResponses[i])) > -1) {
             jointMove[i] = this.playerResponses[i];
           } else {
-            console.log('Got illegal move ' + this.playerResponses[i] + '. Choosing random move for player ' + i);
+            UserInterface.logError('Got illegal move ' + this.playerResponses[i] + '. Choosing random move for player ' + i);
           }
         } else {
-          console.log('Got null response. Choosing random move for player ' + i);
+          UserInterface.logError('Got null response. Choosing random move for player ' + i);
         }
       }
       // Advance to the next state
@@ -265,53 +300,55 @@ var MatchHosting = {
       this.updateState(this.machine.get_next_state(this.state, jointMove));
       this.spectator.publish(this.matchData);
       this.renderCurrentState();
-      // Null out the responses
-      for(var i = 0; i < this.matchData.gameRoleNames.length; i++) {
-        this.playerResponses[i] = null;
-      }
     }
     
+    // Null out the responses
+    for(var i = 0; i < this.playerResponses.length; i++) {
+      this.playerResponses[i] = null;
+    }    
+
     // Ask for the next moves
+    this.matchJustStarted = false;
     if (this.matchData.isCompleted) {
-        this.writeToAllPlayers(["STOP", this.matchData.matchId, SymbolList.arrayIntoSymbolList(jointMove)], 500+this.playClock*1000);
+      this.writeToAllPlayers(["STOP", this.matchData.matchId, SymbolList.arrayIntoSymbolList(jointMove)], 500+this.playClock*1000);
     } else {
-        this.writeToAllPlayers(["PLAY", this.matchData.matchId, SymbolList.arrayIntoSymbolList(jointMove)], 500+this.playClock*1000);
-        setTimeout("gameHandler.processResponsesForMatch(false);", 500+this.playClock*1000);
+      this.writeToAllPlayers(["PLAY", this.matchData.matchId, SymbolList.arrayIntoSymbolList(jointMove)], 500+this.playClock*1000);
     }
   },
-  
+
   writeToAllPlayers: function (messageArray, timeout) {
     for(var i = 0; i < this.players.length; i++) {
       this.writeToPlayer(i, messageArray, timeout);
     }
   },
-  
+
   writeStartMessages: function (timeout) {
     for(var i = 0; i < this.players.length; i++) {
       this.writeToPlayer(i, ["START", this.matchData.matchId, this.matchData.gameRoleNames[i], "(" + this.rulesheet + ")", this.startClock, this.playClock], timeout);
     }
   },
-  
+
   writeToPlayer: function (playerIndex, messageArray, timeout) {
     this.players[playerIndex].writeToPlayer(this.state, messageArray, timeout, this.getResponseCallbackForPlayer(playerIndex));
   },
-  
+
   getResponseCallbackForPlayer: function (playerIndex) {
     var x = this;
     return function (response) {
       if (response) {
         x.playerResponses[playerIndex] = SymbolList.symbolListIntoArray(response);
       } else {
-        x.playerResponses[playerIndex] = null;
+        x.playerResponses[playerIndex] = "";
       }
+      x.checkForAllMoves();
     };
   }
 }
 
 // NOTE: This function *must* define gameHandler as a global variable.
 // Otherwise, sections of the above code will not work.
-function load_game (serverName, gameName, myRole, gameDiv, width, height) {  
+function load_game (serverName, gameName, gameDiv, width, height) {  
   gameHandler = Object.create(MatchHosting);
-  gameHandler.initialize(serverName, gameName, myRole, gameDiv, width, height);  
+  gameHandler.initialize(serverName, gameName, gameDiv, width, height);  
   return gameHandler;
 }
