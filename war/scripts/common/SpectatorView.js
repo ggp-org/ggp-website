@@ -30,8 +30,10 @@ var SpectatorView = {
   
   state: null,  
   matchData: null,
-  stylesheet: null,  
-
+  stylesheet: null,
+  
+  visibleStateIndex: null,
+  
   // Render the current state of the match, using a
   // smooth transition between old and new states.
   render: function() {
@@ -101,6 +103,7 @@ var SpectatorView = {
     var matchString = ResourceLoader.load_raw(match_url);
     this.matchData = JSON.parse(matchString);        
     this.state = this.getStateFromMatchData(this.matchData);
+    this.visibleStateIndex = this.matchData.states.length-1;
     
     // Next, load the stylesheet associated with the game being played. This involves
     // calling out to the repository server that hosts the game being played.
@@ -133,6 +136,7 @@ var SpectatorView = {
       }
       
       thisRef.state = thisRef.getStateFromMatchData(newMatchData);
+      thisRef.visibleStateIndex = newMatchData.states.length-1;
       thisRef.matchData = newMatchData;
       thisRef.render();
 
@@ -163,6 +167,30 @@ var SpectatorView = {
       }
     }
     window.theGlobalChannelCallbacks.push(update_state_via_channel);
+    
+    document.onkeydown = function(e) {
+      if (!e) e = window.event;
+      key = e.keyCode ? e.keyCode : e.which;      
+
+      if (!thisRef.matchData.isCompleted || thisRef.rendering) {
+        return;
+      }
+      
+      // 37 = left, 38 = up, 39 = right, 40 = down
+      if (key == 37) {
+        if (thisRef.visibleStateIndex > 0) {
+          thisRef.visibleStateIndex--;
+        }
+      }
+      if (key == 39) {
+        if (thisRef.visibleStateIndex < thisRef.matchData.states.length-1) {
+          thisRef.visibleStateIndex++;
+        }
+      }
+
+      thisRef.state = SymbolList.symbolListIntoArray(thisRef.matchData.states[thisRef.visibleStateIndex]);
+      thisRef.render();
+    }    
   },
   
   // Constructor, to make new SpectatorViews.
