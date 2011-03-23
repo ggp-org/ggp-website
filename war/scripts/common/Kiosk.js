@@ -95,7 +95,7 @@ function create_player (theURL, machine, vizDiv, user_interface, renderStateCall
   if (theURL == "random") {
     player = Object.create(RandomPlayer);
     player.machine = machine;
-  } else if (theURL == "human") {
+  } else if (theURL == "me") {
     player = Object.create(HumanPlayer);
     player.vizDiv = vizDiv;
     player.machine = machine;
@@ -208,7 +208,7 @@ var Kiosk = {
       var thePlayer = create_player(playerURL, this.machine, this.vizDiv, this.user_interface, function () { parent.renderCurrentState(); });
       this.players.push(thePlayer);
       this.playerResponses.push(null);
-      if (playerURL == "human") {
+      if (playerURL == "me") {
         this.humanPlayer = thePlayer;
       }
     }
@@ -241,7 +241,7 @@ var Kiosk = {
       var goals = [];
       var roles = this.machine.get_roles();
       for (var i = 0; i < roles.length; i++) {
-        if (this.humanPlayer && i == this.humanPlayer.myRole) {
+        if (this.humanPlayer != null && i == this.humanPlayer.myRole) {
           scoreText += "You";
         } else {
           scoreText += roles[i];
