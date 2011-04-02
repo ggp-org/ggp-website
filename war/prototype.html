@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <title>General Game Playing</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:bold">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans">
+    <link rel="stylesheet" type="text/css" href="/ggp_org.css" />    
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/splash/supersized.3.1.core.min.js"></script>
+    <link rel="stylesheet" href="/splash/supersized.core.css" type="text/css" media="screen" /> 
+    <style>
+      /* Huge hack to center things. This is surprisingly hard to do.
+       * Credit to: http://brunildo.org/test/shrink_center_4.html
+       */
+      html, body {
+	    margin: 0;
+        padding: 0;
+      }
+      html, body, .swc0, .swc1 {
+	    height: 100%;
+      }
+      .swc0 {
+        margin: 0 auto;
+        display: table;
+      }
+      .swc1 {
+        display: table-cell;
+        vertical-align: middle;
+        white-space: nowrap;
+        background: rgba(200, 200, 200, 0.9);
+      }
+      .swc2:after {
+        position: absolute;
+        height: 0%;
+        content: "";
+      }
+      html {
+        position: relative;
+      }
+    </style>
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type='text/javascript'> 
+        jQuery(function($){
+          $.supersized({
+            slides: [{image:'/splash/bg1.jpg'},
+                     {image:'/splash/bg2.jpg'},
+                     {image:'/splash/bg3.jpg'}],
+            start_slide: 0
+          });
+        });
+    </script>    
+  </head>
+  <body>
+    <div class="swc0"><div class="swc1"><div class="swc2">
+      <div style="width: 500px">
+      <center>
+        <h1>GGP.org</h1>
+        <h2>General Game Playing</h2>
+        <br>
+        <table style="width: 400px">
+          <tr>
+            <td style="vertical-align: top; padding-top: 10px; ">
+            <td><h3>What is general game playing?</h3><div class="main_text">
+            
+              General game playing is about playing games that you've never seen
+            before. Making moves before understanding the full consequences of the
+            rules. Developing a strategy as you go. Whether done by humans or by
+            machines, general game playing is less about established expertise
+            than it is about individual innovation. <a href="//www.ggp.org/docs/BeginnersGuide.html">Learn more</a>.
+            
+            </div> </td>
+          </tr>
+          <tr><td colspan=2 height=10px></td></tr>
+          <tr>
+            <td style="vertical-align: top; padding-top: 10px; ">
+            <td><h3>How can you play a sample game?</h3> <div class="main_text">
+            
+                Play games against computer players using the
+                <a href="//www.ggp.org/kiosk/">online gaming kiosk</a>.
+                Play games against human opponents using the
+                <a href="//artemis.ggp.org/">Artemis gaming server</a>.
+              
+            </div> </td>
+          </tr>
+          <tr><td colspan=2 height=10px></td></tr>
+          <tr>
+            <td style="vertical-align: top; padding-top: 10px; ">
+            <td><h3>How do you develop a computer player?</h3> <div class="main_text">
+            
+                Check out the <a href="http://code.google.com/p/ggp-base/">GGP Base</a> project
+                to get started building your own player. Register it with the
+                <a href="//apollo.ggp.org/">Apollo gaming server</a> or the
+                <a href="http://euklid.inf.tu-dresden.de:8180/ggpserver/">Dresden gaming server</a>
+                to have it play matches against other players around the world.
+                
+            </div> </td>
+          </tr>
+          <tr><td colspan=2 height=10px></td></tr>
+          <tr>
+            <td style="vertical-align: top; padding-top: 10px; ">
+            <td><h3>How can you help out?</h3> <div class="main_text">
+
+                Explore the ongoing <a href="http://code.google.com/p/ggp-galaxy/">GGP Galaxy</a> project,
+                which aims to bring general game playing to a wider audience on the web.
+                
+            </div> </td>
+          </tr>          
+        </table>
+        <br>
+        <div class="tiny_text">Questions? Comments? Contact <b>webmaster@ggp.org</b>.</div>
+        <div class="tiny_text" id="img_attribution"></div>
+      </center>
+      </div>
+    </div><span class="swc3"></span></div></div>
+    <script type='text/javascript'>
+      function renderAttribution() {
+        var imgName = document.getElementById("supersized").childNodes[0].src;
+        if (imgName.indexOf("bg3.jpg") >= 0) {
+          a = ["wikimedia", "http://commons.wikimedia.org/wiki/File:Tzaar_detail.jpg"];
+        } else if (imgName.indexOf("bg2.jpg") >= 0) {
+          a = ["flickr", "http://www.flickr.com/photos/rebeccaanne/3751332112/"];
+        } else if (imgName.indexOf("bg1.jpg") >= 0) {
+          a = ["fotopedia", "http://www.fotopedia.com/items/flickr-547944930"];
+        } else {
+          a = ["unknown: please report this bug", "#"];
+        }
+        document.getElementById("img_attribution").innerHTML = "(background image courtesy of <a href=\"" + a[1] + "\">" + a[0] + "</a>)";
+      }
+      setTimeout("renderAttribution()", 0);
+    </script>
+  </body>
+</html>

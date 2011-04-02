@@ -1,0 +1,49 @@
+body {
+  margin:0;
+  padding:0;
+}
+
+h1 {
+	color: #222222;
+	font-family: 'Droid Sans', bold;
+	font-size: 100px;
+	text-align: center;
+	font-variant: small-caps;
+	text-shadow: #AAAAAA 0px 0px 20px;
+	margin: 0px;
+}
+h2 {
+	color: #222222;
+	font-family: 'Droid Sans', bold;
+	font-size: 40px;
+	text-align: center;
+	font-variant: small-caps;
+	text-shadow: #AAAAAA 0px 0px 10px;
+	margin: 0px;
+}
+h3 {
+	color: #222222;
+	font-family: 'Droid Sans', bold;
+	font-size: 20px;
+	text-align: left;
+	font-variant: small-caps;
+	text-shadow: #AAAAAA 0px 0px 10px;
+	margin: 0px;
+}
+div.main_text {
+	color: #222222;
+	font-family: 'Droid Sans';
+	font-size: 14px;
+	text-align: left;	
+}
+div.tiny_text {
+	color: #222222;
+	font-family: 'Droid Sans';
+	font-size: 11px;
+	text-align: center;	
+}
+
+a:link {color: #000000; text-decoration: underline; }
+a:active {color: #222222; text-decoration: underline; }
+a:visited {color: #444444; text-decoration: underline; }
+a:hover {color: #0000FF; text-decoration: none; }
