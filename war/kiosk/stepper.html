@@ -1,0 +1,177 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>GGP Stepper</title>
+  <style>
+    body {
+      margin: 2%;      
+      background: #EEE;
+    }
+    h1 {
+      color: #212121;
+      font-size: 48px;
+      text-shadow: #414141 0px 0px 5px;
+      margin: 2px;
+    }
+    h2 {
+      color: #212121;
+      font-size: 36px;
+      text-shadow: #414141 0px 0px 5px;
+      margin: 2px;
+    }
+  </style>
+  <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+</head>
+<body>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/compulog.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/AJAXSLT.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/SpectatorPublisher.js'></script> 
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/StateRenderer.js'></script> 
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/StateMachine.js'></script>   
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/SymbolList.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
+  <script type='text/javascript' src='//www.ggp.org/scripts/common/Kiosk.js'></script>
+
+  <center>
+  <h1>GGP Stepper</h1>
+  <h2>Experiment with rulesheets.</h2>
+  <br>
+  <table>
+    <tr>
+      <td rowspan=2>
+        <textarea id="rulesheet" rows="40" cols="50">
+(role xplayer)
+(role oplayer)
+
+(init (cell 1 1 b))
+(init (cell 1 2 b))
+(init (cell 1 3 b))
+(init (cell 2 1 b))
+(init (cell 2 2 b))
+(init (cell 2 3 b))
+(init (cell 3 1 b))
+(init (cell 3 2 b))
+(init (cell 3 3 b))
+(init (control xplayer))
+
+(<= (next (cell ?m ?n x))
+(does xplayer (mark ?m ?n))
+(true (cell ?m ?n b)))
+
+(<= (next (cell ?m ?n o))
+(does oplayer (mark ?m ?n))
+(true (cell ?m ?n b)))
+
+(<= (next (cell ?m ?n ?w))
+(true (cell ?m ?n ?w))
+(distinct ?w b))
+
+(<= (next (cell ?m ?n b))
+(does ?w (mark ?j ?k))
+(true (cell ?m ?n b))
+(or (distinct ?m ?j) (distinct ?n ?k)))
+
+(<= (next (control xplayer))
+(true (control oplayer)))
+
+(<= (next (control oplayer))
+(true (control xplayer)))
+
+(<= (row ?m ?x)
+(true (cell ?m 1 ?x))
+(true (cell ?m 2 ?x))
+(true (cell ?m 3 ?x)))
+
+(<= (column ?n ?x)
+(true (cell 1 ?n ?x))
+(true (cell 2 ?n ?x))
+(true (cell 3 ?n ?x)))
+
+(<= (diagonal ?x)
+(true (cell 1 1 ?x))
+(true (cell 2 2 ?x))
+(true (cell 3 3 ?x)))
+
+(<= (diagonal ?x)
+(true (cell 1 3 ?x))
+(true (cell 2 2 ?x))
+(true (cell 3 1 ?x)))
+
+(<= (line ?x) (row ?m ?x))
+(<= (line ?x) (column ?m ?x))
+(<= (line ?x) (diagonal ?x))
+
+(<= open
+(true (cell ?m ?n b)))
+
+(<= (legal ?w (mark ?x ?y))
+(true (cell ?x ?y b))
+(true (control ?w)))
+
+(<= (legal xplayer noop)
+(true (control oplayer)))
+
+(<= (legal oplayer noop)
+(true (control xplayer)))
+
+(<= (goal xplayer 100)
+(line x))
+
+(<= (goal xplayer 50)
+(not (line x))
+(not (line o))
+(not open))
+
+(<= (goal xplayer 0)
+(line o))
+
+(<= (goal oplayer 100)
+(line o))
+
+(<= (goal oplayer 50)
+(not (line x))
+(not (line o))
+(not open))
+
+(<= (goal oplayer 0)
+(line x))
+
+(<= terminal
+(line x))
+
+(<= terminal
+(line o))
+
+(<= terminal
+(not open))
+        </textarea>
+      </td>
+      <td>
+        <textarea id="state" rows="25" cols="50">
+        </textarea>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div id="move_selectors"></div>
+        <center>
+          <button type="button">Initial State</button>
+          <button type="button" disabled=true>Make Move</button>
+        </center>
+      </td>
+    </tr>
+  </table>
+  </center>
+
+  <script type="text/javascript" language="javascript">
+    var machine = null;
+    
+    function process_rules() {
+      machine = load_machine(grindem(readkifdata(document.getElementById("rulesheet").value)));
+    }
+    
+    //...
+  </script>
+</body>
+</html>
