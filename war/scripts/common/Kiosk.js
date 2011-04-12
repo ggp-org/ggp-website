@@ -116,8 +116,8 @@ var Kiosk = {
   gameDiv: null,
   spectatorDiv: null,
 
-  playClock: 8,
-  startClock: 16,
+  playClock: null,
+  startClock: null,
 
   rulesheet: null,  
   stylesheet: null,
@@ -136,9 +136,12 @@ var Kiosk = {
   
   matchJustStarted: null,
 
-  initialize: function (serverName, gameName, gameDiv, width, height) {  
+  initialize: function (serverName, gameName, playerURLs, startClock, playClock, gameDiv, width, height) {  
     this.width = width;
     this.height = height;
+    
+    this.playClock = playClock;
+    this.startClock = startClock;    
 
     var gameURL = serverName + "games/" + gameName + "/";
     var metadata = ResourceLoader.load_json(gameURL);
@@ -204,7 +207,7 @@ var Kiosk = {
     this.players = [];
     this.playerResponses = [];
     for (var i=0; i < this.matchData.gameRoleNames.length; i++) {
-      var playerURL = prompt("What is the URL for the '" + this.matchData.gameRoleNames[i] + "' player?", "");
+      var playerURL = playerURLs[i];
       var thePlayer = create_player(playerURL, this.machine, this.vizDiv, this.user_interface, function () { parent.renderCurrentState(); });
       this.players.push(thePlayer);
       this.playerResponses.push(null);
@@ -347,8 +350,8 @@ var Kiosk = {
 
 // NOTE: This function *must* define gameHandler as a global variable.
 // Otherwise, sections of the above code will not work.
-function load_kiosk (serverName, gameName, gameDiv, width, height) {  
+function load_kiosk (serverName, gameName, playerURLs, startClock, playClock, gameDiv, width, height) {  
   gameHandler = Object.create(Kiosk);
-  gameHandler.initialize(serverName, gameName, gameDiv, width, height);  
+  gameHandler.initialize(serverName, gameName, playerURLs, startClock, playClock, gameDiv, width, height);  
   return gameHandler;
 }
