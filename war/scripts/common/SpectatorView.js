@@ -20,7 +20,8 @@ if (typeof Object.create !== 'function') {
 var SpectatorView = {
   topDiv: null,
   gameVizDiv: null,
-  gameOldVizDiv: null,  
+  gameOldVizDiv: null,
+  callbacks: null,
   
   rendering: false,
   pending_render: false,
@@ -75,7 +76,7 @@ var SpectatorView = {
     return SymbolList.symbolListIntoArray(z[z.length-1]);
   },
   
-  initialize: function (match_url, spectator_div) {
+  initialize: function (match_url, spectator_div, callbacks) {
     // First, create the HTML structure for holding the spectator view.
     // This consists of a DIV for the game visualization (gameVizDiv) and
     // a DIV that holds the previous state of the game, which is needed for
@@ -109,20 +110,22 @@ var SpectatorView = {
     // calling out to the repository server that hosts the game being played.
     var gameURL = this.matchData.gameMetaURL;
     var metadata = ResourceLoader.load_json(gameURL);      
-    this.stylesheet = ResourceLoader.load_stylesheet(gameURL + metadata.stylesheet);      
-
-    // If we need to load the description, do that as well.
-    // TODO(schreib): Set the description in a more elegant way.
-    if ("description" in metadata && document.getElementById('desc_div') != null) {
-      var description = ResourceLoader.load_raw(gameURL + metadata.description);
-      var desc_div = document.getElementById('desc_div');
-      desc_div.innerHTML = '<b>Game Description:</b> ' + description;       
-    }
+    this.stylesheet = ResourceLoader.load_stylesheet(gameURL + metadata.stylesheet);
     
-    // TODO(schreib): Set the name_div in a more elegant way.
-    if (document.getElementById('name_div') != null) {
-      var name_div = document.getElementById('name_div');
-      name_div.innerHTML = 'Showing match: ' + this.matchData.matchId;
+    // Store the callbacks, and start off by sending back information
+    // about the match being loaded to the "info" callback.
+    this.callbacks = callbacks;    
+    if ("info" in callbacks) {
+      var info_response = {};
+      info_response.matchId = this.matchData.matchId;
+      info_response.description = null;
+      if ("description" in metadata) {
+        info_response.description = ResourceLoader.load_raw(gameURL + metadata.description);
+      }
+      callbacks.info(info_response);
+    }
+    if (this.matchData.isCompleted && "done" in callbacks) {
+      callbacks.done();
     }
 
     // Create a callback that will update the match state based on
@@ -139,13 +142,12 @@ var SpectatorView = {
       thisRef.visibleStateIndex = newMatchData.states.length-1;
       thisRef.matchData = newMatchData;
       thisRef.render();
-
-      if (newMatchData.isCompleted && document.getElementById('name_div') != null) {
-        // TODO(schreib): Better reflect that the match is over.
-        // TODO(schreib): Also, do so even when we never get an update.
-        var name_div = document.getElementById('name_div');
-        name_div.innerHTML += ' ... GAME OVER'
-        return;
+      
+      if ("update" in thisRef.callbacks) {
+        thisRef.callbacks.update();
+      }
+      if (newMatchData.isCompleted && "done" in thisRef.callbacks) {
+        thisRef.callbacks.done();
       }
     }
     
@@ -195,8 +197,26 @@ var SpectatorView = {
   
   // Constructor, to make new SpectatorViews.
   construct: function (match_url, spectator_div) {
+    // TODO: Move these into the individual callers, rather than
+    // having them live in the SpectatorView library.      
+    var default_callbacks = {
+      "info": function(info_response) {
+        if (document.getElementById('desc_div') != null) {      
+          document.getElementById('desc_div').innerHTML = '<b>Game Description:</b> ' + info_response.description;       
+        }
+        if (document.getElementById('name_div') != null) {
+          document.getElementById('name_div').innerHTML = 'Showing match: ' + info_response.matchId;
+        }
+      },
+      "done": function() {
+        if (document.getElementById('name_div') != null) {
+          document.getElementById('name_div').innerHTML += ' ... GAME OVER';
+        }        
+      }
+    };
+      
     var my_spectator_view = Object.create(SpectatorView);
-    my_spectator_view.initialize(match_url, spectator_div);
+    my_spectator_view.initialize(match_url, spectator_div, default_callbacks);
     return my_spectator_view;
   }
 }
