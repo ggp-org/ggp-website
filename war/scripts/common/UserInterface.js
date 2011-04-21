@@ -47,5 +47,19 @@ var UserInterface = {
   clearErrors: function () {
     var logDiv = document.getElementById("log_div");
     if (logDiv) logDiv.innerHTML = "";
+  },
+  
+  renderDateTime: function(d) {    
+    var suffix = "AM";
+    var hours = d.getHours()
+    var minutes = d.getMinutes()  
+    if (hours >= 12) { suffix = "PM"; hours = hours - 12; }
+    if (hours == 0) { hours = 12; }
+    if (minutes < 10) { minutes = "0" + minutes; }
+
+    var out = "";
+    out += hours + ":" + minutes + " " + suffix + " on ";
+    out += (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
+    return out;
   }
 }
