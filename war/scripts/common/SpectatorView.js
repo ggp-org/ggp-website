@@ -19,6 +19,8 @@ if (typeof Object.create !== 'function') {
 // is preferred).
 var SpectatorView = {
   topDiv: null,
+  midDiv: null,
+  textDiv: null,
   gameVizDiv: null,
   gameOldVizDiv: null,
   callbacks: null,
@@ -34,6 +36,9 @@ var SpectatorView = {
   stylesheet: null,
   
   visibleStateIndex: null,
+  
+  VISUAL_VIEW: 0,
+  LISTING_VIEW: 1,
   
   // Render the current state of the match, using a
   // smooth transition between old and new states.
@@ -57,6 +62,8 @@ var SpectatorView = {
     StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.gameVizDiv, width, height);
 
     this.topDiv.style.height = this.gameVizDiv.children[0].clientHeight + 'px';
+    
+    this.renderTextPage();
 
     var thisRef = this;
     this.rendering = true;    
@@ -67,6 +74,41 @@ var SpectatorView = {
         thisRef.render();
       }
     });
+  },
+  
+  renderTextPage: function () {
+    textHTML = "<table border=1px><tr height=20px><th>Step</th><th>Moves</th><th>Time</th><th>Errors</th></tr>";
+    for (var i = 0; i < this.matchData.states.length; i++) {
+        textHTML += "<tr height=20px><td>" + i + "</td>";
+        if (i > 0) {
+          textHTML += "<td>" + this.matchData.moves[i-1] + "</td>";
+        } else {
+          textHTML += "<td></td>";
+        }
+        textHTML += "<td>" + UserInterface.renderDateTime(new Date(this.matchData.stateTimes[i])) + "</td>";
+        if ("errors" in this.matchData) {
+          if (this.matchData.errors.length > i) {
+            var isEmpty = true;
+            for (var j = 0; j < this.matchData.errors[i].length; j++) {
+              if (this.matchData.errors[i][j] != "") {
+                isEmpty = false;
+              }
+            }
+            if (isEmpty) {
+              textHTML += "<td>None</td>";
+            } else {
+              textHTML += "<td>[" + this.matchData.errors[i] + "]</td>";
+            }
+          } else {
+            textHTML += "<td></td>";
+          }
+        } else {
+          textHTML += "<td>Unknown</td>";
+        }
+        textHTML += "</tr>";
+    }
+    textHTML += "</table>";
+    this.textDiv.innerHTML = textHTML;
   },
   
   // Given a match data object, return the current state, which is at the end
@@ -84,8 +126,11 @@ var SpectatorView = {
     this.topDiv = document.createElement('div');
     this.topDiv.style.cssText = "";
     
-    var midDiv = document.createElement('div');    
-    midDiv.style.cssText = "position: relative; width: 100%; height: 100%";
+    this.midDiv = document.createElement('div');    
+    this.midDiv.style.cssText = "position: relative; width: 100%; height: 100%";
+    this.textDiv = document.createElement('div');    
+    this.textDiv.style.cssText = "position: relative; width: 100%; height: 100%; display: none; ";
+    this.textDiv.innerHTML = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
     
     this.gameVizDiv = document.createElement('div');
     this.gameOldVizDiv = document.createElement('div');
@@ -93,9 +138,10 @@ var SpectatorView = {
     this.gameVizDiv.style.cssText = "position: absolute; top: auto; left: auto; width: 100%; height: 100%; z-index:1;";
     this.gameOldVizDiv.style.cssText = "position: absolute; top: auto; left: auto; width: 100%; height: 100%; z-index:2;";
     
-    midDiv.appendChild(this.gameVizDiv);
-    midDiv.appendChild(this.gameOldVizDiv);
-    this.topDiv.appendChild(midDiv);
+    this.midDiv.appendChild(this.gameVizDiv);
+    this.midDiv.appendChild(this.gameOldVizDiv);
+    this.topDiv.appendChild(this.midDiv);
+    this.topDiv.appendChild(this.textDiv);
     spectator_div.appendChild(this.topDiv);
     
     // Next, load the resources for the match. We need to load the current state,
@@ -189,10 +235,26 @@ var SpectatorView = {
           thisRef.visibleStateIndex++;
         }
       }
+      
+      if (key == 65) {
+        thisRef.switchView(thisRef.VISUAL_VIEW);
+      } else if (key == 66) {
+        thisRef.switchView(thisRef.LISTING_VIEW);
+      }
 
       thisRef.state = SymbolList.symbolListIntoArray(thisRef.matchData.states[thisRef.visibleStateIndex]);
       thisRef.render();
     }    
+  },
+
+  switchView: function (viewID) {
+    if (viewID == this.VISUAL_VIEW) {
+      this.midDiv.style.display = '';
+      this.textDiv.style.display = 'none';
+    } else if (viewID == this.LISTING_VIEW) {
+      this.midDiv.style.display = 'none';
+      this.textDiv.style.display = '';
+    }
   },
   
   // Constructor, to make new SpectatorViews.
