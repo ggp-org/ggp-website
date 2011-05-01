@@ -61,5 +61,25 @@ var UserInterface = {
     out += hours + ":" + minutes + " " + suffix + " on ";
     out += (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
     return out;
-  }
+  },
+  
+  // Currently this correctly renders names for [-9,9].
+  // Since it's currently only used for rendering names for
+  // the number of roles in a given game, that range is sufficient.
+  // It shouldn't be difficult to expand if needed.
+  properNameForInteger: function (x) {
+      if (x < 0) return "Negative " + properNameForInteger(-x);
+      
+      if (x == 0) return "Zero";
+      if (x == 1) return "One";
+      if (x == 2) return "Two";
+      if (x == 3) return "Three";
+      if (x == 4) return "Four";
+      if (x == 5) return "Five";
+      if (x == 6) return "Six";
+      if (x == 7) return "Seven";
+      if (x == 8) return "Eight";
+      if (x == 9) return "Nine";
+      return "Ten+";
+    }
 }
