@@ -34,19 +34,20 @@
     <h3>by Sam Schreiber</h3>
     <br>
     
-    <h2>What is General Game Playing?</h2>
-    <p>General game playing is a field of artificial intelligence which studies
-how to build programs that can play games. There is a long and varied history
-of humans building artificial gamers, from the Mechanical Turk back in the 1770s
-to modern chess-playing computers like Deep Blue that have beaten the human world
-chess champions. Artificial intelligence work has long focused on computer programs
-that play specific games, and such programs can handily defeat human opponents
-on games ranging from Connect Four to Chess.</p>
+    <h2>What is General Game Playing?</h2>    
+    <p>General game playing is about playing games that you've never seen before.
+While humans can already do this, it remains a challenging task for computer programs.
+There is a long and varied history of humans building artificial gamers, from the
+Mechanical Turk back in the 1770s to modern chess-playing computers like Deep Blue
+that have beaten the human world chess champions. Artificial intelligence work has
+long focused on computer programs that play specific games, and such programs can
+handily defeat human opponents on games ranging from Connect Four to Chess. Yet,
+such programs are helpless when presented with games they have not seen before.</p>
 
     <p>Computer programs designed to play specific games traditionally have the
 rules of the game hard-coded in, along with <q>heuristics</q> that allow the
 programs to evaluate whether a particular state of the game is good or not.
-Such programs look ahead in the game tree, and choose their moves so as to
+Such programs look at where the game might go, and choose their moves so as to
 eventually reach states with high heuristic values. This constant search for
 high-value states will lead the programs to continually improve their position,
 and, if everything goes according to plan, ultimately win the game.</p>
@@ -59,15 +60,14 @@ programmers devised. This demonstrates that the original programmers understand 
 game, but it doesn't demonstrate that the programs themselves really understand 
 the game in a meaningful way.</p>
 
-    <p><b>General game playing is about building computer programs which can play
+    <p><b>General game playing requires building computer programs which can play
 any arbitrary game.</b> These programs are written without knowing the games
 they are playing in advance, and so they have to be able to play any game that
 they are presented with. Chess programs can only play chess; checkers programs
 can only play checkers; but a general game playing program can play any game.</p>
   </body>
   
-  <h2>How can it play any game?</h2>
-  
+  <h2>How can it play any game?</h2>  
   <p>At the beginning of a match, the general game playing program is sent the rules
   of the game. These rules are encoded in a logic language called the "Game Description
   Language", which is based on first order logic. The GDL description of the game
