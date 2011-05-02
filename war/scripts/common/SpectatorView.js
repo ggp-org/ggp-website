@@ -77,34 +77,41 @@ var SpectatorView = {
   },
   
   renderTextPage: function () {
-    textHTML = "<table border=1px><tr height=20px><th>Step</th><th>Moves</th><th>Time</th><th>Errors</th></tr>";
+    if (!("moves" in this.matchData) || this.matchData.moves.length == 0) {
+      this.textDiv.innerHTML = "";
+      return;
+    }
+    var roleCols = this.matchData.moves[0].length;
+    
+    textHTML = "<table border=1px><tr height=20px><th rowspan=2>Step</th><th colspan="+roleCols+">Moves</th><th colspan="+roleCols+">Errors</th><th rowspan=2>Time</th></tr>";
+    textHTML += "<tr height=20px>";
+    for (var i = 0; i < 2; i++) {
+      for (var j = 0; j < roleCols; j++) {
+        if ("gameRoleNames" in this.matchData) {
+          textHTML += "<th>" + this.matchData.gameRoleNames[j] + "</th>";
+        } else {
+          textHTML += "<th>Player " + j + "</th>";
+        }
+      }
+    }
+    textHTML += "</tr>";
     for (var i = 0; i < this.matchData.states.length; i++) {
         textHTML += "<tr height=20px><td>" + i + "</td>";
-        if (i > 0) {
-          textHTML += "<td>" + this.matchData.moves[i-1] + "</td>";
-        } else {
-          textHTML += "<td></td>";
-        }
-        textHTML += "<td>" + UserInterface.renderDateTime(new Date(this.matchData.stateTimes[i])) + "</td>";
-        if ("errors" in this.matchData) {
-          if (this.matchData.errors.length > i) {
-            var isEmpty = true;
-            for (var j = 0; j < this.matchData.errors[i].length; j++) {
-              if (this.matchData.errors[i][j] != "") {
-                isEmpty = false;
-              }
-            }
-            if (isEmpty) {
-              textHTML += "<td>None</td>";
-            } else {
-              textHTML += "<td>[" + this.matchData.errors[i] + "]</td>";
-            }
+        for (var j = 0; j < roleCols; j++) {
+          if (i > 0) {          
+            textHTML += "<td>" + this.matchData.moves[i-1][j] + "</td>";
           } else {
             textHTML += "<td></td>";
           }
-        } else {
-          textHTML += "<td>Unknown</td>";
         }
+        for (var j = 0; j < roleCols; j++) {
+          if (("errors" in this.matchData) && (this.matchData.errors.length > i)) {
+            textHTML += "<td>" + this.matchData.errors[i][j] + "</td>";
+          } else {
+            textHTML += "<td>???</td>";
+          }
+        }
+        textHTML += "<td>" + UserInterface.renderDateTime(new Date(this.matchData.stateTimes[i])) + "</td>";
         textHTML += "</tr>";
     }
     textHTML += "</table>";
