@@ -8,32 +8,16 @@ if (typeof Object.create !== 'function') {
 
 var SpectatorPublisher = {
   authToken: null,
-  initialized: false,
   spectator_link: null,
 
-  initialize: function (matchData) {
-    this.authToken = Math.floor((new Date().getTime())*Math.random());
-    
-    this.spectator_link = 'http://matches.ggp.org/matches/';
-    this.spectator_link += matchData.matchId + '.';
-    this.spectator_link += matchData.startTime + '.';
-    this.spectator_link += matchData.randomToken + '/viz.html';
-  },
-  
   publish: function(matchData) {
-      if (!this.initialized) {
-          this.initialize(matchData);
-          this.initialized = true;
+      if (this.authToken == null) {
+          this.authToken = Math.floor((new Date().getTime())*Math.random());
       }
-      
-      this.post('http://matches.ggp.org/', JSON.stringify(matchData));    
-  },
-  
-  post: function (url, content) {
-    var xhttp = new XMLHttpRequest();      
-    xhttp.open("POST", url, false);    
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");    
-    xhttp.send("AUTH=" + this.authToken + "&DATA="+content);
+
+      var contentToPost = "AUTH=" + this.authToken + "&DATA="+JSON.stringify(matchData);
+      var matchIdentifier = ResourceLoader.post_raw("http://matches.ggp.org/", contentToPost, "application/x-www-form-urlencoded");
+      this.spectator_link = 'http://matches.ggp.org/matches/' + matchIdentifier + '/viz.html';
   },
   
   link: function () {

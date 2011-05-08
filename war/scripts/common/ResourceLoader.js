@@ -35,8 +35,8 @@ var ResourceLoader = {
     return this.internals.load_data(url)[0];
   },
   
-  post_raw: function (url, content) {
-    return this.internals.post_data(url, content)[0];
+  post_raw: function (url, content, contentType) {
+    return this.internals.post_data(url, content, contentType)[0];
   },
   
   load_raw_async_with_timeout: function (url, callback, timeout) {
@@ -94,9 +94,12 @@ var ResourceLoader = {
       return false
     },
     
-    post_data: function (url, content) {
-        var xhttp = new XMLHttpRequest();      
+    post_data: function (url, content, contentType) {
+        var xhttp = new XMLHttpRequest();
         xhttp.open("POST", url, false);
+        if (contentType != null) {
+          xhttp.setRequestHeader("Content-type", contentType);
+        }
         xhttp.send(content);
         if (xhttp.responseText) {
           return [xhttp.responseText, xhttp.responseXML]
