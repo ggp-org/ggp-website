@@ -265,27 +265,9 @@ var SpectatorView = {
   },
   
   // Constructor, to make new SpectatorViews.
-  construct: function (match_url, spectator_div) {
-    // TODO: Move these into the individual callers, rather than
-    // having them live in the SpectatorView library.      
-    var default_callbacks = {
-      "info": function(info_response) {
-        if (document.getElementById('desc_div') != null) {      
-          document.getElementById('desc_div').innerHTML = '<b>Game Description:</b> ' + info_response.description;       
-        }
-        if (document.getElementById('name_div') != null) {
-          document.getElementById('name_div').innerHTML = 'Showing match: ' + info_response.matchId;
-        }
-      },
-      "done": function() {
-        if (document.getElementById('name_div') != null) {
-          document.getElementById('name_div').innerHTML += ' ... GAME OVER';
-        }        
-      }
-    };
-      
+  construct: function (match_url, spectator_div, spectator_callbacks) {
     var my_spectator_view = Object.create(SpectatorView);
-    my_spectator_view.initialize(match_url, spectator_div, default_callbacks);
+    my_spectator_view.initialize(match_url, spectator_div, spectator_callbacks);
     return my_spectator_view;
   }
 }
