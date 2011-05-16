@@ -188,6 +188,7 @@ var Kiosk = {
     // All of the following will change over the course of the match
     this.matchData.states = [];
     this.matchData.moves = [];
+    this.matchData.errors = [];
     this.matchData.stateTimes = [];
     this.matchData.isCompleted = false;
 
@@ -281,8 +282,9 @@ var Kiosk = {
     // If we haven't just started the match, we should take the player
     // responses and formulate a joint move based on them. We should then
     // advance the state of the match based on that joint move, and then
-    // broadcast the joint move to all of the players.
+    // broadcast the joint move to all of the players.    
     var jointMove;
+    var jointErrors = [];
     if (!this.matchJustStarted) {
       jointMove = this.machine.get_random_joint_moves(this.state);
       for(var i = 0; i < this.matchData.gameRoleNames.length; i++) {
@@ -291,18 +293,33 @@ var Kiosk = {
           for (j in legalMoves) { legalMoves[j] = SymbolList.arrayIntoSymbolList(legalMoves[j]); }
           if (legalMoves.indexOf(SymbolList.arrayIntoSymbolList(this.playerResponses[i])) > -1) {
             jointMove[i] = this.playerResponses[i];
+            jointErrors.push("");
           } else {
             UserInterface.logError('Got illegal move ' + this.playerResponses[i] + '. Choosing random move for player ' + i);
+            jointErrors.push("IL " + this.playerResponses[i]);
           }
         } else {
           UserInterface.logError('Got null response. Choosing random move for player ' + i);
+          jointErrors.push("CE");
         }
       }
       // Advance to the next state
-      this.matchData.moves.push(SymbolList.arrayIntoSymbolList(jointMove));
+      this.matchData.moves.push(jointMove);
+      this.matchData.errors.push(jointErrors);
       this.updateState(this.machine.get_next_state(this.state, jointMove));
       this.spectator.publish(this.matchData);
       this.renderCurrentState();
+    } else {
+      // First move: just make sure that they've sent a reply to the START command.
+      for(var i = 0; i < this.matchData.gameRoleNames.length; i++) {
+        if (this.playerResponses[i]) {
+          jointErrors.push("");
+        } else {
+          UserInterface.logError('Got null response to START from player ' + i);
+          jointErrors.push("CE");
+        }
+      }
+      this.matchData.errors.push(jointErrors);
     }
     
     // Null out the responses
