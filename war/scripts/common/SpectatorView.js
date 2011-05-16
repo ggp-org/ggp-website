@@ -114,6 +114,13 @@ var SpectatorView = {
         textHTML += "<td>" + UserInterface.renderDateTime(new Date(this.matchData.stateTimes[i])) + "</td>";
         textHTML += "</tr>";
     }
+    if ("isCompleted" in this.matchData && this.matchData.isCompleted && "goalValues" in this.matchData) {
+        textHTML += "<tr height=20px><td></td>";
+        for (var j = 0; j < roleCols; j++) {
+          textHTML += "<td>Score: " + this.matchData.goalValues[j] + "</td>";
+        }
+        textHTML += "<td colspan=" + (roleCols+1) + "></td></tr>";
+    }
     textHTML += "</table>";
     this.textDiv.innerHTML = textHTML;
   },
