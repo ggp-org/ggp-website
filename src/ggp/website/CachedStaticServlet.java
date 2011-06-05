@@ -100,12 +100,7 @@ public abstract class CachedStaticServlet extends HttpServlet {
         } else if (theURL.endsWith(".ico")) {
             return "image/png";
         } else {
-            if (theURL.equals("/")) {
-                return "text/html";
-            } else if (theURL.endsWith("/")) {
-                return "text/javascript";
-            }
-            return "text/plain";
+            return "text/html";
         }
     }
     
