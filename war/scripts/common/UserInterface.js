@@ -22,11 +22,28 @@ var UserInterface = {
       // Add the game to the menu
       theMenu.options.add(opt);
     }
-    
+
+    /*
     var games_listing = ResourceLoader.load_json(theRepoPrefix + 'games/');
     games_listing.sort();    
     for (var i = 0; i < games_listing.length; i++) {
       ResourceLoader.load_raw_async_with_timeout(theRepoPrefix + 'games/' + games_listing[i] + '/', curry(addGameToMenu, games_listing[i]), 60000);
+    }
+    */
+    
+    // This uses a single resource request, that pulls in all of the accumulated
+    // game metadata files for all available games. This should be faster than asking
+    // for every game metadata file individually, but it's not 100% clear that we want
+    // to require that repository servers support this "bulk metadata" request, so it
+    // may break in the future.
+    var games_metadata = ResourceLoader.load_json(theRepoPrefix + 'games/metadata');
+    var gameNames = [];
+    for (var gameName in games_metadata) {
+      gameNames.push(gameName);
+    }
+    gameNames.sort();
+    for (var i = 0; i < gameNames.length; i++) {
+      addGameToMenu(gameNames[i], JSON.stringify(games_metadata[gameNames[i]]));
     }
   },
 
