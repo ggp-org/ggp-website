@@ -65,7 +65,9 @@ var HumanPlayer = {
       game_parent.selectedMove = move;
       document.getElementById("status_bar_div").innerHTML = "<b>Selected Move: </b>" + move;
     }
-    this.user_interface.attach(inner_args);
+    if (this.user_interface) {
+      this.user_interface.attach(inner_args);
+    }
   },
   
   submitMove: function () {
@@ -86,7 +88,9 @@ var HumanPlayer = {
   },
       
   clearMove: function () {
-    this.user_interface.clearSelection();
+    if (this.user_interface) {
+      this.user_interface.clearSelection();
+    }
   }
 }
 
@@ -159,7 +163,6 @@ var Kiosk = {
 
     var rules_url = gameURL + metadata.rulesheet;
     var style_url = gameURL + metadata.stylesheet;
-    var inter_url = gameURL + metadata.user_interface;    
     var gameVersionedURL = gameURL + 'v' + metadata.version + "/";
 
     this.gameDiv = gameDiv;
@@ -201,7 +204,9 @@ var Kiosk = {
     UserInterface.clearErrors();
 
     // Load the user interface
-    this.user_interface = ResourceLoader.load_js(inter_url);    
+    if ("user_interface" in metadata) {
+      this.user_interface = ResourceLoader.load_js(gameURL + metadata.user_interface);
+    }
 
     // Create the player instances for the game.
     var parent = this;

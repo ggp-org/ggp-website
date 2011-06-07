@@ -112,7 +112,7 @@
     var repo_prefix = 'http://games.ggp.org/';
 
     var selector = document.getElementById("gameChooser");
-    setTimeout("UserInterface.loadRepositoryGamesIntoMenu(repo_prefix, selector, true)", 1);  
+    setTimeout("UserInterface.loadRepositoryGamesIntoMenu(repo_prefix, selector, false, true)", 1);  
     
     var gameName;
     var numRoles;
@@ -166,7 +166,11 @@
         var capitalizedRoleName = roleNames[i].charAt(0).toUpperCase() + roleNames[i].slice(1);
         tableHTML += '<tr>';
         tableHTML += '<td><b>'+capitalizedRoleName+'</b></td> <td width=10px></td>';
-        tableHTML += '<td><input type="radio" name="role'+i+'" value="me" onchange="document.getElementById(\'config_role'+i+'address\').disabled=true;">Me</input></td> <td width=10px></td>';
+        if ("user_interface" in metadata) {
+          tableHTML += '<td><input type="radio" name="role'+i+'" value="me" onchange="document.getElementById(\'config_role'+i+'address\').disabled=true;">Me</input></td> <td width=10px></td>';
+        } else {
+          tableHTML += '<td><input type="radio" value="me" disabled="true">Me</input></td> <td width=10px></td>';
+        }
         tableHTML += '<td><input type="radio" checked name="role'+i+'" value="random" onchange="document.getElementById(\'config_role'+i+'address\').disabled=true;">Random</input></td> <td width=10px></td>';
         tableHTML += '<td><input type="radio" name="role'+i+'" value="remote" onchange="document.getElementById(\'config_role'+i+'address\').disabled=false;">Remote:</input></td> <td width=10px></td>';
         tableHTML += '<td><input type="text" size=30 id="config_role'+i+'address" value="http://'+i+'.player.ggp.org:80/" disabled=true></input></td>';

@@ -1,5 +1,5 @@
 var UserInterface = {
-  loadRepositoryGamesIntoMenu: function (theRepoPrefix, theMenu, requirePlayable) {
+  loadRepositoryGamesIntoMenu: function (theRepoPrefix, theMenu, requirePlayable, requireViewable) {
     function curry(f, x) {
       return function(z) { return f(x, z); };
     }
@@ -10,6 +10,7 @@ var UserInterface = {
       // Choose whether to display the game
       if (requirePlayable && !meta.stylesheet) return;
       if (requirePlayable && !meta.user_interface) return;
+      if (requireViewable && !meta.stylesheet) return;
       
       // Choose how the display the game
       opt.text = key;
