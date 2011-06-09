@@ -206,6 +206,14 @@ var Kiosk = {
     // Load the user interface
     if ("user_interface" in metadata) {
       this.user_interface = ResourceLoader.load_js(gameURL + metadata.user_interface);
+      
+      // Attach keybindings for the buttons the Kiosk interface renders
+      if (!this.hasKeyBindings) {
+        var thisRef = this;
+        var oldkeydown = document.onkeydown;
+        document.onkeydown = function(e) { thisRef.onkeydown(e); if (oldkeydown) oldkeydown(e); }
+        this.hasKeyBindings = true;
+      }
     }
 
     // Create the player instances for the game.
@@ -263,6 +271,14 @@ var Kiosk = {
       document.getElementById("clear_move_button").disabled = true;
     }
   },
+  
+  // === KEY BINDINGS ===
+  hasKeyBindings: false,
+  onkeydown: function (e) {
+    if (e.which == 13 && gameHandler.humanPlayer) {
+      gameHandler.humanPlayer.submitMove();
+    }
+  },  
 
   // === MATCH HANDLING ===
   checkForAllMoves: function () {
