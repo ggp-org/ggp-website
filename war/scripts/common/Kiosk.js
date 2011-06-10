@@ -277,6 +277,8 @@ var Kiosk = {
   onkeydown: function (e) {
     if (e.which == 13 && gameHandler.humanPlayer) {
       gameHandler.humanPlayer.submitMove();
+    } else if (e.which == 27 && gameHandler.humanPlayer) {
+      gameHandler.humanPlayer.clearMove();
     }
   },  
 
