@@ -21,6 +21,9 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
 
         if (reqURI.endsWith(".png") || reqURI.endsWith(".ico")) {
             return readBinaryFile(new File(reqURI.substring(1)));
+        } else if (reqURI.endsWith(".js")) {
+            // TODO: Automatically minify any javascript files we serve.
+            return readFile(new File(reqURI.substring(1))).getBytes();
         } else {
             return readFile(new File(reqURI.substring(1))).getBytes();
         }
