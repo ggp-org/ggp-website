@@ -10,13 +10,7 @@ if (typeof Object.create !== 'function') {
 // This requires the following includes in the HEAD of the page:
 //   * Channel API: "/_ah/channel/jsapi"
 //   * jQuery Library: "//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"
-//
-// This also requires the acquisition of a channel token, which
-// is stored in the global variable "theChannelToken". This can be
-// acquired by including the "channel.js" script in a match directory
-// on the spectator server, or by including the "channel.js" in the
-// root "matches/" directory on the spectator server (latter method
-// is preferred).
+//   * Channel Token: "//database.ggp.org/subscribe/channel.js"
 var SpectatorView = {
   topDiv: null,
   midDiv: null,
@@ -192,17 +186,18 @@ var SpectatorView = {
     // messages from the browser channel.
     var thisRef = this;
     function update_state_via_channel(channelMessage) {
-      var newMatchData = JSON.parse(channelMessage.data);
-      if ((newMatchData.matchId != thisRef.matchData.matchId) ||
-          (newMatchData.startTime != thisRef.matchData.startTime)) {
+      if (channelMessage.data != match_url) {
+        // Channel update notification was about a different match.
+        // Ignore it -- it was meant for a different SpectatorView.
         return;
-      }
-      
+      }      
+      var newMatchData = JSON.parse(ResourceLoader.load_raw(match_url));
+
       thisRef.state = thisRef.getStateFromMatchData(newMatchData);
       thisRef.visibleStateIndex = newMatchData.states.length-1;
       thisRef.matchData = newMatchData;
       thisRef.render();
-      
+
       if ("update" in thisRef.callbacks) {
         thisRef.callbacks.update();
       }
@@ -213,7 +208,7 @@ var SpectatorView = {
     
     // Make sure that we're registered to view this match.
     if (match_url[match_url.length-1] != '/') { match_url += '/'; }
-    ResourceLoader.load_raw(match_url + 'clientId=' + theChannelID + '/channel.js');
+    ResourceLoader.load_raw("//database.ggp.org/subscribe/match/" + match_url + 'clientId=' + theChannelID);
 
     // Open a Browser Channel to the Spectator Server.
     // We will receive updates to the match state over this channel.
