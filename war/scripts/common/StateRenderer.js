@@ -29,7 +29,7 @@ var StateRenderer = {
         // so we have it fall back to a JS-based XSLT processor.
     
 	    var androidTab = document.createElement('xslt_note');
-	    androidTab.innerHTML = "<b>Using Javascript XSLT Processor!</b>";
+	    //androidTab.innerHTML = "<b>Using Javascript XSLT Processor!</b>";
 	    vdiv.appendChild(androidTab);
 	    
 	    output = run_AJAXSLT_Processor(xml_node, xsl_raw);
