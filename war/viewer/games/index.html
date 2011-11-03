@@ -41,8 +41,8 @@
         
         loadBellerophonMetadataForGames();
         
-        var gameListHTML = '<table class="matchlist" cellpadding=5px border=1px>';
-        gameListHTML += '<tr bgcolor=#E0E0E0><th>Game Name</th><th>Players</th><th>Version</th><th>Has Description?</th></tr>';
+        var gameListHTML = '<table class="matchlist" cellpadding="5px">';
+        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded">Has Description?</th></tr>';
         for (var i = 0; i < observedGames.length; i++) {
           if (i % 2 == 0) {
             gameListHTML += "<tr bgcolor=#F5F5F5>";
@@ -53,10 +53,10 @@
           var gameKey = observedGames[i];
           var theGame = getGameInfo(gameKey);
           var theVersion = theGame.bellerophonVersionFromURL;
-          gameListHTML += '<td><a href="' + theGame.bellerophonLink + '">' + theGame.bellerophonName + '</a></td>';
-          gameListHTML += '<td>' + toProperString(theGame.numRoles) + '</td>';
-          gameListHTML += '<td>' + toProperString(theVersion) + '</td>';
-          gameListHTML += '<td>' + ("description" in theGame ? "Yes" : "No") + '</td></tr>';
+          gameListHTML += '<td class="padded"><a href="' + theGame.bellerophonLink + '">' + theGame.bellerophonName + '</a></td>';
+          gameListHTML += '<td class="padded">' + toProperString(theGame.numRoles) + '</td>';
+          gameListHTML += '<td class="padded">' + toProperString(theVersion) + '</td>';
+          gameListHTML += '<td class="padded">' + ("description" in theGame ? "Yes" : "No") + '</td></tr>';
         }
         gameListHTML += "</table>"
         document.getElementById('gameList').innerHTML = gameListHTML;
