@@ -12,6 +12,11 @@ import java.io.InputStream;
 public class GGP_WebsiteServlet extends CachedStaticServlet {
     @Override
     protected byte[] getResponseBytesForURI(String reqURI) throws IOException {
+        if (reqURI.startsWith("/view/")) {
+            reqURI = rewriteViewURI(reqURI);
+            if (reqURI == null) return null;
+        }
+        
         if (reqURI.equals("/docs")) reqURI += "/";
         if (reqURI.equals("/kiosk")) reqURI += "/";
         
@@ -55,5 +60,43 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
         in.close();
         
         return out.toByteArray();
+    }
+    
+    // GGP View Rewriter
+    private String rewriteViewURI(String reqURI) {
+        reqURI = reqURI.replaceFirst("/view/", "");
+        if (reqURI.isEmpty())
+            return "/viewer/index.html";
+
+        String[] splitURI = reqURI.split("/");
+        reqURI = "";
+        for (int i = 1; i < splitURI.length; i++) {
+            reqURI += "/" + splitURI[i];
+        }
+        if (reqURI.isEmpty())
+            return "/viewer/host.html";            
+
+        if (reqURI.startsWith("/matches")) {
+            reqURI = reqURI.replaceFirst("/matches", "");
+            if (reqURI.isEmpty())
+                return "/viewer/matches/index.html";
+            return "/viewer/matches/match.html";
+        }
+        if (reqURI.startsWith("/games")) {
+            reqURI = reqURI.replaceFirst("/games", "");
+            if (reqURI.isEmpty())
+                return "/viewer/games/index.html";
+            return "/viewer/games/game.html";
+        }
+        if (reqURI.startsWith("/players")) {
+            reqURI = reqURI.replaceFirst("/players", "");
+            if (reqURI.isEmpty())
+                return "/viewer/players/index.html";
+            return "/viewer/players/player.html";
+        }
+        if (reqURI.equals("/stats")) {
+            return "/viewer/stats/index.html";
+        }
+        return null;
     }
 }
