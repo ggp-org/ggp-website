@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>GGP.org - View</title>
+    <meta name="description" content="General game playing is about playing games that you've never seen before. Watch intelligent computers play games against each other here!" />  
+    <link rel="shortcut icon" href="http://www.ggp.org/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:bold">
+    <link rel="stylesheet" type="text/css" href="/viewer/shared/bellerophon.css" />
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+  </head>
+  <body>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
+    <script type="text/javascript" src="/viewer/shared/bellerophonHeader.js"></script>
+  
+    <div id='header'></div>
+    <br>
+    <center>
+      <div id='playerList'></div>
+    </center>
+
+    <script type='text/javascript'>
+      generateHeader(document.getElementById('header'));
+      
+      function drawPlayerList() {
+        var observedPlayers = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall').observedPlayers;
+        
+        var playerListHTML = '<table class="matchlist" cellpadding=5px border=1px>';
+        playerListHTML += '<tr><th bgcolor=#E0E0E0>Players</th></tr>';
+        for (var i = 0; i < observedPlayers.length; i++) {
+          if (i % 2 == 0) {
+            playerListHTML += "<tr bgcolor=#F5F5F5>";
+          } else {          
+            playerListHTML += "<tr bgcolor=#E0E0E0>";
+          }
+          
+          var aPlayer = observedPlayers[i];
+          playerListHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer + '">' + aPlayer + '</a></td></tr>';
+        }
+        playerListHTML += "</table>"
+        document.getElementById('playerList').innerHTML = playerListHTML;      
+      }
+      
+      drawPlayerList();
+    </script>
+  </body>  
+</html>
