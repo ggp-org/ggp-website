@@ -12,17 +12,19 @@ import java.io.InputStream;
 public class GGP_WebsiteServlet extends CachedStaticServlet {
     @Override
     protected byte[] getResponseBytesForURI(String reqURI) throws IOException {
+        if (reqURI.equals("/docs")) reqURI += "/";
+        if (reqURI.equals("/view")) reqURI += "/";
+        if (reqURI.equals("/kiosk")) reqURI += "/";        
+
         if (reqURI.startsWith("/view/")) {
+            // Hooks for the Bellerophon viewer.
             reqURI = rewriteViewURI(reqURI);
             if (reqURI == null) return null;
         }
         
-        if (reqURI.equals("/docs")) reqURI += "/";
-        if (reqURI.equals("/kiosk")) reqURI += "/";
-        
         if (reqURI.endsWith("/")) {
             reqURI += "index.html";
-        }
+        }        
 
         if (reqURI.endsWith(".png") || reqURI.endsWith(".ico")) {
             return readBinaryFile(new File(reqURI.substring(1)));

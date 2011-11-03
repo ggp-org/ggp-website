@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>GGP.org - View</title>
+    <meta name="description" content="General game playing is about playing games that you've never seen before. Watch intelligent computers play games against each other here!" />  
+    <link rel="shortcut icon" href="http://www.ggp.org/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:bold">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+  </head>
+  <body>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+
+    <div id='header'></div>
+    <br>
+    <div style="margin-left: 25%; width: 50%">
+    <p>Welcome to the experimental new GGP.org Viewer (codenamed Bellerophon). This is a unified
+       viewing interface for all GGP content (players, games, matches, aggregate statistics) spanning
+       multiple game repositories, multiple spectator servers, multiple match hosts, etc. All of this
+       content can be viewed on a per-host or global basis, paving the way for having player statistics
+       based on matches played on many different hosts (not yet possible because right now a player's
+       identity is tied to the host they're playing matches on, but we can build a future where that's
+       no longer the case).</p>
+    <p>For example, you can view matches played on
+        <a href="/view/apollo/matches/">Apollo</a>,
+        <a href="/view/dresden/matches/">Dresden</a>,
+        or <a href="/view/all/matches/">both</a>, all in the same interface.</p>
+    <p>This interface is still in-development. Please file bug reports.</p>
+    </div>
+    <script type='text/javascript'>
+      generateHeader(document.getElementById('header'));
+    </script>
+  </body>  
+</html>

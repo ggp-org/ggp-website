@@ -1,17 +1,20 @@
 var loginNascarHTML;
 function generateHeader(theDiv) {
     toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
+    var theHost = window.location.pathname.split("/")[2];
+    if (theHost == "") theHost = "all";    
+    
     var theHTML = "";
     theHTML += '<center>';
     theHTML += '<table style="width: 100%; border: 0; margin: 0; border-spacing: 0px 0px; bgcolor: rgb(160,160,160);">';
     theHTML += '  <tr class="navbarTop">';
     theHTML += '    <td width=2% align="left"></td>';
     theHTML += '    <td width=18% align="left" valign="bottom"><a class=logo href="/">GGP.org</a><span class=logo2>view</span></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + window.location.pathname.split("/")[2] + '/">' + toTitle(window.location.pathname.split("/")[2]) + '</a></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + window.location.pathname.split("/")[2] + '/games/">Games</a></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + window.location.pathname.split("/")[2] + '/players/">Players</a></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + window.location.pathname.split("/")[2] + '/matches/">Matches</a></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + window.location.pathname.split("/")[2] + '/stats/">Stats</a></td>';
+    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/">' + toTitle(theHost) + '</a></td>';
+    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/games/">Games</a></td>';
+    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/players/">Players</a></td>';
+    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/matches/">Matches</a></td>';
+    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/stats/">Stats</a></td>';
     theHTML += '    <td width=30% align="right" valign="bottom"><a class=darklink href="/view/apollo/matches/">[Apollo]</a> <a class=darklink href="/view/dresden/matches/">[Dresden]</a> <a class=darklink href="/view/all/matches/">[All]</a></td>';
     theHTML += '  </tr>';
     theHTML += '  <tr id="navBuffer" class="navbarBottom">'; 
