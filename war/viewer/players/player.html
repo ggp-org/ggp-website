@@ -96,7 +96,7 @@
         theTableHTML += "<tr><th></th><th>Avg</th>";
         for (var j = 0; j < sortedPlayers.length; j++) {
           var aPlayer = sortedPlayers[j];
-          theTableHTML += '<th><b><a href="/players/' + aPlayer + '"><img src="http://www.placekitten.com/25/25" title="' + aPlayer + '"></img></a></b></th>';
+          theTableHTML += '<th><b><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer + '"><img src="http://www.placekitten.com/25/25" title="' + aPlayer + '"></img></a></b></th>';
         }
         theTableHTML += "</tr>";
         // avg score row
@@ -109,7 +109,7 @@
         // real rows
         for (var i = 0; i < theGames.length; i++) {        
           theTableHTML += '<tr>';
-          theTableHTML += '<td><b><a href="/games/' + translateRepositoryIntoCodename(theGames[i]) + '">' + getGameName(theGames[i]) + '</a></b></td>';
+          theTableHTML += '<td><b><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theGames[i]) + '">' + getGameName(theGames[i]) + '</a></b></td>';
           // avg score column
           theTableHTML += renderColoredAvg(perGame[theGames[i]]);
           // real columns
@@ -139,7 +139,7 @@
         var theTableHTML = "<table border=1px>";
         theTableHTML += "<tr><th colspan=2>Aggregate Puzzle Scores</th></tr>";
         for (var aGame in perGame) {
-          theTableHTML += '<tr><td><b><a href="/games/' + translateRepositoryIntoCodename(aGame) + '">' + getGameName(aGame) + '</a></b></td><td>' + renderAvg(perGame[aGame]) + '</td></tr>';
+          theTableHTML += '<tr><td><b><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(aGame) + '">' + getGameName(aGame) + '</a></b></td><td>' + renderAvg(perGame[aGame]) + '</td></tr>';
         }
         theTableHTML += "</table>";
         return theTableHTML;
