@@ -118,12 +118,20 @@ function renderMatchEntries(theMatchEntries, theOngoingMatches, topCaption, play
     loadBellerophonMetadataForGames();
     
     var theHTML = '<center><table class="matchlist">';
-    theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=9>' + topCaption + '</th></tr>';
+    theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=10>' + topCaption + '</th></tr>';
     for (var i = 0; i < theMatchEntries.length; i++) {
       theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight, i%2);
     }
     theHTML += "</table></center>";
     return theHTML;
+}
+
+function trimTo(x,y) {
+  if (x.length > y) {
+    return x.substring(0,y-3)+"...";
+  } else {
+    return x;
+  }
 }
 
 function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, showShadow) {
@@ -224,10 +232,6 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     theMatchHTML = "<tr bgcolor=#F5F5F5>";
   }
   
-  // Match page URL.
-  var matchURL = theMatchJSON.matchURL.replace("http://matches.ggp.org/matches/", "");
-  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/matches/' + matchURL + '">View Match</a></td>';  
-  
   // Match start time.
   var theDate = new Date(theMatchJSON.startTime);
   theMatchHTML += '<td class="padded">' + UserInterface.renderDateTime(theDate);
@@ -278,7 +282,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   theMatchHTML += '</table></td>';
 
   // Match game profile.
-  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + getGameName(theMatchJSON.gameMetaURL) + '</a></td>';
+  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + trimTo(getGameName(theMatchJSON.gameMetaURL),20) + '</a></td>';
   theMatchHTML += '<td width=5></td>';
   
   // Signature badge.
@@ -305,7 +309,11 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   } else {
     theMatchHTML += '<td></td>';
   }
-
+  theMatchHTML += '<td width=5></td>';
+  
+  // Match page URL.
+  var matchURL = theMatchJSON.matchURL.replace("http://matches.ggp.org/matches/", "");
+  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/matches/' + matchURL + '">View</a></td>';
   theMatchHTML += '<td width=5></td>';
   return theMatchHTML + "</tr>";
 }

@@ -147,22 +147,20 @@ td.navbarBottomAbrupt {
   );
 }
 
-@media (min-width: 1230px) {
+@media (min-width: 1215px) {
   div.major_left {
-    padding-left: 10px;
+    padding-left: 5px;
     min-width: 600px;
     float: left;
   }
   div.major_right {
-    padding-left: 10px;
-    padding-right: 10px;
-    min-width: 600px;
-    max-width: 600x;
+    padding-left: 5px;
+    padding-right: 5px;
     width: 600px;
     float: right;
   }
 }
-@media (max-width: 1230px) {
+@media (max-width: 1215px) {
   div.major_right {
     padding-top: 20px;
   }

@@ -28,6 +28,10 @@
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
       
+      if (window.location.pathname.split("/")[2] == "all") {
+        alert("Sorry, the per-player view for 'all' isn't working yet.");
+      }
+      
       loadBellerophonMetadataForGames();
       getGameName = function (x) { return getGameInfo(x).bellerophonName; };
 
@@ -84,8 +88,6 @@
         return thePlayers;
       }
       function renderWinLossTable(theTable, perPlayer, perGame, avgScore) {
-        var trimTo = function (x,y) { if (x.length > y) { return x.substring(0,y-3)+"..."; } else { return x; } } 
-      
         var sortedPlayers = sortPlayersByMatches(theTable).slice(0,18);
         var perPuzzleGame = JSON.parse(JSON.stringify(perGame));
         var theGames = [];
@@ -166,7 +168,7 @@
           theHTML += "<tr style='text-align:left'><th>Avg* Score</th><td>" + cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.</td></tr>";
           delete statsJSON.decayedAverageScore;
         }
-        theHTML += '<tr>' + renderJSON(statsJSON) + '</tr></table>';
+        theHTML += '<tr><td>' + renderJSON(statsJSON) + '</td></tr></table>';
         return theHTML;
       }
 
