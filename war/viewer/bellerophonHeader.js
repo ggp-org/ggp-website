@@ -286,7 +286,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);    
     var theHostImage = "/viewer/images/hosts/Unknown.png";
     if (theHostName == "apollo") theHostImage = "/viewer/images/hosts/Apollo2.png";
-    if (theHostName == "dresden") theHostImage = "/viewer/images/hosts/Dresden.png";
+    if (theHostName == "dresden") theHostImage = "/viewer/images/hosts/Dresden2.png";
     if (theHostName == "artemis") theHostImage = "/viewer/images/hosts/Party.png";
     toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
     theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/matches/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + toTitle(theHostName) + '."></img></a></td>';
