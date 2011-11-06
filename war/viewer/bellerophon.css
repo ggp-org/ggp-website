@@ -100,6 +100,9 @@ td.padded {
 td.imageHolder {
   padding: 0px;
 }
+th.imageHolder {
+  padding: 0px;
+}
 
 tr.navbarTop {
   background-image: -webkit-gradient(
@@ -142,4 +145,28 @@ td.navbarBottomAbrupt {
     #E6E6E6 24%,
     rgb(160,160,160) 81%
   );
+}
+
+@media (min-width: 1600px) {
+  div.major_left {
+    padding-left: 3%;
+    width: 46%;
+    float: left;    
+  }
+  div.major_spacer {
+    margin: 1px;
+    width: 1%;
+    float: left;
+  }
+  div.major_right {
+    padding-right: 3%;
+    width: 46%;    
+    float: left;
+  }
+}
+@media (max-width: 1600px) {
+  div.major_spacer {
+    height: 20px;
+    margin: 1px;
+  }
 }

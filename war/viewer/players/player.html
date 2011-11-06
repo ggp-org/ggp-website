@@ -15,13 +15,16 @@
 
     <div id='header'></div>
     <br>
-    <center>    
-      <div id='playerDiv'></div><br>
-      <div id='playerStatsDiv'></div><br>
-      <div id='playerStatsPuzzleDiv'></div><br>
-      <div id='playerStatsTableDiv'></div><br>
-    </center>
-    <div id='playerMatchesDiv'></div>
+    <div class="major_left">
+      <div style="float: left;" id='playerPrimaryDiv'></div>
+      <div stlye="float: left; margin: 10px;"></div>
+      <div style="float: left;" id='playerStatsPuzzleDiv'></div>
+      <div id='playerStatsTableDiv'></div>
+    </div>
+    <div class="major_spacer"></div>
+    <div class="major_right">
+      <div id='playerMatchesDiv'></div>
+    </div>
 
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
@@ -82,7 +85,7 @@
         return thePlayers;
       }
       function renderWinLossTable(theTable, perPlayer, perGame, avgScore) {
-        var sortedPlayers = sortPlayersByMatches(theTable);
+        var sortedPlayers = sortPlayersByMatches(theTable).slice(0,15);
         var theGames = [];
         for (var aPlayer in theTable) {
           for (var aGame in theTable[aPlayer]) {
@@ -96,7 +99,7 @@
         theTableHTML += "<tr><th></th><th>Avg</th>";
         for (var j = 0; j < sortedPlayers.length; j++) {
           var aPlayer = sortedPlayers[j];
-          theTableHTML += '<th><b><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer + '"><img src="http://www.placekitten.com/25/25" title="' + aPlayer + '"></img></a></b></th>';
+          theTableHTML += '<th class="imageHolder"><b><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer + '"><img src="http://www.placekitten.com/25/25" title="' + aPlayer + '"></img></a></b></th>';
         }
         theTableHTML += "</tr>";
         // avg score row
@@ -145,30 +148,34 @@
         return theTableHTML;
       }
       
-      function renderPlayerStats(statsJSON) {
-        var theHTML = "";
-              
+      function renderPlayerPrimary(playerName, statsJSON) {
+        var theHTML = '<table><tr>';
+        theHTML += '<td rowspan=8 class="imageHolder"><img width=150 height=150 src="http://placekitten.com/g/150/150" /></td>';
+        theHTML += '<td rowspan=8 width=10></td>';
+        theHTML += '<th colspan=2><center><h1>' + playerName + '</h1></center></td></tr>';
+        theHTML += '<tr>';
+
         delete statsJSON.computedEdgeOn;
         if ("eloRank" in statsJSON) {
-          theHTML += "<b>Elo Rank:</b> " + cleanFloat(statsJSON.eloRank) + "<br>";
+          theHTML += "<tr style='text-align:left'><th>Elo Rank</th><td>" + cleanFloat(statsJSON.eloRank) + "</td></tr>";
           delete statsJSON.eloRank;
         }        
         if ("agonScaledSkill" in statsJSON) {
-          theHTML += "<b>Agon Skill:</b> " + generateAgonView(statsJSON.agonScaledSkill, statsJSON.agonSkill, "") + " <br>";
+          theHTML += "<tr style='text-align:left'><th>Agon Skill</th><td>" + generateAgonView(statsJSON.agonScaledSkill, statsJSON.agonSkill, "") + "</td></tr>";
           delete statsJSON.agonScaledSkill;
           delete statsJSON.agonSkill;  
         }
         if ("averageScore" in statsJSON) {
           statsJSON.averageScore = JSON.parse(statsJSON.averageScore);
-          theHTML += "<b>Average Score:</b> " + cleanFloat(statsJSON.averageScore[0]) + " over " + statsJSON.averageScore[1] + " matches.<br>";
+          theHTML += "<tr style='text-align:left'><th>Avg Score</th><td>" + cleanFloat(statsJSON.averageScore[0]) + " over " + statsJSON.averageScore[1] + " matches.</td></tr>";
           delete statsJSON.averageScore;
         }
         if ("decayedAverageScore" in statsJSON) {
           statsJSON.decayedAverageScore = JSON.parse(statsJSON.decayedAverageScore);
-          theHTML += "<b>(Decayed) Average Score:</b> " + cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.<br>";
+          theHTML += "<tr style='text-align:left'><th>Avg* Score</th><td>" + cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.</td></tr>";
           delete statsJSON.decayedAverageScore;
         }
-        theHTML += renderJSON(statsJSON);
+        theHTML += '<tr>' + renderJSON(statsJSON) + '</tr></table>';
         return theHTML;
       }
 
@@ -182,10 +189,8 @@
         delete statsJSON.averageScoreVersus;
         delete statsJSON.averageScoreOn;
       }
-      document.getElementById('playerStatsDiv').innerHTML = renderPlayerStats(statsJSON);
-
-      var playerHTML = '<center style="display: table; width: 100%"><h2>Player: ' + playerName + '</h2></center>';
-      document.getElementById('playerDiv').innerHTML = playerHTML;
+      
+      document.getElementById('playerPrimaryDiv').innerHTML = renderPlayerPrimary(playerName, statsJSON);
       
       var playerMatchesHTML = '';
       var ongoingMatches = ResourceLoader.load_json('//database.ggp.org/query/filterActiveSet,recent,'+getHostHashedPK()).queryMatches;      
