@@ -16,12 +16,11 @@
     <div id='header'></div>
     <br>
     <div class="major_left">
-      <div style="float: left;" id='playerPrimaryDiv'></div>
-      <div stlye="float: left; margin: 10px;"></div>
-      <div style="float: left;" id='playerStatsPuzzleDiv'></div>
-      <div id='playerStatsTableDiv'></div>
+      <center>
+        <div id='playerPrimaryDiv'></div><br>
+        <div id='playerStatsTableDiv'></div>
+      </center>
     </div>
-    <div class="major_spacer"></div>
     <div class="major_right">
       <div id='playerMatchesDiv'></div>
     </div>
@@ -85,16 +84,20 @@
         return thePlayers;
       }
       function renderWinLossTable(theTable, perPlayer, perGame, avgScore) {
-        var sortedPlayers = sortPlayersByMatches(theTable).slice(0,15);
+        var trimTo = function (x,y) { if (x.length > y) { return x.substring(0,y-3)+"..."; } else { return x; } } 
+      
+        var sortedPlayers = sortPlayersByMatches(theTable).slice(0,18);
+        var perPuzzleGame = JSON.parse(JSON.stringify(perGame));
         var theGames = [];
         for (var aPlayer in theTable) {
           for (var aGame in theTable[aPlayer]) {
+            delete perPuzzleGame[aGame];
             if (theGames.indexOf(aGame) == -1) {
               theGames.push(aGame);
             }
           }
         }
-        var theTableHTML = "<table border=1px>";
+        var theTableHTML = '<table class="matchlist">';
         theTableHTML += "<tr><th colspan=" + (sortedPlayers.length+2) + ">Aggregate Win-Tie-Loss Table</th></tr>";
         theTableHTML += "<tr><th></th><th>Avg</th>";
         for (var j = 0; j < sortedPlayers.length; j++) {
@@ -103,7 +106,7 @@
         }
         theTableHTML += "</tr>";
         // avg score row
-        theTableHTML += "<tr><td><b>Average Score</b></td><td></td>";
+        theTableHTML += "<tr><td><b>Avg Score</b></td><td></td>";
         for (var j = 0; j < sortedPlayers.length; j++) {
           var aPlayer = sortedPlayers[j];
           theTableHTML += renderColoredAvg(perPlayer[aPlayer]);
@@ -112,7 +115,7 @@
         // real rows
         for (var i = 0; i < theGames.length; i++) {        
           theTableHTML += '<tr>';
-          theTableHTML += '<td><b><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theGames[i]) + '">' + getGameName(theGames[i]) + '</a></b></td>';
+          theTableHTML += '<td><b><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theGames[i]) + '">' + trimTo(getGameName(theGames[i]),12) + '</a></b></td>';
           // avg score column
           theTableHTML += renderColoredAvg(perGame[theGames[i]]);
           // real columns
@@ -126,23 +129,11 @@
           }
           theTableHTML += '</tr>';
         }
-        theTableHTML += "</table>";
-        return theTableHTML;
-      }
-      
-      function renderPuzzleTable(theWinLossTable, perGameOriginal) {
-        var perGame = JSON.parse(JSON.stringify(perGameOriginal));
-        for (var aPlayer in theWinLossTable) {
-          for (var aGame in theWinLossTable[aPlayer]) {
-            if (aGame in perGame) {
-              delete perGame[aGame];
-            }
-          }
-        }
-        var theTableHTML = "<table border=1px>";
-        theTableHTML += "<tr><th colspan=2>Aggregate Puzzle Scores</th></tr>";
-        for (var aGame in perGame) {
-          theTableHTML += '<tr><td><b><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(aGame) + '">' + getGameName(aGame) + '</a></b></td><td>' + renderAvg(perGame[aGame]) + '</td></tr>';
+        // puzzle info, shoehorned in
+        for (var aGame in perPuzzleGame) {
+          theTableHTML += '<td><b><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(aGame) + '">' + trimTo(getGameName(aGame),12) + '</a></b></td>';
+          theTableHTML += renderColoredAvg(perGame[aGame]);
+          theTableHTML += '</tr>';
         }
         theTableHTML += "</table>";
         return theTableHTML;
@@ -183,7 +174,6 @@
       var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/players/' + playerName);
       
       if ("winsVersusPlayerOnGame" in statsJSON) {
-        document.getElementById('playerStatsPuzzleDiv').innerHTML = renderPuzzleTable(statsJSON.winsVersusPlayerOnGame, statsJSON.averageScoreOn);
         document.getElementById('playerStatsTableDiv').innerHTML = renderWinLossTable(statsJSON.winsVersusPlayerOnGame, statsJSON.averageScoreVersus, statsJSON.averageScoreOn, statsJSON.averageScore);
         delete statsJSON.winsVersusPlayerOnGame;
         delete statsJSON.averageScoreVersus;
