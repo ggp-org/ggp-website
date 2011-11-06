@@ -97,6 +97,9 @@ th.padded {
 td.padded {
   padding-left: 10px;
 }
+td.imageHolder {
+  padding: 0px;
+}
 
 tr.navbarTop {
   background-image: -webkit-gradient(

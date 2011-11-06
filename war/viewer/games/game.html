@@ -91,30 +91,30 @@
       var gameRawName = window.location.pathname.split("/")[5];
       
       var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/games/' + gameName);
-      if ("agonScaledDifficulty" in statsJSON) {
+      if ("agonScaledDifficulty" in statsJSON && statsJSON.agonScaledDifficulty) {
         var difficultyHTML = "";
         for (var i = 0; i < statsJSON.agonScaledDifficulty.length; i++) {
           difficultyHTML += "<td width=10px></td>";
           difficultyHTML += "<td>" + generateAgonView(statsJSON.agonScaledDifficulty[i], statsJSON.agonDifficulty[i], "for Player " + toProperString(i+1) + ": ") + "</td>";
         }
         document.getElementById('difficulty_tr').innerHTML += difficultyHTML;
-        delete statsJSON.agonScaledDifficulty;
-        delete statsJSON.agonDifficulty;        
       }
-      if ("roleCorrelationWithSkill" in statsJSON) {
+      delete statsJSON.agonScaledDifficulty;
+      delete statsJSON.agonDifficulty;
+      if ("roleCorrelationWithSkill" in statsJSON && statsJSON.roleCorrelationWithSkill) {
         var correlationHTML = "";
         for (var i = 0; i < statsJSON.roleCorrelationWithSkill.length; i++) {
           correlationHTML += "<td width=10px></td>";
           correlationHTML += "<td>" + generateAgonView(2*Math.abs(statsJSON.roleCorrelationWithSkill[i]-0.5), statsJSON.roleCorrelationWithSkill[i], "for Player " + toProperString(i+1) + ": ") + "</td>";
         }
         document.getElementById('correlation_tr').innerHTML += correlationHTML;
-        delete statsJSON.roleCorrelationWithSkill;
       }
-      if ("averageMoves" in statsJSON) {
+      delete statsJSON.roleCorrelationWithSkill;
+      if ("averageMoves" in statsJSON && statsJSON.averageMoves) {
         statsJSON.averageMoves = JSON.parse(statsJSON.averageMoves);
-        document.getElementById('gameStatsDiv').innerHTML = "On average this game takes " + cleanFloat(statsJSON.averageMoves[0]) + " moves, based on " + statsJSON.averageMoves[1] + " matches.<br>";
-        delete statsJSON.averageMoves;
+        document.getElementById('gameStatsDiv').innerHTML = "On average this game takes " + cleanFloat(statsJSON.averageMoves[0]) + " moves, based on " + statsJSON.averageMoves[1] + " matches.<br>";        
       }
+      delete statsJSON.averageMoves;
       delete statsJSON.rolePlayerAverageScore; // TODO: Actually render this one.
       document.getElementById('gameStatsDiv').innerHTML += renderJSON(statsJSON);
 

@@ -118,7 +118,7 @@ function renderMatchEntries(theMatchEntries, theOngoingMatches, topCaption, play
     loadBellerophonMetadataForGames();
     
     var theHTML = '<center><table class="matchlist">';
-    theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=7>' + topCaption + '</th></tr>';
+    theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=9>' + topCaption + '</th></tr>';
     for (var i = 0; i < theMatchEntries.length; i++) {
       theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight, i%2);
     }
@@ -247,53 +247,66 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     var nPlayers = -1;
   }
   for (var j = 0; j < nPlayers; j++) {
-    theMatchHTML += '<tr><td class="padded">'
-    var highlightAttribute = '';
-    if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost.length > 0) {
-      if (playerToHighlight == theMatchJSON.playerNamesFromHost[j]) {
-        highlightAttribute = 'style="background-color: #CCEECC;"';
-      }
-      theMatchHTML += '<a ' + highlightAttribute + ' href="/view/' + window.location.pathname.split("/")[2] + '/players/' + theMatchJSON.playerNamesFromHost[j] + '">' + theMatchJSON.playerNamesFromHost[j] + '</a>';
+    if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost.length > 0 && playerToHighlight == theMatchJSON.playerNamesFromHost[j]) {
+        theMatchHTML += '<tr style="background-color: #CCEECC;">'
     } else {
-      theMatchHTML += 'Anonymous';
+        theMatchHTML += '<tr>'
     }
+    if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost.length > 0) {
+      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="http://placekitten.com/g/25/25"/></td>';
+      theMatchHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + theMatchJSON.playerNamesFromHost[j] + '">' + theMatchJSON.playerNamesFromHost[j] + '</a></td>';
+    } else {
+      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" /></td>';
+      theMatchHTML += '<td>Anonymous</td>';
+    }
+    theMatchHTML += '<td width=5></td>';
+    theMatchHTML += '<td class="imageHolder">'
     if (allErrorsForPlayer[j]) {
-      theMatchHTML += ' <img src="/viewer/images/YellowAlert.png" title="This player had all errors in this match." height=20px>';
+      theMatchHTML += '<img width=20 height=20 src="/viewer/images/warnings/YellowAlert.png" title="This player had all errors in this match.">';
     } else if (hasErrorsForPlayer[j]) {
-      theMatchHTML += ' <img src="/viewer/images/WhiteAlert.png" title="This player had errors in this match." height=20px>';
+      theMatchHTML += '<img width=20 height=20 src="/viewer/images/warnings/WhiteAlert.png" title="This player had errors in this match.">';
     }
     theMatchHTML += '</td>'
+    theMatchHTML += '<td width=5></td>';
     if ("goalValues" in theMatchJSON) {
-      theMatchHTML += '<td class="padded" style="text-align: right;"><span ' + highlightAttribute + '>' + theMatchJSON.goalValues[j] + '</span></td>';
+      theMatchHTML += '<td class="padded" style="text-align: right;">' + theMatchJSON.goalValues[j] + '</td>';
     } else {
       theMatchHTML += '<td class="padded"></td>';
     }
-    theMatchHTML += '<td width="5px"></td></tr>';
+    theMatchHTML += '<td width=5></td></tr>';
   }
   theMatchHTML += '</table></td>';
 
   // Match game profile.
-  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + getGameName(theMatchJSON.gameMetaURL) + '</a></td>';  
+  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + getGameName(theMatchJSON.gameMetaURL) + '</a></td>';
+  theMatchHTML += '<td width=5></td>';
   
   // Signature badge.
   if ("hashedMatchHostPK" in theMatchJSON) {
-    theMatchHTML += '<td class="padded"><img src="/viewer/images/GreenLock.png" title="Match has a valid digital signature, from '+getHostFromHashedPK(theMatchJSON.hashedMatchHostPK)+'." height=20px></img></td>';
+    var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);    
+    var theHostImage = "/viewer/images/hosts/Unknown.png";
+    if (theHostName == "apollo") theHostImage = "/viewer/images/hosts/Apollo2.png";
+    if (theHostName == "dresden") theHostImage = "/viewer/images/hosts/Dresden.png";
+    if (theHostName == "artemis") theHostImage = "/viewer/images/hosts/Party.png";
+    toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
+    theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/matches/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + toTitle(theHostName) + '."></img></a></td>';
   } else {
-    theMatchHTML += '<td class="padded"><img src="/viewer/images/RedLock.png" title="Match has no digital signature." height=20px></img></td>';
+    theMatchHTML += '<td class="imageHolder"><img width=25 height=25 src="/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></td>';
   }
+  theMatchHTML += '<td width=5></td>';
   
   // Warning badge.
   if (allErrors) {
-    theMatchHTML += '<td class="padded"><img src="/viewer/images/OrangeAlert.png" title="Every player had all errors during this match." height=20px></img></td>';
+    theMatchHTML += '<td class="imageHolder"><img src="/viewer/images/warnings/OrangeAlert.png" title="Every player had all errors during this match." height=20px></img></td>';
   } else if (allErrorsForSomePlayer) {
-    theMatchHTML += '<td class="padded"><img src="/viewer/images/YellowAlert.png" title="At least one player had all errors during this match." height=20px></img></td>';
+    theMatchHTML += '<td class="imageHolder"><img src="/viewer/images/warnings/YellowAlert.png" title="At least one player had all errors during this match." height=20px></img></td>';
   } else if (hasErrors) {
-    theMatchHTML += '<td class="padded"><img src="/viewer/images/WhiteAlert.png" title="Players had errors during this match." height=20px></img></td>';
+    theMatchHTML += '<td class="imageHolder"><img src="/viewer/images/warnings/WhiteAlert.png" title="Players had errors during this match." height=20px></img></td>';
   } else {
     theMatchHTML += '<td></td>';
   }
 
-  theMatchHTML += '<td width="5px"></td>';
+  theMatchHTML += '<td width=5></td>';
   return theMatchHTML + "</tr>";
 }
 
@@ -392,9 +405,9 @@ function getHostHashedPK() {
 }
 
 function getHostFromHashedPK(hostPK) {
-    if (hostPK == "90bd08a7df7b8113a45f1e537c1853c3974006b2") return "Apollo";
-    if (hostPK == "f69721b2f73839e513eed991e96824f1af218ac1") return "Dresen";
-    if (hostPK == "5bc94f8e793772e8585a444f2fc95d2ac087fed0") return "Artemis";
-    if (hostPK == "0ca7065b86d7646166d86233f9e23ac47d8320d4") return "Sample";
+    if (hostPK == "90bd08a7df7b8113a45f1e537c1853c3974006b2") return "apollo";
+    if (hostPK == "f69721b2f73839e513eed991e96824f1af218ac1") return "dresden";
+    if (hostPK == "5bc94f8e793772e8585a444f2fc95d2ac087fed0") return "artemis";
+    if (hostPK == "0ca7065b86d7646166d86233f9e23ac47d8320d4") return "sample";
     return hostPK;
 }
