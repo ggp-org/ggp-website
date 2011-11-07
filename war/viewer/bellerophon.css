@@ -147,7 +147,7 @@ td.navbarBottomAbrupt {
   );
 }
 
-@media (min-width: 1215px) {
+@media (min-width: 1265px) {
   div.major_left {
     padding-left: 5px;
     min-width: 600px;
@@ -156,11 +156,11 @@ td.navbarBottomAbrupt {
   div.major_right {
     padding-left: 5px;
     padding-right: 5px;
-    width: 600px;
+    width: 650px;
     float: right;
   }
 }
-@media (max-width: 1215px) {
+@media (max-width: 1265px) {
   div.major_right {
     padding-top: 20px;
   }
