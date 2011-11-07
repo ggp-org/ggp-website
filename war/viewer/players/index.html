@@ -21,24 +21,85 @@
 
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
+
+      function renderPlayerListEntry(aPlayer, nPlayer) {
+        var theHTML = '';
+        if (nPlayer % 2 == 0) {
+          theHTML += "<tr bgcolor=#F5F5F5>";
+        } else {          
+          theHTML += "<tr bgcolor=#E0E0E0>";
+        }
+        
+        function renderCell(x) {
+          if (x) {
+            return '<td class="padded">' + x + '</td>';
+          } else {
+            return '<td></td>';
+          }
+        }
+        
+        pingStatusIcon = function(aPlayer) {
+          var z = aPlayer.pingStatus;
+          if (!aPlayer.isEnabled || z == null) {
+            return '<img src="/viewer/images/presence/StatusGrey.png" title="Player is inactive."></img>';
+          }
+          if (z == "available") return '<img src="/viewer/images/presence/StatusGreen.png" title="Player is listed as active, and is currently ready for new matches."></img>';          
+          if (z == "waiting") return '<img src="/viewer/images/presence/StatusWhite.png" title="Player was just activated: waiting to get its status..."></img>';
+          if (z == "unknown") return '<img src="/viewer/images/presence/StatusGrey.png" title="Player status is unknown."></img>';
+          if (z == "error") return '<img src="/viewer/images/presence/StatusError.png" title="Player is listed as active, but is being unresponsive, so its current status is unknown."></img>';          
+          if (z == "busy") return '<img src="/viewer/images/presence/StatusOrange.png" title="Player is listed as active, and is currently busy playing a match."></img>';          
+          return '<img src="/viewer/images/presence/StatusError.png" title="Player is listed as active, but its current status is unrecognizable: ' + z + '."></img>';
+        }
+        
+        theHTML += renderCell(pingStatusIcon(aPlayer));
+        theHTML += renderCell('<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer.name + '">' + aPlayer.name + '</a>');
+        theHTML += renderCell(aPlayer.visibleEmail);
+        theHTML += renderCell(("theURL" in aPlayer) ? "Yours!" : null);
+        theHTML += "<td width=10px></td>";
+
+        theHTML += "</tr>";
+        return theHTML;
+      }
+      
+      // Returns a positive number if "aPlayer" should appear in the player
+      // listing after "bPlayer".
+      function playerComesAfter(aPlayer, bPlayer) {
+        if (("theURL" in aPlayer) && !("theURL" in bPlayer)) return -1;
+        if (!("theURL" in aPlayer) && ("theURL" in bPlayer)) return 1;      
+        if (aPlayer.isEnabled && !bPlayer.isEnabled) return -1;
+        if (!aPlayer.isEnabled && bPlayer.isEnabled) return 1;
+        if (aPlayer.name > bPlayer.name) return 1;
+        if (aPlayer.name < bPlayer.name) return -1;
+        return 0;
+      }
       
       function drawPlayerList() {
         var observedPlayers = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall').observedPlayers;
-        
-        var playerListHTML = '<table class="matchlist" cellpadding=5px border=1px>';
-        playerListHTML += '<tr><th bgcolor=#E0E0E0>Players</th></tr>';
-        for (var i = 0; i < observedPlayers.length; i++) {
-          if (i % 2 == 0) {
-            playerListHTML += "<tr bgcolor=#F5F5F5>";
-          } else {          
-            playerListHTML += "<tr bgcolor=#E0E0E0>";
-          }
-          
-          var aPlayer = observedPlayers[i];
-          playerListHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer + '">' + aPlayer + '</a></td></tr>';
+
+        var thePlayers = {};        
+        var theHost = window.location.pathname.split("/")[2];
+        if (theHost == "apollo") {
+          thePlayers = ResourceLoader.load_json('//apollo.ggp.org/data/players/');
         }
-        playerListHTML += "</table>"
-        document.getElementById('playerList').innerHTML = playerListHTML;      
+        for (var i = 0; i < observedPlayers.length; i++) {
+          if (!(observedPlayers[i] in thePlayers)) {
+            thePlayers[observedPlayers[i]] = {"name":observedPlayers[i], "isEnabled":true, "pingStatus":"unknown"};
+          }
+        }
+        
+        var thePlayersList = [];
+        for (var theName in thePlayers) {
+          thePlayersList.push(thePlayers[theName]);
+        }
+        thePlayersList.sort(playerComesAfter);
+
+        var playerListHTML = '<center><table class="matchlist" cellpadding="5px">';
+        playerListHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=5>Player List</th></tr>';
+        for (var i = 0; i < thePlayersList.length; i++) {
+          playerListHTML += renderPlayerListEntry(thePlayersList[i], i);
+        }
+        playerListHTML += '</table></center>';
+        document.getElementById('playerList').innerHTML = playerListHTML;   
       }
       
       drawPlayerList();
