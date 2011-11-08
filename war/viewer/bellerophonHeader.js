@@ -2,7 +2,7 @@ var loginNascarHTML;
 function generateHeader(theDiv) {
     toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
     var theHost = window.location.pathname.split("/")[2];
-    if (theHost == "") theHost = "all";    
+    if (!theHost) theHost = "all";    
     
     var theHTML = "";
     theHTML += '<center>';
