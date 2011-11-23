@@ -60,7 +60,11 @@
           } else {
             sidePanelHTML += 'Anonymous';
           }
-          sidePanelHTML += '</td><td>as <b>' + spectatorMatch.gameRoleNames[i] + '</b></td>';                  
+          if ("gameRoleNames" in spectatorMatch) {
+            sidePanelHTML += '</td><td>as <b>' + spectatorMatch.gameRoleNames[i] + '</b></td>';
+          } else {
+            sidePanelHTML += '</td><td>as Player ' + i + '</td>';
+          }
           if ("goalValues" in spectatorMatch) {
             sidePanelHTML += '<td><i>(' + spectatorMatch.goalValues[i] + ')</i></td>';
           }

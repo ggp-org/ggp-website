@@ -359,7 +359,7 @@ function loadBellerophonMetadataForGames() {
   }
     
   // TODO: Make this more elegant.
-  if (getHostHashedPK() == "f69721b2f73839e513eed991e96824f1af218ac1" || getHostHashedPK() == "all") {
+  if (getHostHashedPK() == "f69721b2f73839e513eed991e96824f1af218ac1" || getHostHashedPK() == "0ca7065b86d7646166d86233f9e23ac47d8320d4" || getHostHashedPK() == "all") {
     loadRepositoryIntoMetadata("//dresden.ggp.org/games/");
   }
   if (getHostHashedPK() != "f69721b2f73839e513eed991e96824f1af218ac1") {

@@ -53,7 +53,13 @@ var SpectatorView = {
     this.gameOldVizDiv.style.cssText = this.gameOldVizDiv.style.cssText.replace('display: none; ', '');
 
     this.gameVizDiv.innerHTML = '';
-    StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.gameVizDiv, width, height);
+    if (this.stylesheet == null) {
+      // TODO: Improve this mode.
+      var stateString = ("" + SymbolList.arrayIntoSymbolList(this.state)).replace(">", "&#62;").replace("<", "&#60;");
+      this.gameVizDiv.innerHTML = '<table style="width: ' + width + 'px; height: ' + height + 'px"><tr><td><b>No visualization available:</b><br><tt>' + stateString + '</tt></td></tr></table>';
+    } else {      
+      StateRenderer.render_state_using_xslt(this.state, this.stylesheet, this.gameVizDiv, width, height);
+    }
 
     this.topDiv.style.height = this.gameVizDiv.children[0].clientHeight + 'px';
     
@@ -163,9 +169,11 @@ var SpectatorView = {
     // Next, load the stylesheet associated with the game being played. This involves
     // calling out to the repository server that hosts the game being played.
     var gameURL = this.matchData.gameMetaURL;
-    var metadata = ResourceLoader.load_json(gameURL);      
-    this.stylesheet = ResourceLoader.load_stylesheet(gameURL + metadata.stylesheet);
-    
+    var metadata = ResourceLoader.load_json(gameURL);
+    if ("stylesheet" in metadata) {
+        this.stylesheet = ResourceLoader.load_stylesheet(gameURL + metadata.stylesheet);
+    }
+
     // Store the callbacks, and start off by sending back information
     // about the match being loaded to the "info" callback.
     this.callbacks = callbacks;    
