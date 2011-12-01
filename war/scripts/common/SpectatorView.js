@@ -18,6 +18,7 @@ var SpectatorView = {
   gameVizDiv: null,
   gameOldVizDiv: null,
   callbacks: null,
+  matchURL: null,
   
   rendering: false,
   pending_render: false,
@@ -160,11 +161,12 @@ var SpectatorView = {
     
     // Next, load the resources for the match. We need to load the current state,
     // and also the stylesheet associated with the game being played. First, load
-    // the current state of the game.
+    // the current state of the game.    
     var matchString = ResourceLoader.load_raw(match_url);
     this.matchData = JSON.parse(matchString);        
     this.state = this.getStateFromMatchData(this.matchData);
     this.visibleStateIndex = this.matchData.states.length-1;
+    this.matchURL = match_url;
     
     // Next, load the stylesheet associated with the game being played. This involves
     // calling out to the repository server that hosts the game being played.
