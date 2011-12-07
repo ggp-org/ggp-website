@@ -360,15 +360,14 @@ function loadBellerophonMetadataForGames() {
     
   // TODO: Make this more elegant.
   if (getHostHashedPK() == "f69721b2f73839e513eed991e96824f1af218ac1" || getHostHashedPK() == "0ca7065b86d7646166d86233f9e23ac47d8320d4" || getHostHashedPK() == "all") {
-    loadRepositoryIntoMetadata("//dresden.ggp.org/games/");
+    loadRepositoryIntoMetadata("//games.ggp.org/dresden/games/");
   }
   if (getHostHashedPK() != "f69721b2f73839e513eed991e96824f1af218ac1") {
     loadRepositoryIntoMetadata("//games.ggp.org/games/");
+    // TODO: loadRepositoryIntoMetadata("//games.ggp.org/base/games/");
   }
   
   getGameInfo = function (gameVersionedURL) {
-    gameVersionedURL = gameVersionedURL.replace("ggp-repository.appspot.com","games.ggp.org"); 
-      
     var splitURL = gameVersionedURL.split("/");
     var versionFromURL = 1*(splitURL[splitURL.length-2].replace("v",""));
     if (isNaN(versionFromURL)) {
@@ -397,10 +396,10 @@ function loadBellerophonMetadataForGames() {
 }
 
 function translateRepositoryCodename(x) {
-  return x.replace("standard/", "http://games.ggp.org/games/").replace("dresden/", "http://dresden.ggp.org/games/");
+  return x.replace("base/", "http://games.ggp.org/games/").replace("base2/", "http://games.ggp.org/base/games/").replace("dresden/", "http://games.ggp.org/dresden/games/");
 }
 function translateRepositoryIntoCodename(x) {
-  return x.replace("http://games.ggp.org/games/", "standard/").replace("http://dresden.ggp.org/games/", "dresden/");
+  return x.replace("http://games.ggp.org/games/", "base/").replace("http://games.ggp.org/base/games/", "base2/").replace("http://games.ggp.org/dresden/games/", "dresden/");
 }
 
 function getHostHashedPK() {
