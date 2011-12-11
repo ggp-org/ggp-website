@@ -363,8 +363,7 @@ function loadBellerophonMetadataForGames() {
     loadRepositoryIntoMetadata("//games.ggp.org/dresden/games/");
   }
   if (getHostHashedPK() != "f69721b2f73839e513eed991e96824f1af218ac1") {
-    loadRepositoryIntoMetadata("//games.ggp.org/games/");
-    // TODO: loadRepositoryIntoMetadata("//games.ggp.org/base/games/");
+    loadRepositoryIntoMetadata("//games.ggp.org/base/games/");
   }
   
   getGameInfo = function (gameVersionedURL) {
@@ -396,10 +395,10 @@ function loadBellerophonMetadataForGames() {
 }
 
 function translateRepositoryCodename(x) {
-  return x.replace("base/", "http://games.ggp.org/games/").replace("base2/", "http://games.ggp.org/base/games/").replace("dresden/", "http://games.ggp.org/dresden/games/");
+  return x.replace("base/", "http://games.ggp.org/base/games/").replace("dresden/", "http://games.ggp.org/dresden/games/");
 }
 function translateRepositoryIntoCodename(x) {
-  return x.replace("http://games.ggp.org/games/", "base/").replace("http://games.ggp.org/base/games/", "base2/").replace("http://games.ggp.org/dresden/games/", "dresden/");
+  return x.replace("http://games.ggp.org/base/games/", "base/").replace("http://games.ggp.org/dresden/games/", "dresden/");
 }
 
 function getHostHashedPK() {
