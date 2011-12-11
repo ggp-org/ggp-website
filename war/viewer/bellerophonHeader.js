@@ -398,7 +398,7 @@ function translateRepositoryCodename(x) {
   return x.replace("base/", "http://games.ggp.org/base/games/").replace("dresden/", "http://games.ggp.org/dresden/games/");
 }
 function translateRepositoryIntoCodename(x) {
-  return x.replace("http://games.ggp.org/base/games/", "base/").replace("http://games.ggp.org/dresden/games/", "dresden/");
+    return x.replace("http://games.ggp.org/base/games/", "base/").replace("http://games.ggp.org/dresden/games/", "dresden/");
 }
 
 function getHostHashedPK() {
