@@ -45,7 +45,7 @@
 
         var sidePanelHTML = '<br>';
         var theDate = new Date(spectatorMatch.startTime);
-        sidePanelHTML += '<b>Game:</b> <a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(spectatorMatch.gameMetaURL) + '">' + spectatorMatch.gameName + '</a><br><br>';
+        sidePanelHTML += '<b>Game:</b> <a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(spectatorMatch.gameMetaURL) + '">' + spectatorView.metadata.gameName + '</a><br><br>';
         sidePanelHTML += '<b>Started at:</b> ' + UserInterface.renderDateTime(theDate) + '<br><br>';
         sidePanelHTML += '<b>Start clock:</b> ' + spectatorMatch.startClock + '<br>';
         sidePanelHTML += '<b>Play clock:</b> ' + spectatorMatch.playClock + '<br><br>';
@@ -63,6 +63,7 @@
           if ("gameRoleNames" in spectatorMatch) {
             sidePanelHTML += '</td><td>as <b>' + spectatorMatch.gameRoleNames[i] + '</b></td>';
           } else {
+            // TODO: Come up with a better way to get this information.
             sidePanelHTML += '</td><td>as Player ' + i + '</td>';
           }
           if ("goalValues" in spectatorMatch) {

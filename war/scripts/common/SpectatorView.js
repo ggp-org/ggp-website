@@ -29,6 +29,7 @@ var SpectatorView = {
   state: null,  
   matchData: null,
   stylesheet: null,
+  metadata: null,
   
   visibleStateIndex: null,
   
@@ -171,9 +172,9 @@ var SpectatorView = {
     // Next, load the stylesheet associated with the game being played. This involves
     // calling out to the repository server that hosts the game being played.
     var gameURL = this.matchData.gameMetaURL;
-    var metadata = ResourceLoader.load_json(gameURL);
-    if ("stylesheet" in metadata) {
-        this.stylesheet = ResourceLoader.load_stylesheet(gameURL + metadata.stylesheet);
+    this.metadata = ResourceLoader.load_json(gameURL);
+    if ("stylesheet" in this.metadata) {
+        this.stylesheet = ResourceLoader.load_stylesheet(gameURL + this.metadata.stylesheet);
     }
 
     // Store the callbacks, and start off by sending back information
@@ -183,8 +184,8 @@ var SpectatorView = {
       var info_response = {};
       info_response.matchId = this.matchData.matchId;
       info_response.description = null;
-      if ("description" in metadata) {
-        info_response.description = ResourceLoader.load_raw(gameURL + metadata.description);
+      if ("description" in this.metadata) {
+        info_response.description = ResourceLoader.load_raw(gameURL + this.metadata.description);
       }
       callbacks.info(info_response);
     }
