@@ -186,6 +186,8 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
 
   // TODO(schreib): Factor this out into a general function.
   renderDuration = function(x) {
+      if (x <= 0) return "0s";
+      
       var s = Math.round(x/1000);
       var sV = "" + (s % 60);
       
