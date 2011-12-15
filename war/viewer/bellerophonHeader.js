@@ -1,6 +1,9 @@
+function toTitle(x) {
+  return x[0].toUpperCase()+x.substring(1);
+}
+
 var loginNascarHTML;
-function generateHeader(theDiv) {
-    toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
+function generateHeader(theDiv) {    
     var theHost = window.location.pathname.split("/")[2];
     if (!theHost) theHost = "all";    
     
@@ -23,76 +26,6 @@ function generateHeader(theDiv) {
     theHTML += '</table>';
     theHTML += '</center>';
     theDiv.innerHTML = theHTML;    
-}
-
-function generatePlayerHTML(aPlayer) {
-    var thePlayerHTML = '<table class="player" id="player_' + aPlayer.name + '_table" style="background-color:';
-    if ("theURL" in aPlayer) {
-        thePlayerHTML += '#CCEECC; height: 110px';
-    } else {
-        thePlayerHTML += '#DDDDDD; height: 80px';
-    }
-    thePlayerHTML += '">';
-    thePlayerHTML += generatePlayerInnerHTML(aPlayer);
-    thePlayerHTML += '</table>';    
-    return thePlayerHTML;
-}
-
-var theRecordedPlayers = {};
-function generatePlayerInnerHTML(aPlayer) {
-    theRecordedPlayers[aPlayer.name] = aPlayer;
-    
-    function clip(s, n) {
-        if (s.length <= n) return s;
-        return s.substring(0,n-3) + "...";
-    }
-    
-    var statusColor = 'grey';
-    if ("pingStatus" in aPlayer) {
-      if (aPlayer.pingStatus == "available") {
-        statusColor = 'green';
-      } else if (aPlayer.pingStatus == "busy") {
-        statusColor = 'yellow';
-      } else {
-        statusColor = 'red';
-      }
-    }
-    
-    var thePlayerHTML = "";
-    thePlayerHTML += '<tr><td width=5></td>';
-    thePlayerHTML += '<td width=60><a style="text-decoration:none; color: #222222;" href="/players/' + aPlayer.name + '"><table style="border-width: 2px; border-style: inset; border-color: ' + statusColor + ';" cellspacing=0 cellpadding=0><tr><td><img width=50 height=50 src="http://placekitten.com/g/50/50"/></tr></td></table></a></td>';
-    thePlayerHTML += '<td width=5></td>';
-    thePlayerHTML += '<td width=255><a style="text-decoration:none; color: #222222;" href="/players/' + aPlayer.name + '"><font size=6><b>' + clip(aPlayer.name,15) + '</b></font></a>';
-    thePlayerHTML += '<div id=player_' + aPlayer.name + '_email>'; 
-    if (aPlayer.visibleEmail.length > 0) {
-        thePlayerHTML += '<tt>' + clip(aPlayer.visibleEmail, 30) + '</tt>';
-    } else {
-        thePlayerHTML += '<i>Email address not listed.</i>';
-    }
-    thePlayerHTML += '</div></td>';
-    thePlayerHTML += '<td width=5></td>';
-    thePlayerHTML += '<td width=90>';
-    if (aPlayer.isEnabled) {
-        thePlayerHTML += '<table class="active"><tr id="player_' + aPlayer.name + '_active"><td>Active!</td></tr></table>';
-    } else {
-        thePlayerHTML += '<table class="inactive"><tr id="player_' + aPlayer.name + '_active"><td>Inactive</td></tr></table>'; 
-    }
-    thePlayerHTML += '<br>';
-    thePlayerHTML += '<table class="gdlVersion"><tr><td>' + aPlayer.gdlVersion + '</td></tr></table>';
-    thePlayerHTML += '</td></tr>';
-    if ("theURL" in aPlayer) {
-        thePlayerHTML += '<tr><td width=5></td>';
-        thePlayerHTML += '<td><b>URL:</b></td><td width=5></td>';
-        thePlayerHTML += '<td><div id=player_' + aPlayer.name + '_url>';
-        if (aPlayer.theURL.length > 0) {
-          thePlayerHTML += '<tt>' + aPlayer.theURL + '</tt>';
-        } else {
-          thePlayerHTML += '<i>Player URL not listed.</i>';
-        }
-        thePlayerHTML += '</div></td><td width=5></td>';
-        thePlayerHTML += '<td><div id=player_' + aPlayer.name + '_button><button onclick=\'clickedEditForPlayer("' + aPlayer.name + '")\' type="Button">Edit</button></div></td></tr>'; 
-    }
-    return thePlayerHTML;
 }
 
 function renderJSON(x) {
@@ -387,8 +320,7 @@ function loadBellerophonMetadataForGames() {
     gameInfo.bellerophonVersionFromURL = versionFromURL;
 
     if (!("gameName" in gameInfo)) {
-      var gameShortKey = translateRepositoryIntoCodename(gameVersionedURL).split("/").splice(1).join("/");
-      gameInfo.bellerophonName = "[" + gameShortKey + "]";
+      gameInfo.bellerophonName = toTitle(translateRepositoryIntoCodename(gameVersionedURL).split("/").splice(1)[0]);
     } else {
       gameInfo.bellerophonName = gameInfo.gameName;
     }
