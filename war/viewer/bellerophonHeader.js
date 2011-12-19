@@ -2,7 +2,14 @@ function toTitle(x) {
   return x[0].toUpperCase()+x.substring(1);
 }
 
-var loginNascarHTML;
+function getGameNameForDisplay(gameMetadata, gameMetadataURL) {
+    if ("gameName" in gameMetadata) {
+        return gameMetadata.gameName;
+    } else {
+        return toTitle(translateRepositoryIntoCodename(gameMetadataURL).split("/").splice(1)[0]);
+    }
+}
+
 function generateHeader(theDiv) {    
     var theHost = window.location.pathname.split("/")[2];
     if (!theHost) theHost = "all";    
@@ -318,12 +325,7 @@ function loadBellerophonMetadataForGames() {
 
     gameInfo.bellerophonLink = '/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(gameVersionedURL);
     gameInfo.bellerophonVersionFromURL = versionFromURL;
-
-    if (!("gameName" in gameInfo)) {
-      gameInfo.bellerophonName = toTitle(translateRepositoryIntoCodename(gameVersionedURL).split("/").splice(1)[0]);
-    } else {
-      gameInfo.bellerophonName = gameInfo.gameName;
-    }
+    gameInfo.bellerophonName = getGameNameForDisplay(gameInfo, gameVersionedURL);
     return gameInfo;
   }
 }
