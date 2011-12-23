@@ -301,7 +301,7 @@ function loadBellerophonMetadataForGames() {
   }
     
   // TODO: Make this more elegant.
-  if (getHostHashedPK() == "f69721b2f73839e513eed991e96824f1af218ac1" || getHostHashedPK() == "0ca7065b86d7646166d86233f9e23ac47d8320d4" || getHostHashedPK() == "all") {
+  if (getHostHashedPK() == "f69721b2f73839e513eed991e96824f1af218ac1" || getHostHashedPK() == "0ca7065b86d7646166d86233f9e23ac47d8320d4" || getHostHashedPK() == "all" || getHostHashedPK() == "unsigned") {
     loadRepositoryIntoMetadata("//games.ggp.org/dresden/games/");
   }
   if (getHostHashedPK() != "f69721b2f73839e513eed991e96824f1af218ac1") {
@@ -322,6 +322,10 @@ function loadBellerophonMetadataForGames() {
     var gameUnversionedURL = splitURL.join("/").replace("http:", "");
     // TODO: Ultimately we should look up version-specific metadata?
     var gameInfo = global_gameMetadata[gameUnversionedURL];
+    
+    if (gameInfo == null) {
+      console.log("Could not find game: " + gameUnversionedURL);
+    }
 
     gameInfo.bellerophonLink = '/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(gameVersionedURL);
     gameInfo.bellerophonVersionFromURL = versionFromURL;
