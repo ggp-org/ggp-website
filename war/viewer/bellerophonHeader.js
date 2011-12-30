@@ -282,6 +282,7 @@ function convertRGB (h,s,v) {
   return [Math.round(255*r),Math.round(255*g),Math.round(255*b)];
 }
 
+// Lower is red, higher is green.
 var cleanFloat = function (x) { return Math.round(x*100)/100; };
 var generateAgonView = function (scaledRank, realRank, theText) {
   var rgb = convertRGB(scaledRank*120,1.0,1.0)
