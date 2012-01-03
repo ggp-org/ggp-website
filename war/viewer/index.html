@@ -37,9 +37,9 @@
       generateTimeSeries = function (z) {
         var q = [];
         for (var x in z) {
-          //if (z[x] > 0) {
+          if (z[x] >= 0) {
             q.push([1*x, z[x]]);
-          //}
+          }
         }
         q.sort();
         return q;
@@ -62,11 +62,11 @@
       // magenta, maroon, navy, olive, orange, pink, purple, violet, red
       // silver, white, yellow
 
-      $.plot($("#matches_viz"), [{data: qArtemis,  label: "Artemis Matches over Time",  color: 'khaki'},
-                                 {data: qDresden,  label: "Dresden Matches over Time",  color: 'blue'},
-                                 {data: qApollo,   label: "Apollo Matches over Time",   color: 'green'},
-                                 {data: qUnsigned, label: "Unsigned Matches over Time", color: 'silver'},
-                                 {data: qSample,   label: "Sample Matches over Time",   color: 'grey'},
+      $.plot($("#matches_viz"), [{data: qArtemis,  label: "Artemis Matches",  color: 'khaki'},
+                                 {data: qDresden,  label: "Dresden Matches",  color: 'blue'},
+                                 {data: qApollo,   label: "Apollo Matches",   color: 'green'},
+                                 {data: qUnsigned, label: "Unsigned Matches", color: 'silver'},
+                                 {data: qSample,   label: "Sample Matches",   color: 'grey'},
                                  ],
              {xaxes: [{mode:'time'}],
               lines: {show: true, fill: true},             
