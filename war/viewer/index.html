@@ -6,30 +6,72 @@
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:bold">
     <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>    
   </head>
   <body>
     <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
     <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <script type="text/javascript" src="//www.ggp.org/scripts/external/jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="//people.iola.dk/olau/flot/jquery.flot.stack.js"></script>     
 
     <div id='header'></div>
     <br>
     <div style="margin-left: 25%; width: 50%">
     <p>Welcome to the experimental new GGP.org Viewer (codenamed Bellerophon). This is a unified
        viewing interface for all GGP content (players, games, matches, aggregate statistics) spanning
-       multiple game repositories, multiple spectator servers, multiple match hosts, etc. All of this
-       content can be viewed on a per-host or global basis, paving the way for having player statistics
-       based on matches played on many different hosts (not yet possible because right now a player's
-       identity is tied to the host they're playing matches on, but we can build a future where that's
-       no longer the case).</p>
+       multiple game repositories, multiple spectator servers, multiple match hosts, etc.</p>       
     <p>For example, you can view matches played on
         <a href="/view/apollo/matches/">Apollo</a>,
         <a href="/view/dresden/matches/">Dresden</a>,
         or <a href="/view/all/matches/">both</a>, all in the same interface.</p>
     <p>This interface is still in-development. Please file bug reports.</p>
     </div>
+    <br>
+    <center>
+      <div id="matches_viz" style="width:600px;height:300px;"></div>
+    </center>
+    
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
+      
+      generateTimeSeries = function (z) {
+        var q = [];
+        for (var x in z) {
+          //if (z[x] > 0) {
+            q.push([1*x, z[x]]);
+          //}
+        }
+        q.sort();
+        return q;
+      }
+      generateTimeSeriesFromData = function (z) {
+        return generateTimeSeries(ResourceLoader.load_json('//database.ggp.org/statistics/'+z+'/overall').matchesStartedChart);
+      }
+      
+      qApollo = generateTimeSeriesFromData('90bd08a7df7b8113a45f1e537c1853c3974006b2');      
+      qArtemis = generateTimeSeriesFromData('5bc94f8e793772e8585a444f2fc95d2ac087fed0');
+      qDresden = generateTimeSeriesFromData('f69721b2f73839e513eed991e96824f1af218ac1');      
+      qUnsigned = generateTimeSeriesFromData('unsigned');
+      qSample = generateTimeSeriesFromData('0ca7065b86d7646166d86233f9e23ac47d8320d4');
+
+      // aqua, azure, beige, black, blue, brown, cyan
+      // darkblue, darkcyan, darkgrey, darkgreen, darkkhaki, darkmagenta
+      // darkolivegreen, darkorange, darkorchid, darkred, darksalmon,
+      // darkviolet, fuchsia, gold, green, indigo, khaki, lightblue,
+      // lightcyan, lightgreen, lightgrey, lightpink, lightyellow, lime
+      // magenta, maroon, navy, olive, orange, pink, purple, violet, red
+      // silver, white, yellow
+
+      $.plot($("#matches_viz"), [{data: qArtemis,  label: "Artemis Matches over Time",  color: 'khaki'},
+                                 {data: qDresden,  label: "Dresden Matches over Time",  color: 'blue'},
+                                 {data: qApollo,   label: "Apollo Matches over Time",   color: 'green'},
+                                 {data: qUnsigned, label: "Unsigned Matches over Time", color: 'silver'},
+                                 {data: qSample,   label: "Sample Matches over Time",   color: 'grey'},
+                                 ],
+             {xaxes: [{mode:'time'}],
+              lines: {show: true, fill: true},             
+              series: {stack: true},
+              legend: {position: 'nw'}});
     </script>
   </body>  
 </html>
