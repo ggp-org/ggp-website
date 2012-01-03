@@ -285,11 +285,14 @@ function convertRGB (h,s,v) {
 // Lower is red, higher is green.
 var cleanFloat = function (x) { return Math.round(x*100)/100; };
 var generateAgonView = function (scaledRank, realRank, theText) {
-  var rgb = convertRGB(scaledRank*120,1.0,1.0)
-  var theHTML = "<span style='background-color: rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ");'>";
+  var theHTML = "<span style='background-color: " + generateAgonViewColor(scaledRank) + ";'>";
   theHTML += theText + cleanFloat(realRank);
   theHTML += "</span>";
   return theHTML;
+}
+var generateAgonViewColor = function (scaledRank) {
+  var rgb = convertRGB(scaledRank*120,1.0,1.0)
+  return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
 }
 
 global_gameMetadata = {};

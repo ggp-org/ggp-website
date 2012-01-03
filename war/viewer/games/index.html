@@ -37,12 +37,13 @@
       }
 
       function drawGameList() {
-        var observedGames = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall').observedGames;
+        var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall');
+        var observedGames = statsJSON.observedGames;
         
         loadBellerophonMetadataForGames();
         
         var gameListHTML = '<table class="matchlist" cellpadding="5px">';
-        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded">Has Description?</th></tr>';
+        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded">Rules?</th><th>Agon Difficulty</th></tr>';
         for (var i = 0; i < observedGames.length; i++) {
           if (i % 2 == 0) {
             gameListHTML += "<tr bgcolor=#F5F5F5>";
@@ -56,7 +57,18 @@
           gameListHTML += '<td class="padded"><a href="' + theGame.bellerophonLink + '">' + theGame.bellerophonName + '</a></td>';
           gameListHTML += '<td class="padded">' + toProperString(theGame.numRoles) + '</td>';
           gameListHTML += '<td class="padded">' + toProperString(theVersion) + '</td>';
-          gameListHTML += '<td class="padded">' + ("description" in theGame ? "Yes" : "No") + '</td></tr>';
+          gameListHTML += '<td class="padded">' + ("description" in theGame ? "Yes" : "No") + '</td>';
+          gameListHTML += '<td class="padded">';
+          if ("agonScaledDifficulty" in statsJSON && statsJSON.agonScaledDifficulty && gameKey in statsJSON.agonScaledDifficulty) {
+            var agonDifficulty = statsJSON.agonDifficulty[gameKey];
+            var agonScaledDifficulty = statsJSON.agonScaledDifficulty[gameKey];            
+            gameListHTML += '<table style="height: 25px; width: 100px;"><tr>';
+            for (var j = 0; j < agonDifficulty.length; j++) {
+              gameListHTML += '<td title="' + agonDifficulty[j] + '" style="background-color: ' + generateAgonViewColor(1-agonScaledDifficulty[j]) + ';"></td>';
+            }
+            gameListHTML += '</tr></table>';
+          }
+          gameListHTML += '</td></tr>';
         }
         gameListHTML += "</table>"
         document.getElementById('gameList').innerHTML = gameListHTML;
