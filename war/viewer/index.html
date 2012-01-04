@@ -5,14 +5,13 @@
     <link rel="shortcut icon" href="http://www.ggp.org/favicon.ico">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:bold">
     <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>    
   </head>
   <body>
     <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
     <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
-    <script type="text/javascript" src="//www.ggp.org/scripts/external/jquery.flot.js"></script>
-    <script language="javascript" type="text/javascript" src="//people.iola.dk/olau/flot/jquery.flot.stack.js"></script>     
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">google.load('visualization', '1', {packages: ['corechart']});</script>
 
     <div id='header'></div>
     <br>
@@ -31,31 +30,15 @@
     </div>
     <br>
     <center>
-      <div id="matches_viz" style="width:600px;height:300px;"></div>
+      <div id="matches_viz" style="width:800px;height:300px;"></div>
     </center>
     
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
       
-      generateTimeSeries = function (z) {
-        var q = [];
-        for (var x in z) {
-          if (z[x] >= 0) {
-            q.push([1*x, z[x]]);
-          }
-        }
-        q.sort();
-        return q;
-      }
-      generateTimeSeriesFromData = function (z) {
-        return generateTimeSeries(ResourceLoader.load_json('//database.ggp.org/statistics/'+z+'/overall').matchesStartedChart);
-      }
-      
-      qApollo = generateTimeSeriesFromData('90bd08a7df7b8113a45f1e537c1853c3974006b2');      
-      qArtemis = generateTimeSeriesFromData('5bc94f8e793772e8585a444f2fc95d2ac087fed0');
-      qDresden = generateTimeSeriesFromData('f69721b2f73839e513eed991e96824f1af218ac1');      
-      qUnsigned = generateTimeSeriesFromData('unsigned');
-      qSample = generateTimeSeriesFromData('0ca7065b86d7646166d86233f9e23ac47d8320d4');
+      getTimeSeriesData = function (z) {
+        return ResourceLoader.load_json('//database.ggp.org/statistics/'+z+'/overall').matchesStartedChart;
+      }      
 
       // aqua, azure, beige, black, blue, brown, cyan
       // darkblue, darkcyan, darkgrey, darkgreen, darkkhaki, darkmagenta
@@ -65,16 +48,46 @@
       // magenta, maroon, navy, olive, orange, pink, purple, violet, red
       // silver, white, yellow
 
-      $.plot($("#matches_viz"), [{data: qArtemis,  label: "Artemis Matches",  color: 'khaki'},
-                                 {data: qDresden,  label: "Dresden Matches",  color: 'blue'},
-                                 {data: qApollo,   label: "Apollo Matches",   color: 'green'},
-                                 {data: qUnsigned, label: "Unsigned Matches", color: 'silver'},
-                                 {data: qSample,   label: "Sample Matches",   color: 'grey'},
-                                 ],
-             {xaxes: [{mode:'time'}],
-              lines: {show: true, fill: true},             
-              series: {stack: true},
-              legend: {position: 'nw'}});
+      zApollo = ["Apollo", "green", getTimeSeriesData('90bd08a7df7b8113a45f1e537c1853c3974006b2')];      
+      zArtemis = ["Artemis", "khaki", getTimeSeriesData('5bc94f8e793772e8585a444f2fc95d2ac087fed0')];
+      zDresden = ["Dresden", "blue", getTimeSeriesData('f69721b2f73839e513eed991e96824f1af218ac1')];      
+      zUnsigned = ["Unsigned", "silver", getTimeSeriesData('unsigned')];
+      zSample = ["Sample", "grey", getTimeSeriesData('0ca7065b86d7646166d86233f9e23ac47d8320d4')];
+
+      var zOrder = [zDresden, zApollo, zArtemis, zSample, zUnsigned];
+
+      var zDataSets = [];
+      var zDataLabels = [];
+      var zDataColors = [];
+      for (var i = 0; i < zOrder.length; i++) {        
+        zDataLabels.push(zOrder[i][0]);
+        zDataColors.push(zOrder[i][1]);
+        zDataSets.push(zOrder[i][2]);
+      }
+      
+      var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Date');
+      for (var i = 0; i < zDataLabels.length; ++i) {
+        data.addColumn('number', zDataLabels[i]);
+      }
+      data.addRows(zDataSets[0].length);
+      for (var i = 0; i < zDataSets[0].length; ++i) {
+        data.setCell(i, 0, new Date(1240000000000+604800000*i));
+      }
+      for (var i = 0; i < zDataLabels.length; ++i) {
+        var zData = zDataSets[i];
+        for (var j = 0; j < zData.length; ++j) {
+          data.setCell(j, i+1, zData[j]);
+        }
+      }
+      
+      new google.visualization.ColumnChart(document.getElementById('matches_viz')).
+      draw(data,
+           {title:"Weekly Matches by Host",
+            width:800, height:300, isStacked:true,
+            colors:zDataColors,
+            hAxis: {showTextEvery:20, title: "Week"}}
+      );           
     </script>
   </body>  
 </html>
