@@ -66,13 +66,13 @@
       }
       
       var data = new google.visualization.DataTable();
-      data.addColumn('date', 'Date');
+      data.addColumn('string', 'Date');
       for (var i = 0; i < zDataLabels.length; ++i) {
         data.addColumn('number', zDataLabels[i]);
       }
       data.addRows(zDataSets[0].length);
       for (var i = 0; i < zDataSets[0].length; ++i) {
-        data.setCell(i, 0, new Date(1240000000000+604800000*i));
+        data.setCell(i, 0, (new Date(1240000000000+604800000*i)).toDateString());
       }
       for (var i = 0; i < zDataLabels.length; ++i) {
         var zData = zDataSets[i];
