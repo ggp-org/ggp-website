@@ -36,16 +36,14 @@
       getGameName = function (x) { return getGameInfo(x).bellerophonName; };
 
       function renderAvg(x) {
-        var y = JSON.parse(x);
-        return '<table width=100% padding=0px cellspacing=0px><tr><td width=100%><b>' + cleanFloat(y[0]) + '</b></td><td><i>' + y[1] + '</i></td></tr></table>';
+        return '<table width=100% padding=0px cellspacing=0px><tr><td width=100%><b>' + cleanFloat(x[0]) + '</b></td><td><i>' + x[1] + '</i></td></tr></table>';
       }
       
       function renderColoredAvg(x) {
-        var y = JSON.parse(x);
-        var theText = 'Average score ' + cleanFloat(y[0]) + ' over ' + y[1] + ' matches.';
+        var theText = 'Average score ' + cleanFloat(x[0]) + ' over ' + x[1] + ' matches.';
         
-        nHue = 120.0 * (y[0]/100.0);
-        nValue = y[1]/200.0 + 0.4;
+        nHue = 120.0 * (x[0]/100.0);
+        nValue = x[1]/200.0 + 0.4;
         var rgb = convertRGB(nHue, 1.0, nValue);
         
         return "<td title='" + theText + "' style='width: 10px; height: 10px; background-color: rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ");'></td>";
@@ -149,6 +147,10 @@
         theHTML += '<tr>';
 
         delete statsJSON.computedEdgeOn;
+        if ("netScore" in statsJSON) {
+          theHTML += "<tr style='text-align:left'><th>Net Score</th><td>" + cleanFloat(statsJSON.netScore) + "</td></tr>";
+          delete statsJSON.netScore;
+        }        
         if ("eloRank" in statsJSON) {
           theHTML += "<tr style='text-align:left'><th>Elo Rank</th><td>" + cleanFloat(statsJSON.eloRank) + "</td></tr>";
           delete statsJSON.eloRank;
@@ -159,12 +161,10 @@
           delete statsJSON.agonSkill;  
         }
         if ("averageScore" in statsJSON) {
-          statsJSON.averageScore = JSON.parse(statsJSON.averageScore);
           theHTML += "<tr style='text-align:left'><th>Avg Score</th><td>" + cleanFloat(statsJSON.averageScore[0]) + " over " + statsJSON.averageScore[1] + " matches.</td></tr>";
           delete statsJSON.averageScore;
         }
         if ("decayedAverageScore" in statsJSON) {
-          statsJSON.decayedAverageScore = JSON.parse(statsJSON.decayedAverageScore);
           theHTML += "<tr style='text-align:left'><th>Avg* Score</th><td>" + cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.</td></tr>";
           delete statsJSON.decayedAverageScore;
         }

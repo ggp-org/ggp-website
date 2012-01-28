@@ -116,7 +116,7 @@
       }
       delete statsJSON.roleCorrelationWithSkill;
       if ("averageMoves" in statsJSON && statsJSON.averageMoves) {
-        statsJSON.averageMoves = JSON.parse(statsJSON.averageMoves);
+        statsJSON.averageMoves = statsJSON.averageMoves;
         document.getElementById('gameStatsDiv').innerHTML = "On average this game takes " + cleanFloat(statsJSON.averageMoves[0]) + " moves, based on " + statsJSON.averageMoves[1] + " matches.<br>";        
       }
       delete statsJSON.averageMoves;

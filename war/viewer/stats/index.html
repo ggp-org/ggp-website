@@ -76,9 +76,8 @@ td.name {
 
       cleanFloat = function (x) { return Math.round(x*100)/100; };
       var sortablePairs = [];
-      for (var pName in statsJSON.leaderboard) {
-        var theBoardStats = JSON.parse(statsJSON.leaderboard[pName]);        
-        var thePlayerRank = getOptionalMapValue(pName, statsJSON, "playerRank");
+      for (var pName in statsJSON.averageScore) {
+        var theBoardStats = statsJSON.averageScore[pName];
         var theNetScore = getOptionalMapValue(pName, statsJSON, "netScore");
         var theEloRank = getOptionalMapValue(pName, statsJSON, "eloRank");
         var theAgonSkill = getOptionalMapValue(pName, statsJSON, "agonSkill");
@@ -95,21 +94,15 @@ td.name {
         }
         leadersHTML += '</tr>';
         // TODO: add back information about the decayed leaderboard
-        //'<td>'+cleanFloat(statsJSON.decayedLeaderboard[sortablePairs[i][1]])+'</td></tr>'; 
+        //'<td>'+cleanFloat(statsJSON.decayedAverageScore[sortablePairs[i][1]])+'</td></tr>'; 
       }
       document.getElementById('leaderboard').children[0].innerHTML += leadersHTML;
       
-      delete statsJSON.leaderboard;
-      delete statsJSON.decayedLeaderboard;
-      delete statsJSON.playerRank;
-      delete statsJSON.netScore;
-      delete statsJSON.eloRank;
-      delete statsJSON.agonSkill;
-      delete statsJSON.agonDifficulty;
-      delete statsJSON.observedGames;
-      delete statsJSON.observedPlayers;
-      
-      delete statsJSON.matchesStartedChart;
+      for(var x in statsJSON) {
+        if (typeof(statsJSON[x]) == "object") {
+          delete statsJSON[x];
+        }
+      }
       
       var varNameMapping = {
         "matches": "Total Matches",
@@ -118,14 +111,10 @@ td.name {
         "matchesStatErrors": "Matches Unreadable",
         "computeTime": "Time Updating Stats",
         "matchesPerDayMedian": "Median Matches/Day",
-        "matchesInPastHour": "Matches in Past Hour",
-        "matchesInPastDay": "Matches in Past Day",
         "computedAt": "Stats Last Updated",
         "matchesAverageMoves": "Average Moves/Match",
         "matchesAveragePlayers": "Average Players/Match",
-        "playerRankError": "PlayerRank Error",
         "statsVersion": "Stats Version",
-        "playerRankDelta": "PlayerRank Delta",
         "computeRAM": "Memory Updating Stats"
       };
       
