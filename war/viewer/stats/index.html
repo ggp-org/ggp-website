@@ -111,7 +111,8 @@ td.name {
         "matchesStatErrors": "Matches Unreadable",
         "computeTime": "Time Updating Stats",
         "matchesPerDayMedian": "Median Matches/Day",
-        "computedAt": "Stats Last Updated",
+        "computedAt": "Stats Last Computed",
+        "updatedAt": "Stats Last Updated",
         "matchesAverageMoves": "Average Moves/Match",
         "matchesAveragePlayers": "Average Players/Match",
         "statsVersion": "Stats Version",
@@ -122,8 +123,9 @@ td.name {
       for (var varName in statsJSON) {
         var varProperName = varName;
         if (varNameMapping[varName]) varProperName = varNameMapping[varName];
-        var varValue = cleanFloat(statsJSON[varName]);        
-        if (varName == "computedAt") varValue = Math.round((new Date() - 1*statsJSON[varName])/1000) + 's ago';
+        var varValue = cleanFloat(statsJSON[varName]);
+        if (varName == "updatedAt") varValue = Math.round((new Date() - 1*statsJSON[varName])/1000) + 's ago';
+        if (varName == "computedAt") varValue = Math.round((new Date() - 1*statsJSON[varName])/1000) + 's ago';        
         if (varName == "computeRAM") varValue = cleanFloat(1*statsJSON[varName]/(1024*1024)) + ' MB';  
         varsHTML += '<tr><td class="name">'+varProperName+'</td><td>'+varValue+'</td></tr>';
       }
