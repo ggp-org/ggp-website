@@ -22,7 +22,7 @@
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
 
-      function renderPlayerListEntry(aPlayer, nPlayer) {
+      function renderPlayerListEntry(aPlayer, nPlayer, statsJSON) {
         var theHTML = '';
         if (nPlayer % 2 == 0) {
           theHTML += "<tr bgcolor=#F5F5F5>";
@@ -57,6 +57,17 @@
         theHTML += renderCell('<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer.name + '">' + aPlayer.name + '</a>');
         theHTML += renderCell(aPlayer.visibleEmail);
         theHTML += renderCell(("theURL" in aPlayer) ? "Yours!" : null);
+        
+        var agonHTML = '';
+        if ("agonScaledSkill" in statsJSON && statsJSON.agonScaledSkill && aPlayer.name in statsJSON.agonScaledSkill) {
+          var agonSkill = statsJSON.agonSkill[aPlayer.name];
+          var agonScaledSkill = statsJSON.agonScaledSkill[aPlayer.name];            
+          agonHTML += '<table style="height: 25px; width: 100px;"><tr>';
+          agonHTML += '<td title="' + cleanFloat(agonSkill) + '" style="background-color: ' + generateAgonViewColor(agonScaledSkill) + ';"></td>';
+          agonHTML += '</tr></table>';
+        }
+        theHTML += renderCell(agonHTML);
+        
         theHTML += "<td width=10px></td>";
 
         theHTML += "</tr>";
@@ -78,9 +89,10 @@
       }
       
       function drawPlayerList() {
-        var observedPlayers = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall').observedPlayers;
+        var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall');
+        var observedPlayers = statsJSON.observedPlayers;
 
-        var thePlayers = {};        
+        var thePlayers = {};
         var theHost = window.location.pathname.split("/")[2];
         if (theHost == "apollo" || theHost == "all") {
           thePlayers = ResourceLoader.load_json('//apollo.ggp.org/data/players/');
@@ -98,9 +110,9 @@
         thePlayersList.sort(playerComesAfter);
 
         var playerListHTML = '<center><table class="matchlist" cellpadding="5px">';
-        playerListHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=5>Player List</th></tr>';
+        playerListHTML += '<tr bgcolor=#E0E0E0><th></th><th style="text-align: left;" height=30px>Player Name</th><th style="text-align: left;">Contact Info</th><th></th><th>Agon Skill</th><th></th></tr>';
         for (var i = 0; i < thePlayersList.length; i++) {
-          playerListHTML += renderPlayerListEntry(thePlayersList[i], i);
+          playerListHTML += renderPlayerListEntry(thePlayersList[i], i, statsJSON);
         }
         playerListHTML += '</table></center>';
         document.getElementById('playerList').innerHTML = playerListHTML;   
