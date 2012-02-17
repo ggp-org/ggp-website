@@ -43,7 +43,7 @@
         loadBellerophonMetadataForGames();
         
         var gameListHTML = '<table class="matchlist" cellpadding="5px">';
-        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded">Rules?</th><th>Agon Difficulty</th></tr>';
+        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded">Rules?</th><th>Agon Difficulty</th><th>Score/Skill PCC</th></tr>';
         for (var i = 0; i < observedGames.length; i++) {
           if (i % 2 == 0) {
             gameListHTML += "<tr bgcolor=#F5F5F5>";
@@ -65,6 +65,15 @@
             gameListHTML += '<table style="height: 25px; width: 100px;"><tr>';
             for (var j = 0; j < agonDifficulty.length; j++) {
               gameListHTML += '<td title="' + agonDifficulty[j] + '" style="background-color: ' + generateAgonViewColor(1-agonScaledDifficulty[j]) + ';"></td>';
+            }
+            gameListHTML += '</tr></table>';
+          }
+          gameListHTML += '<td class="padded">';
+          if ("roleCorrelationWithSkill" in statsJSON && statsJSON.roleCorrelationWithSkill && gameKey in statsJSON.roleCorrelationWithSkill) {
+            var roleCorrelationWithSkill = statsJSON.roleCorrelationWithSkill[gameKey];            
+            gameListHTML += '<table style="height: 25px; width: 100px;"><tr>';
+            for (var j = 0; j < roleCorrelationWithSkill.length; j++) {
+              gameListHTML += '<td title="' + roleCorrelationWithSkill[j] + '" style="background-color: ' + generateAgonViewColor((1+roleCorrelationWithSkill[j])/2.0) + ';"></td>';
             }
             gameListHTML += '</tr></table>';
           }

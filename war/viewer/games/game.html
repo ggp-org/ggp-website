@@ -44,7 +44,7 @@
     </tr>
     <tr>
       <td colspan=3>
-        <table style="width:100%,height:100%">
+        <table style="width:100%;height:100%">
           <tr id="difficulty_tr">
             <th>Agon Difficulty</th>
           </tr>
@@ -53,9 +53,9 @@
     </tr>
     <tr>
       <td colspan=3>
-        <table style="width:100%,height:100%">
+        <table style="width:100%;height:100%">
           <tr id="correlation_tr">
-            <th>Score/Skill Correlation</th>
+            <th>Score/Skill PCC</th>
           </tr>
         </table>
       </td>
@@ -98,9 +98,10 @@
       var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/games/' + gameName);
       if ("agonScaledDifficulty" in statsJSON && statsJSON.agonScaledDifficulty) {
         var difficultyHTML = "";
+        var theWidth = (75/statsJSON.agonScaledDifficulty.length);
         for (var i = 0; i < statsJSON.agonScaledDifficulty.length; i++) {
-          difficultyHTML += "<td width=10px></td>";
-          difficultyHTML += "<td>" + generateAgonView(1-statsJSON.agonScaledDifficulty[i], statsJSON.agonDifficulty[i], "for Player " + toProperString(i+1) + ": ") + "</td>";
+          difficultyHTML += "<td width=10px></td>";          
+          difficultyHTML += "<td style='text-align: center; width: " + theWidth + "%; background-color: " + generateAgonViewColor(1-statsJSON.agonScaledDifficulty[i]) + "'>" + cleanFloat(statsJSON.agonDifficulty[i]) + "</td>";
         }
         document.getElementById('difficulty_tr').innerHTML += difficultyHTML;
       }
@@ -108,9 +109,10 @@
       delete statsJSON.agonDifficulty;
       if ("roleCorrelationWithSkill" in statsJSON && statsJSON.roleCorrelationWithSkill) {
         var correlationHTML = "";
+        var theWidth = (75/statsJSON.roleCorrelationWithSkill.length);
         for (var i = 0; i < statsJSON.roleCorrelationWithSkill.length; i++) {
           correlationHTML += "<td width=10px></td>";
-          correlationHTML += "<td>" + generateAgonView(2*Math.abs(statsJSON.roleCorrelationWithSkill[i]-0.5), statsJSON.roleCorrelationWithSkill[i], "for Player " + toProperString(i+1) + ": ") + "</td>";
+          correlationHTML += "<td style='text-align: center; width: " + theWidth + "%; background-color: " + generateAgonViewColor((1+statsJSON.roleCorrelationWithSkill[i])/2.0) + "'>" + cleanFloat(statsJSON.roleCorrelationWithSkill[i]) + "</td>";
         }
         document.getElementById('correlation_tr').innerHTML += correlationHTML;
       }

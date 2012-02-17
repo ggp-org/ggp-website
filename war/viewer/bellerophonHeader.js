@@ -237,7 +237,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
     theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/matches/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + toTitle(theHostName) + '."></img></a></td>';
   } else {
-    theMatchHTML += '<td class="imageHolder"><img width=25 height=25 src="/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></td>';
+    theMatchHTML += '<td class="imageHolder"><a href="/view/unsigned/matches/"><img width=25 height=25 src="/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></a></td>';
   }
   theMatchHTML += '<td width=5></td>';
   
@@ -291,6 +291,7 @@ var generateAgonView = function (scaledRank, realRank, theText) {
   return theHTML;
 }
 var generateAgonViewColor = function (scaledRank) {
+  if (Math.abs(scaledRank) > 1.5) return "rgb(0,0,0)";
   var rgb = convertRGB(scaledRank*120,1.0,1.0)
   return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
 }
