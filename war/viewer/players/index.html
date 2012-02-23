@@ -73,7 +73,7 @@
         }
         
         var colorSwatchAndLabel = function (scaledValue, realValue) {
-          if (scaledValue && realValue) {
+          if (scaledValue != null && realValue != null) {
             var theHTML = '';
             theHTML += '<table style="height: 25px;"><tr>';
             theHTML += '<td title="' + cleanFloat(realValue) + '" style="width: 25px; text-align: center; background-color: ' + generateAgonViewColor(scaledValue) + ';"></td>';
@@ -117,9 +117,9 @@
           }
         } else {
           return function(aPlayer, bPlayer) {
-            if (mode in aPlayer && !(mode in bPlayer)) return -1;
-            if (!(mode in aPlayer) && mode in bPlayer) return 1;
-            if (!(mode in aPlayer) && !(mode in bPlayer)) return 0;
+            if (aPlayer[mode] && !bPlayer[mode]) return -1;
+            if (!aPlayer[mode] && bPlayer[mode]) return 1;
+            if (!aPlayer[mode] && !bPlayer[mode]) return 0;
             return bPlayer[mode] - aPlayer[mode];
           }        
         }         
@@ -142,7 +142,7 @@
         }
 
         var thePlayersList = [];        
-        getOptionalMapValue = function(k,s,m) { return (m in s && k in s[m]) ? s[m][k] : ""; }
+        getOptionalMapValue = function(k,s,m) { return (m in s && k in s[m]) ? s[m][k] : null; }
         for (var theName in thePlayers) {
           // First, attach statistics data.
           var averageScoreData = getOptionalMapValue(theName, statsJSON, "averageScore");
