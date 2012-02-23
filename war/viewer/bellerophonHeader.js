@@ -24,8 +24,7 @@ function generateHeader(theDiv) {
     theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/games/">Games</a></td>';
     theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/players/">Players</a></td>';
     theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/matches/">Matches</a></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/stats/">Stats</a></td>';
-    theHTML += '    <td width=30% align="right" valign="bottom"></td>';
+    theHTML += '    <td width=40% align="right" valign="bottom"></td>';
     theHTML += '  </tr>';
     theHTML += '  <tr id="navBuffer" class="navbarBottom">'; 
     theHTML += '    <td colspan=10 height=10px></td>';
@@ -330,6 +329,7 @@ function loadBellerophonMetadataForGames() {
     
     if (gameInfo == null) {
       console.log("Could not find game: " + gameUnversionedURL);
+      gameInfo = {};
     }
 
     gameInfo.bellerophonLink = '/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(gameVersionedURL);

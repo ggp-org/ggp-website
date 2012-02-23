@@ -30,15 +30,21 @@
           theHTML += "<tr bgcolor=#E0E0E0>";
         }
         
-        function renderCell(x) {
+        function renderCell(x, padded) {
           if (x) {
-            return '<td class="padded">' + x + '</td>';
+            if (padded) {
+              return '<td class="padded">' + x + '</td>';
+            } else {
+              return '<td>' + x + '</td>';
+            }
           } else {
             return '<td></td>';
           }
         }
+        function renderPaddedCell(x) { return renderCell(x, true); }
+        function renderRawCell(x) { return renderCell(x, false); }
         
-        pingStatusIcon = function(aPlayer) {
+        var pingStatusIcon = function(aPlayer) {
           var z = aPlayer.pingStatus;
           if (!aPlayer.isEnabled) {
             return '<img src="/viewer/images/presence/StatusGrey.png" title="Player is inactive."></img>';
@@ -53,20 +59,40 @@
           return '<img src="/viewer/images/presence/StatusError.png" title="Player is listed as active, but its current status is unrecognizable: ' + z + '."></img>';
         }
         
-        theHTML += renderCell(pingStatusIcon(aPlayer));
-        theHTML += renderCell('<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer.name + '">' + aPlayer.name + '</a>');
-        theHTML += renderCell(aPlayer.visibleEmail);
-        theHTML += renderCell(("theURL" in aPlayer) ? "Yours!" : null);
-        
-        var agonHTML = '';
-        if ("agonScaledSkill" in statsJSON && statsJSON.agonScaledSkill && aPlayer.name in statsJSON.agonScaledSkill) {
-          var agonSkill = statsJSON.agonSkill[aPlayer.name];
-          var agonScaledSkill = statsJSON.agonScaledSkill[aPlayer.name];            
-          agonHTML += '<table style="height: 25px; width: 100px;"><tr>';
-          agonHTML += '<td title="' + cleanFloat(agonSkill) + '" style="background-color: ' + generateAgonViewColor(agonScaledSkill) + ';"></td>';
-          agonHTML += '</tr></table>';
+        var contactInfo = function (aPlayer) {
+          var theHTML = "<center><table><tr>";
+          if ("visibleEmail" in aPlayer && aPlayer.visibleEmail && aPlayer.visibleEmail.length > 0) {          
+            theHTML += '<td><a href="mailto:' + aPlayer.visibleEmail + '"><img src="/viewer/images/glyphicons/glyphicons_010_envelope.png" title="' + aPlayer.visibleEmail + '"></img></a></td>';
+          }
+          // TODO: Support XMPP contact information?
+          //if ("visibleEmail" in aPlayer && aPlayer.visibleEmail && aPlayer.visibleEmail.length > 0) {
+          //  theHTML += '<td><a href="xmpp:' + aPlayer.visibleEmail + '"><img src="/viewer/images/glyphicons/glyphicons_245_chat.png" title="' + aPlayer.visibleEmail + '"></img></a></td>';
+          //}
+          theHTML += "</tr></table></center>";
+          return theHTML;          
         }
-        theHTML += renderCell(agonHTML);
+        
+        var colorSwatchAndLabel = function (scaledValue, realValue) {
+          if (scaledValue && realValue) {
+            var theHTML = '';
+            theHTML += '<table style="height: 25px;"><tr>';
+            theHTML += '<td title="' + cleanFloat(realValue) + '" style="width: 25px; text-align: center; background-color: ' + generateAgonViewColor(scaledValue) + ';"></td>';
+            theHTML += '<td> ' + cleanFloat(realValue) + '</td>';
+            theHTML += '</tr></table>';
+            return theHTML;
+          }
+        }
+        
+        theHTML += renderPaddedCell(pingStatusIcon(aPlayer));
+        theHTML += renderPaddedCell('<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer.name + '">' + trimTo(aPlayer.name,20) + '</a>');
+        theHTML += renderPaddedCell(contactInfo(aPlayer));
+        theHTML += renderPaddedCell(("theURL" in aPlayer) ? "Yours!" : null);
+        
+        theHTML += renderPaddedCell(aPlayer.totalMatches);
+        theHTML += renderPaddedCell(cleanFloat(aPlayer.averageScore));
+        theHTML += renderPaddedCell(cleanFloat(aPlayer.netScore));
+        theHTML += renderPaddedCell(cleanFloat(aPlayer.eloRank));
+        theHTML += renderPaddedCell(colorSwatchAndLabel(aPlayer.agonScaledSkill, aPlayer.agonSkill));        
         
         theHTML += "<td width=10px></td>";
 
@@ -76,20 +102,32 @@
       
       // Returns a positive number if "aPlayer" should appear in the player
       // listing after "bPlayer".
-      function playerComesAfter(aPlayer, bPlayer) {
-        if (("theURL" in aPlayer) && !("theURL" in bPlayer)) return -1;
-        if (!("theURL" in aPlayer) && ("theURL" in bPlayer)) return 1;      
-        if (aPlayer.isEnabled && !bPlayer.isEnabled) return -1;
-        if (!aPlayer.isEnabled && bPlayer.isEnabled) return 1;
-        if (aPlayer.pingStatus && !bPlayer.pingStatus) return -1;
-        if (!aPlayer.pingStatus && bPlayer.pingStatus) return 1;        
-        if (aPlayer.name > bPlayer.name) return 1;
-        if (aPlayer.name < bPlayer.name) return -1;
-        return 0;
+      function getPlayerComesAfter(mode) {
+        if (mode == "mine") {
+          return function(aPlayer, bPlayer) {
+            if (("theURL" in aPlayer) && !("theURL" in bPlayer)) return -1;
+            if (!("theURL" in aPlayer) && ("theURL" in bPlayer)) return 1;      
+            if (aPlayer.isEnabled && !bPlayer.isEnabled) return -1;
+            if (!aPlayer.isEnabled && bPlayer.isEnabled) return 1;
+            if (aPlayer.pingStatus && !bPlayer.pingStatus) return -1;
+            if (!aPlayer.pingStatus && bPlayer.pingStatus) return 1;
+            if (aPlayer.name > bPlayer.name) return 1;
+            if (aPlayer.name < bPlayer.name) return -1;
+            return 0;
+          }
+        } else {
+          return function(aPlayer, bPlayer) {
+            if (mode in aPlayer && !(mode in bPlayer)) return -1;
+            if (!(mode in aPlayer) && mode in bPlayer) return 1;
+            if (!(mode in aPlayer) && !(mode in bPlayer)) return 0;
+            return bPlayer[mode] - aPlayer[mode];
+          }        
+        }         
       }
       
-      function drawPlayerList() {
-        var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall');
+      var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall');
+      
+      function getPlayersList() {        
         var observedPlayers = statsJSON.observedPlayers;
 
         var thePlayers = {};
@@ -102,15 +140,35 @@
             thePlayers[observedPlayers[i]] = {"name":observedPlayers[i], "isEnabled":true, "pingStatus":null};
           }
         }
-        
-        var thePlayersList = [];
+
+        var thePlayersList = [];        
+        getOptionalMapValue = function(k,s,m) { return (m in s && k in s[m]) ? s[m][k] : ""; }
         for (var theName in thePlayers) {
+          // First, attach statistics data.
+          var averageScoreData = getOptionalMapValue(theName, statsJSON, "averageScore");
+          thePlayers[theName].averageScore = averageScoreData ? averageScoreData[0] : null;
+          thePlayers[theName].totalMatches = averageScoreData ? averageScoreData[1] : null;
+          thePlayers[theName].agonSkill = getOptionalMapValue(theName, statsJSON, "agonSkill");
+          thePlayers[theName].agonScaledSkill = getOptionalMapValue(theName, statsJSON, "agonScaledSkill");
+          thePlayers[theName].netScore = getOptionalMapValue(theName, statsJSON, "netScore");
+          thePlayers[theName].eloRank = getOptionalMapValue(theName, statsJSON, "eloRank");
+          // Then, add to the list of players.
           thePlayersList.push(thePlayers[theName]);
         }
-        thePlayersList.sort(playerComesAfter);
-
+        
+        return thePlayersList;
+      }
+      
+      function drawPlayersList(thePlayersList) {
         var playerListHTML = '<center><table class="matchlist" cellpadding="5px">';
-        playerListHTML += '<tr bgcolor=#E0E0E0><th></th><th style="text-align: left;" height=30px>Player Name</th><th style="text-align: left;">Contact Info</th><th></th><th>Agon Skill</th><th></th></tr>';
+        playerListHTML += '<tr bgcolor=#E0E0E0><th></th>';
+        playerListHTML += '<th style="text-align: left;" height=30px><a class="darklink" href="#" onclick="redrawPlayersList(\'mine\');"><u>Player Name</u></a></th>';
+        playerListHTML += '<th>Contact Info</th><th></th>';
+        playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'totalMatches\');"><u>Matches</u></a></th>';
+        playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'averageScore\');"><u>Avg Score</u></a></th>';
+        playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'netScore\');" title="NetScore increases by 1 when you get 100 points in a match, decreases by 1 when you get 0 points in a match, and does not change when you get 50 points in a match."><u>NetScore</u></a></th>';
+        playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'eloRank\');" title="EloRank is the standard Chess ranking system. It ignores puzzle games and cooperative games."><u>EloRank</u></a></th>';
+        playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'agonSkill\');" title="AgonSkill is a variant of Chess ranking designed for General Game Playing, in which you play against the game in addition to playing against your opponent. It counts puzzles. (Better description forthcoming)"><u>Agon Skill</u></a></th><th></th></tr>';
         for (var i = 0; i < thePlayersList.length; i++) {
           playerListHTML += renderPlayerListEntry(thePlayersList[i], i, statsJSON);
         }
@@ -118,7 +176,14 @@
         document.getElementById('playerList').innerHTML = playerListHTML;   
       }
       
-      drawPlayerList();
+      var thePlayersList = getPlayersList();
+      thePlayersList.sort(getPlayerComesAfter("agonSkill"));
+      drawPlayersList(thePlayersList);
+      
+      function redrawPlayersList(mode) {
+        thePlayersList.sort(getPlayerComesAfter(mode));
+        drawPlayersList(thePlayersList);        
+      }
     </script>
   </body>  
 </html>
