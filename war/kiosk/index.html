@@ -4,25 +4,14 @@
   <meta name="description" content="General game playing is about playing games that you've never seen before. Start playing games here!" />
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">  
   <link rel="shortcut icon" href="http://www.ggp.org/favicon.ico">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine:bold">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:bold">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans">
+  <link rel="stylesheet" type="text/css" href="/ggp_org.css" />
   <style>
     body {
       margin: 2%;      
       background: #EEE;
-    }
-    h1 {
-      font-family: 'Tangerine', bold;
-      color: #212121;
-      font-size: 48px;
-      text-shadow: #414141 0px 0px 5px;
-      margin: 2px;
-    }
-    h2 {
-      font-family: 'Tangerine', bold;
-      color: #212121;
-      font-size: 36px;
-      text-shadow: #414141 0px 0px 5px;
-      margin: 2px;
+      font-family: 'Droid Sans';
     }
   </style>
   <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>  
@@ -39,15 +28,14 @@
   <script type='text/javascript' src='//www.ggp.org/scripts/common/Kiosk.js'></script>
 
   <center>
-  <h1>General Game Playing Kiosk</h1>
-  <h2>You can host a match in your browser.</h2>
+  <h2>GGP.org Kiosk</h2>
   <br>
   <div id='new_game_div'>
-    <b>Shall we start a <select id='gameChooser' style='width:300'></select> match?</b>    
+    Shall we start a <select id='gameChooser' style='width:300'></select> match?    
     <button onclick="UserInterface.emptyDiv(desc_div); UserInterface.emptyDiv(game_div); UserInterface.emptyDiv(log_div); showGamePanel();">Start!</button>
     <br>
-    <b>You can include remote players, random players, and a single human player.</b><br>
-    <b>This user interface is a rough prototype and will be improved in the future.</b><br>
+    You can include remote players, random players, and a single human player.<br>
+    This user interface is a rough prototype and will be improved in the future.<br>
   </div>
   <br>
   

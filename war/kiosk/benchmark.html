@@ -28,8 +28,8 @@
   <script type='text/javascript' src='http://www.ggp.org/scripts/common/SymbolList.js'></script>
 
   <center>
-  <h1>General Game Playing Benchmark Suite</h1>
-  <h2>Javascript gaming library benchmark for your browser.</h2>
+  <h1>GGP Benchmark</h1>
+  <h3>Cost metric: lower is better.</h3>
   <br>
   <div id='table_div'>
     <table cellspacing=15>
@@ -39,7 +39,7 @@
         <th align=left>Rounds</th>
         <th align=left>Total Match Time</th>
         <th align=left>Avg Match Time</th>
-        <th align=left>Score</th>
+        <th align=left>Cost Metric</th>
       </tr>
     </tbody>
     </table>
@@ -48,8 +48,8 @@
   </center>
 
   <script type="text/javascript" language="javascript">
-    var repo_prefix = 'http://games.ggp.org/base/;
-    var totalScore = 0;        
+    var repo_prefix = 'http://games.ggp.org/base/';
+    var totalCost = 0;        
     
     function makeTable(gameNames) {
       var bench_table = document.getElementById("bench_table");
@@ -76,9 +76,9 @@
       var avgRunTime = Math.round(100 * x[0] / rounds) / 100.0;
       //var avgGoals = x[1];
       
-      var theScore = Math.round(100 * avgRunTime / expAvgTime) / 100.0;
-      benchRow.innerHTML = "<td><b>" + gameName + "</b></td> <td>" + rounds + "</td> <td>" + runTime + "</td> <td>" + avgRunTime + "</td> <td>" + theScore + "</td>";      
-      totalScore += theScore;      
+      var theCost = Math.round(100 * avgRunTime / expAvgTime) / 100.0;
+      benchRow.innerHTML = "<td><b>" + gameName + "</b></td> <td>" + rounds + "</td> <td>" + runTime + "</td> <td>" + avgRunTime + "</td> <td>" + theCost + "</td>";      
+      totalCost += theCost;      
     }
 
     // These two lists need to be kept in sync.
@@ -91,7 +91,7 @@
       benchGame("asteroids",          13000,    0.08);
       
       var score_div = document.getElementById("score_div");
-      score_div.innerHTML = "Average benchmark score: " + (100 * totalScore / gameNames.length) + "%";
+      score_div.innerHTML = "Average benchmark cost: " + Math.round(100 * totalCost / gameNames.length) + "%";
     }
 
     makeTable(gameNames);
