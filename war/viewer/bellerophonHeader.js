@@ -230,11 +230,11 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   if ("hashedMatchHostPK" in theMatchJSON) {
     var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);    
     var theHostImage = "/viewer/images/hosts/Unknown.png";
-    if (theHostName == "apollo") theHostImage = "/viewer/images/hosts/Apollo2.png";
+    if (theHostName == "tiltyard") theHostImage = "/viewer/images/hosts/Tiltyard2.png";
     if (theHostName == "dresden") theHostImage = "/viewer/images/hosts/Dresden3.png";
     if (theHostName == "artemis") theHostImage = "/viewer/images/hosts/Party.png";
     toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
-    theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/matches/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + toTitle(theHostName) + '."></img></a></td>';
+    theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + toTitle(theHostName) + '."></img></a></td>';
   } else {
     theMatchHTML += '<td class="imageHolder"><a href="/view/unsigned/matches/"><img width=25 height=25 src="/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></a></td>';
   }
@@ -348,7 +348,7 @@ function translateRepositoryIntoCodename(x) {
 
 function getHostHashedPK() {
   var hostName = window.location.pathname.split("/")[2];
-  if (hostName == "apollo") return "90bd08a7df7b8113a45f1e537c1853c3974006b2";
+  if (hostName == "tiltyard") return "90bd08a7df7b8113a45f1e537c1853c3974006b2";
   if (hostName == "dresden") return "f69721b2f73839e513eed991e96824f1af218ac1";
   if (hostName == "artemis") return "5bc94f8e793772e8585a444f2fc95d2ac087fed0";
   if (hostName == "sample") return "0ca7065b86d7646166d86233f9e23ac47d8320d4";
@@ -356,7 +356,7 @@ function getHostHashedPK() {
 }
 
 function getHostFromHashedPK(hostPK) {
-    if (hostPK == "90bd08a7df7b8113a45f1e537c1853c3974006b2") return "apollo";
+    if (hostPK == "90bd08a7df7b8113a45f1e537c1853c3974006b2") return "tiltyard";
     if (hostPK == "f69721b2f73839e513eed991e96824f1af218ac1") return "dresden";
     if (hostPK == "5bc94f8e793772e8585a444f2fc95d2ac087fed0") return "artemis";
     if (hostPK == "0ca7065b86d7646166d86233f9e23ac47d8320d4") return "sample";
