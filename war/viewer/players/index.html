@@ -70,7 +70,7 @@
           //}
           // TODO: Indicate ownership somehow.
           //if ("theURL" in aPlayer) {
-          //  theHTML += '<td><a href="//apollo.ggp.org/players/' + aPlayer.name + '"><img src="/viewer/images/glyphicons/glyphicons_44_keys.png" title="You own this player! Click to configure."></img></a></td>';
+          //  theHTML += '<td><a href="//tiltyard.ggp.org/players/' + aPlayer.name + '"><img src="/viewer/images/glyphicons/glyphicons_44_keys.png" title="You own this player! Click to configure."></img></a></td>';
           //}          
           theHTML += "</tr></table></center>";
           return theHTML;          
@@ -136,8 +136,8 @@
 
         var thePlayers = {};
         var theHost = window.location.pathname.split("/")[2];
-        if (theHost == "apollo" || theHost == "all") {
-          thePlayers = ResourceLoader.load_json('//apollo.ggp.org/data/players/');
+        if (theHost == "tiltyard" || theHost == "all") {
+          thePlayers = ResourceLoader.load_json('//tiltyard.ggp.org/data/players/');
         }
         for (var i = 0; i < observedPlayers.length; i++) {
           if (!(observedPlayers[i] in thePlayers)) {
