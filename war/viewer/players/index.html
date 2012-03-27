@@ -62,8 +62,11 @@
         var ownerInfo = function (aPlayer) {
           var theHTML = "<center><table><tr>";
           if ("visibleEmail" in aPlayer && aPlayer.visibleEmail && aPlayer.visibleEmail.length > 0) {          
-            theHTML += '<td><a href="mailto:' + aPlayer.visibleEmail + '"><img src="/viewer/images/glyphicons/glyphicons_010_envelope.png" title="' + aPlayer.visibleEmail + '"></img></a></td>';
+            theHTML += '<td><a rel="nofollow" href="mailto:' + aPlayer.visibleEmail + '"><img src="/viewer/images/glyphicons/glyphicons_010_envelope.png" title="' + aPlayer.visibleEmail + '"></img></a></td>';
           }
+          if ("visibleWebsite" in aPlayer && aPlayer.visibleWebsite && aPlayer.visibleWebsite.length > 0) {          
+            theHTML += '<td><a rel="nofollow" href="' + aPlayer.visibleWebsite + '"><img src="/viewer/images/glyphicons/glyphicons_020_home.png" title="' + aPlayer.visibleWebsite + '"></img></a></td>';
+          }          
           // TODO: Support XMPP contact information?
           //if ("visibleEmail" in aPlayer && aPlayer.visibleEmail && aPlayer.visibleEmail.length > 0) {
           //  theHTML += '<td><a href="xmpp:' + aPlayer.visibleEmail + '"><img src="/viewer/images/glyphicons/glyphicons_245_chat.png" title="' + aPlayer.visibleEmail + '"></img></a></td>';

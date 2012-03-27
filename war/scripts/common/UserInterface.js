@@ -77,7 +77,7 @@ var UserInterface = {
 
     var out = "";
     out += hours + ":" + minutes + " " + suffix + " on ";
-    out += (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
+    out += (d.getMonth()+1) + "/" + d.getDate() + "/" + (d.getYear()-100);
     return out;
   },
   

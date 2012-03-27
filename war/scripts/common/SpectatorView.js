@@ -98,7 +98,7 @@ var SpectatorView = {
     }
     textHTML += "</tr>";
     for (var i = 0; i < this.matchData.states.length; i++) {
-        textHTML += "<tr height=20px><td>" + i + "</td>";
+        textHTML += "<tr height=20px><td><center>" + i + "</center></td>";
         for (var j = 0; j < roleCols; j++) {
           if (i > 0) {          
             textHTML += "<td>" + this.matchData.moves[i-1][j] + "</td>";
