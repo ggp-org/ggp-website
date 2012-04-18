@@ -60,13 +60,16 @@
         }
         
         var ownerInfo = function (aPlayer) {
-          var theHTML = "<center><table><tr>";
+          //var theHTML = "<center><table><tr>";
+          var theHTML = "<td style='padding-left: 10; padding-right: 2'>";
           if ("visibleEmail" in aPlayer && aPlayer.visibleEmail && aPlayer.visibleEmail.length > 0) {          
-            theHTML += '<td><a rel="nofollow" href="mailto:' + aPlayer.visibleEmail + '"><img src="/viewer/images/glyphicons/glyphicons_010_envelope.png" title="' + aPlayer.visibleEmail + '"></img></a></td>';
+            theHTML += '<a rel="nofollow" href="mailto:' + aPlayer.visibleEmail + '"><img width=20 src="/viewer/images/glyphicons/glyphicons_010_envelope.png" title="Contact email: ' + aPlayer.visibleEmail + '"></img></a>';
           }
+          theHTML += "</td><td style='padding-left: 2; padding-right: 10'>";
           if ("visibleWebsite" in aPlayer && aPlayer.visibleWebsite && aPlayer.visibleWebsite.length > 0) {          
-            theHTML += '<td><a rel="nofollow" href="' + aPlayer.visibleWebsite + '"><img src="/viewer/images/glyphicons/glyphicons_020_home.png" title="' + aPlayer.visibleWebsite + '"></img></a></td>';
-          }          
+            theHTML += '<a rel="nofollow" href="' + aPlayer.visibleWebsite + '"><img width=20 src="/viewer/images/glyphicons/glyphicons_020_home.png" title="Contact website: ' + aPlayer.visibleWebsite + '"></img></a>';
+          }
+          theHTML += "</td>";          
           // TODO: Support XMPP contact information?
           //if ("visibleEmail" in aPlayer && aPlayer.visibleEmail && aPlayer.visibleEmail.length > 0) {
           //  theHTML += '<td><a href="xmpp:' + aPlayer.visibleEmail + '"><img src="/viewer/images/glyphicons/glyphicons_245_chat.png" title="' + aPlayer.visibleEmail + '"></img></a></td>';
@@ -75,7 +78,7 @@
           //if ("theURL" in aPlayer) {
           //  theHTML += '<td><a href="//tiltyard.ggp.org/players/' + aPlayer.name + '"><img src="/viewer/images/glyphicons/glyphicons_44_keys.png" title="You own this player! Click to configure."></img></a></td>';
           //}          
-          theHTML += "</tr></table></center>";
+          //theHTML += "</tr></table></center>";
           return theHTML;          
         }
         
@@ -92,7 +95,7 @@
         
         theHTML += renderPaddedCell(pingStatusIcon(aPlayer));
         theHTML += renderPaddedCell('<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer.name + '">' + trimTo(aPlayer.name,20) + '</a>');
-        theHTML += renderPaddedCell(ownerInfo(aPlayer));
+        theHTML += ownerInfo(aPlayer);
         theHTML += renderPaddedCell(("theURL" in aPlayer) ? "Yours!" : null);
         
         theHTML += renderPaddedCell(aPlayer.totalMatches);
@@ -170,7 +173,7 @@
         var playerListHTML = '<center><table class="matchlist" cellpadding="5px">';
         playerListHTML += '<tr bgcolor=#E0E0E0><th></th>';
         playerListHTML += '<th style="text-align: left;" height=30px><a class="darklink" href="#" onclick="redrawPlayersList(\'mine\');"><u>Player Name</u></a></th>';
-        playerListHTML += '<th>Contact</th><th></th>';
+        playerListHTML += '<th colspan=2><center>Contact</center></th><th></th>';
         playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'totalMatches\');"><u>Matches</u></a></th>';
         playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'averageScore\');"><u>Avg Score</u></a></th>';
         playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'netScore\');" title="NetScore increases by 1 when you get 100 points in a match, decreases by 1 when you get 0 points in a match, and does not change when you get 50 points in a match."><u>NetScore</u></a></th>';
