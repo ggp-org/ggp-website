@@ -84,6 +84,12 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
                 return "/viewer/matches/index.html";
             return "/viewer/matches/match.html";
         }
+        if (reqURI.startsWith("/logs")) {
+            reqURI = reqURI.replaceFirst("/logs", "");
+            if (reqURI.isEmpty())
+                return null;
+            return "/viewer/matches/logs.html";            
+        }
         if (reqURI.startsWith("/games")) {
             reqURI = reqURI.replaceFirst("/games", "");
             if (reqURI.isEmpty())

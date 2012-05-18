@@ -72,6 +72,16 @@
           sidePanelHTML += '</tr>';
         }
         sidePanelHTML += '</table><br>';
+        if ("playerNamesFromHost" in spectatorMatch && spectatorMatch.playerNamesFromHost.indexOf("GreenShell") >= 0) {
+          sidePanelHTML += '<b>Time series:</b> <br><table>';
+          for (var i = 0; i < nPlayers; i++) {
+            if (spectatorMatch.playerNamesFromHost[i] == "GreenShell") {
+              sidePanelHTML += '<a href="' + window.location.href.replace("matches", "logs") + spectatorMatch.playerNamesFromHost[i] + '"><img src="/viewer/images/glyphicons/glyphicons_040_stats.png" title="Player log time series for ' + spectatorMatch.playerNamesFromHost[i] + '"></img></a> ';
+            }      
+          }
+          sidePanelHTML += '</table><br>';
+        }
+        
         var nSteps = spectatorMatch.moves.length;
         if (spectatorMatch.isCompleted) {
           sidePanelHTML += '<b>Match done!</b> (in ' + nSteps + ' steps)';
@@ -79,7 +89,7 @@
           sidePanelHTML += '<i>Match ongoing, ' + nSteps + ' steps in...</i>';
         }
         document.getElementById('sidePanel').innerHTML = sidePanelHTML;      
-      }      
+      }    
     
       generateHeader(document.getElementById('header'));
       document.getElementById('navBuffer').innerHTML = '<td colspan=2 style="padding: 0; width: 20%"><table style="border: 0; margin: 0; border-spacing: 0px 0px; width: 100%"><tr><td class="navbarBottomAbrupt" height=10px></td></tr></table></td>' + document.getElementById('navBuffer').innerHTML;
