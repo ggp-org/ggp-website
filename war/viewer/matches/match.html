@@ -56,7 +56,7 @@
         for (var i = 0; i < nPlayers; i++) {
           sidePanelHTML += '<tr><td width=10px></td><td style="text-align: right;">';
           if ("playerNamesFromHost" in spectatorMatch) {
-            sidePanelHTML += '<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + spectatorMatch.playerNamesFromHost[i] + '">' + spectatorMatch.playerNamesFromHost[i] + '</a>';
+            sidePanelHTML += '<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + spectatorMatch.playerNamesFromHost[i] + '">' + trimTo(spectatorMatch.playerNamesFromHost[i],12) + '</a>';
           } else {
             sidePanelHTML += 'Anonymous';
           }
