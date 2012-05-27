@@ -28,7 +28,7 @@
 
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
-      var expURL = 'http://database.ggp.org/logs/7ea00db36151e0b4f3736ae0a2698792958b05e7/GreenShell';      
+      var expURL = 'http://database.ggp.org/logs/' + window.location.pathname.split("/")[4] + '/' + window.location.pathname.split("/")[5];      
       var cleanFloat = function (x) { return Math.round(x*100)/100; };
 
       function graphSeries(name, points, moves, yAxis, into) {
