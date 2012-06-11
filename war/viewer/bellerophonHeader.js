@@ -159,12 +159,14 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   }
   
   // TODO(schreib): Find the right place for this.
+  /*
   updateLiveDuration = function (objName, startTime) {
     var theSpan = document.getElementById(objName);
     if (theSpan == null) return;
     theSpan.innerHTML = renderDuration(new Date() - new Date(startTime));
     setTimeout("updateLiveDuration('" + objName + "'," + startTime + ")", 1000);
   }
+  */
 
   var theMatchHTML = "<tr>";
   if (showShadow == 1) {
@@ -175,10 +177,13 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   
   // Match start time.
   var theDate = new Date(theMatchJSON.startTime);
-  theMatchHTML += '<td class="padded">' + UserInterface.renderDateTime(theDate);
+  theMatchHTML += '<td class="padded">';  
   if (theOngoingMatches.indexOf(theMatchJSON.matchURL) >= 0) {
-      theMatchHTML += '<br><center><b>(Ongoing! <span id="dlx_' + theMatchJSON.randomToken + '">' + renderDuration(new Date() - new Date(theMatchJSON.startTime)) + '</span>)</b></center>';
-      setTimeout("updateLiveDuration('dlx_" + theMatchJSON.randomToken + "'," + theMatchJSON.startTime + ")", 1000);
+    //theMatchHTML += '<br><center><b>(Ongoing! <span id="dlx_' + theMatchJSON.randomToken + '">' + renderDuration(new Date() - new Date(theMatchJSON.startTime)) + '</span>)</b></center>';
+    //setTimeout("updateLiveDuration('dlx_" + theMatchJSON.randomToken + "'," + theMatchJSON.startTime + ")", 1000);
+    theMatchHTML += "<b>" + UserInterface.renderDateTime(theDate) + "</b>";
+  } else {
+    theMatchHTML += UserInterface.renderDateTime(theDate);
   }
   theMatchHTML += "</td>"  
   

@@ -66,19 +66,50 @@ var UserInterface = {
     var logDiv = document.getElementById("log_div");
     if (logDiv) logDiv.innerHTML = "";
   },
-  
-  renderDateTime: function(d) {    
+    
+  renderDateTime: function(d) {
+    var monthShortNames = {0:"Jan",1:"Feb",2:"Mar",3:"Apr",4:"May",5:"Jun",6:"Jul",7:"Aug",8:"Sep",9:"Oct",10:"Nov",11:"Dec"};
+    var longForm = "";
+    var shortForm = "";
+      
     var suffix = "AM";
     var hours = d.getHours()
     var minutes = d.getMinutes()  
     if (hours >= 12) { suffix = "PM"; hours = hours - 12; }
     if (hours == 0) { hours = 12; }
     if (minutes < 10) { minutes = "0" + minutes; }
+    var month = monthShortNames[d.getMonth()];
+    var year = (d.getYear()-100);
+    if (year < 10) { year = "0" + year; }    
+    longForm += hours + ":" + minutes + " " + suffix + " - ";
+    longForm += d.getDate() + " " + month + " 20" + year;
 
-    var out = "";
-    out += hours + ":" + minutes + " " + suffix + " on ";
-    out += (d.getMonth()+1) + "/" + d.getDate() + "/" + (d.getYear()-100);
-    return out;
+    var nowDate = new Date();
+    var timeDelta = nowDate - d;
+    if (timeDelta < 1000) {
+      shortForm = timeDelta + "ms";
+    } else {
+      timeDelta = Math.floor(timeDelta / 1000);
+      if (timeDelta < 60) {
+        shortForm = timeDelta + "s";
+      } else {
+        timeDelta = Math.floor(timeDelta / 60);
+        if (timeDelta < 60) {
+          shortForm = timeDelta + "m";
+        } else {
+          timeDelta = Math.floor(timeDelta / 60);
+          if (timeDelta < 24) {
+            shortForm = timeDelta + "h";
+          } else if (nowDate.getYear() == d.getYear()) {
+            shortForm = d.getDate() + " " + month;  
+          } else {
+            shortForm = d.getDate() + " " + month + " " + year;
+          }
+        }
+      }
+    }    
+    
+    return "<span title=\""+longForm+"\">" + shortForm + "</a>";
   },
   
   // Currently this correctly renders names for [-9,9].
