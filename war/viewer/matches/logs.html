@@ -83,8 +83,9 @@
 		
 		// Total ~= Simulation + Update + Setup
 		// Simulation ~= DepthCharge + GuidingCharge + GuidingMove
-		
+				
 		var p_Total = f(data.profileTotal);
+		var p_CompleteTotal = ("profileCompleteTotal" in data) ? f(data.profileCompleteTotal) : p_Total;
 		var p_Update = f(data.profileUpdate);
 		var p_Simulation = f(data.profileSimulation);		
 		var p_DepthCharge = f(data.profileDepthCharge);
@@ -92,7 +93,8 @@
 		var p_GuideMove = f(data.profileGuidingMove);
 		var p_Setup = ("profileSetup" in data) ? f(data.profileSetup) : z(data.profileTotal);  		
 		var p_OtherSim = g(p_Simulation, [p_DepthCharge, p_GuideCharge, p_GuideMove]);
-		var p_Other = g(p_Total, [p_Update, p_Simulation, p_Setup]); 
+		var p_Other = g(p_Total, [p_Update, p_Simulation, p_Setup]);
+		var p_External = g(p_CompleteTotal, [p_Total]); 
 
 		opts.series = [{
 			name: 'Depth Charge',
@@ -115,6 +117,9 @@
 		}, {
 			name: 'Other',
 			data: p_Other			
+		}, {
+			name: 'External',
+			data: p_External
 		}];
 
         new Highcharts.Chart(opts);      
