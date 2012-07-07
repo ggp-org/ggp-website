@@ -72,7 +72,7 @@
           sidePanelHTML += '</tr>';
         }
         sidePanelHTML += '</table><br>';
-        if ("playerNamesFromHost" in spectatorMatch && spectatorMatch.playerNamesFromHost.indexOf("GreenShell") >= 0) {
+        if ("playerNamesFromHost" in spectatorMatch && spectatorMatch.playerNamesFromHost.indexOf("GreenShell") >= 0 && spectatorMatch.isCompleted) {
           sidePanelHTML += '<b>Time series:</b> <br><table>';
           for (var i = 0; i < nPlayers; i++) {
             if (spectatorMatch.playerNamesFromHost[i] == "GreenShell") {
