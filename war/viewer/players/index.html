@@ -55,8 +55,8 @@
           if (z == "available") return '<img src="/viewer/images/presence/StatusGreen.png" title="Player is listed as active, and is currently ready for new matches."></img>';          
           if (z == "waiting") return '<img src="/viewer/images/presence/StatusWhite.png" title="Player was just activated: waiting to get its status..."></img>';
           if (z == "error") return '<img src="/viewer/images/presence/StatusError.png" title="Player is listed as active, but is being unresponsive, so its current status is unknown."></img>';          
-          if (z == "busy") return '<img src="/viewer/images/presence/StatusOrange.png" title="Player is listed as active, and is currently busy playing a match."></img>';          
-          return '<img src="/viewer/images/presence/StatusError.png" title="Player is listed as active, but its current status is unrecognizable: ' + z + '."></img>';
+          if (z == "busy") return '<img src="/viewer/images/presence/StatusOrange.png" title="Player is listed as active, and is currently busy playing a match."></img>';
+          return '<img src="/viewer/images/presence/StatusError.png" title="Player is listed as active, but its current status is unrecognizable: ' + z.replace(/\"/g,"'") + '."></img>';
         }
         
         var ownerInfo = function (aPlayer) {
