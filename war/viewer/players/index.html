@@ -44,14 +44,14 @@
         function renderPaddedCell(x) { return renderCell(x, true); }
         function renderRawCell(x) { return renderCell(x, false); }
         
-        var pingStatusIcon = function(aPlayer) {
-          var z = aPlayer.pingStatus;
+        var pingStatusIcon = function(aPlayer) {          
           if (!aPlayer.isEnabled) {
             return '<img src="/viewer/images/presence/StatusGrey.png" title="Player is inactive."></img>';
           }
-          if (z == null || z == "unknown") {
-            return '<img src="/viewer/images/presence/StatusGrey.png" title="Player status is unknown."></img>';
-          }
+          var z = aPlayer.pingStatus;
+          if (z == null) return '<img src="/viewer/images/presence/StatusGrey.png" title="Player status is unknown."></img>';
+          z = z.toLowerCase();
+          if (z == "unknown") return '<img src="/viewer/images/presence/StatusGrey.png" title="Player status is unknown."></img>';
           if (z == "available") return '<img src="/viewer/images/presence/StatusGreen.png" title="Player is listed as active, and is currently ready for new matches."></img>';          
           if (z == "waiting") return '<img src="/viewer/images/presence/StatusWhite.png" title="Player was just activated: waiting to get its status..."></img>';
           if (z == "error") return '<img src="/viewer/images/presence/StatusError.png" title="Player is listed as active, but is being unresponsive, so its current status is unknown."></img>';          
@@ -66,7 +66,7 @@
             theHTML += '<a rel="nofollow" href="mailto:' + aPlayer.visibleEmail + '"><img width=20 src="/viewer/images/glyphicons/glyphicons_010_envelope.png" title="Contact email: ' + aPlayer.visibleEmail + '"></img></a>';
           }
           theHTML += "</td><td style='padding-left: 2; padding-right: 10'>";
-          if ("visibleWebsite" in aPlayer && aPlayer.visibleWebsite && aPlayer.visibleWebsite.length > 0) {          
+          if ("visibleWebsite" in aPlayer && aPlayer.visibleWebsite && aPlayer.visibleWebsite.length > 0) {
             theHTML += '<a rel="nofollow" href="' + aPlayer.visibleWebsite + '"><img width=20 src="/viewer/images/glyphicons/glyphicons_020_home.png" title="Contact website: ' + aPlayer.visibleWebsite + '"></img></a>';
           }
           theHTML += "</td>";          
@@ -125,6 +125,16 @@
             if (aPlayer.name < bPlayer.name) return -1;
             return 0;
           }
+        } else if (mode == "bestActive") {
+          return function(aPlayer, bPlayer) {
+            var isThirtyDayActive = function (x) { return (new Date() - x.lastPlayed) < 2592000000; }; 
+            if (aPlayer.agonSkill && !bPlayer.agonSkill) return -1;
+            if (!aPlayer.agonSkill && bPlayer.agonSkill) return 1;
+            if (!aPlayer.agonSkill && !bPlayer.agonSkill) return 0;
+            if (isThirtyDayActive(aPlayer) && !isThirtyDayActive(bPlayer)) return -1;
+            if (!isThirtyDayActive(aPlayer) && isThirtyDayActive(bPlayer)) return 1;
+            return bPlayer.agonSkill - aPlayer.agonSkill;
+          }        
         } else {
           return function(aPlayer, bPlayer) {
             if (aPlayer[mode] && !bPlayer[mode]) return -1;
@@ -162,6 +172,7 @@
           thePlayers[theName].agonScaledSkill = getOptionalMapValue(theName, statsJSON, "agonScaledSkill");
           thePlayers[theName].netScore = getOptionalMapValue(theName, statsJSON, "netScore");
           thePlayers[theName].eloRank = getOptionalMapValue(theName, statsJSON, "eloRank");
+          thePlayers[theName].lastPlayed = getOptionalMapValue(theName, statsJSON, "lastPlayed");
           // Then, add to the list of players.
           thePlayersList.push(thePlayers[theName]);
         }
@@ -187,7 +198,7 @@
       }
       
       var thePlayersList = getPlayersList();
-      thePlayersList.sort(getPlayerComesAfter("agonSkill"));
+      thePlayersList.sort(getPlayerComesAfter("bestActive"));
       drawPlayersList(thePlayersList);
       
       function redrawPlayersList(mode) {
