@@ -142,6 +142,7 @@
         theHTML += '<th colspan=2><center><h1>' + playerName + '</h1></center></td></tr>';
         theHTML += '<tr>';
 
+        delete statsJSON.lastPlayed;
         delete statsJSON.computedEdgeOn;
         if ("netScore" in statsJSON) {
           theHTML += "<tr style='text-align:left'><th>Net Score</th><td>" + cleanFloat(statsJSON.netScore) + "</td></tr>";
@@ -163,7 +164,7 @@
         if ("decayedAverageScore" in statsJSON) {
           theHTML += "<tr style='text-align:left'><th>Avg* Score</th><td>" + cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.</td></tr>";
           delete statsJSON.decayedAverageScore;
-        }
+        }        
         theHTML += '<tr><td>' + renderJSON(statsJSON) + '</td></tr></table>';
         return theHTML;
       }
