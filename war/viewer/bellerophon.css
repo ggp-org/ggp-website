@@ -147,7 +147,7 @@ td.navbarBottomAbrupt {
   );
 }
 
-@media (min-width: 1265px) {
+@media (min-width: 1115px) {
   div.major_left {
     padding-left: 5px;
     min-width: 600px;
@@ -156,7 +156,7 @@ td.navbarBottomAbrupt {
   div.major_right {
     padding-left: 5px;
     padding-right: 5px;
-    width: 650px;
+    width: 500px;
     float: right;
   }
 }

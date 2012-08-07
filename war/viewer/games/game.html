@@ -16,61 +16,11 @@
     <div id='header'></div>
     <br>
     <div class="major_left">
-    
-  <center>
-  <table width=600px border=1px cellpadding=5px>
-    <tr>
-      <td class="imageHolder" border=1 width=50 height=50>
-        <img width=50 height=50 src="http://placekitten.com/50/50"></img>
-      </td>
-      <td width=300>
-        <font size=5> <b><div id="game_gameName"></div></b> </font>
-      </td>
-      <td>
-        <table width=100%>
-          <tr>
-            <td><div id="game_gameVersion"></div></td>
-          </tr>
-          <tr>
-            <td><div id="game_gameNumRoles"></div></td>
-          </tr>
-        </table>
-      </td>    
-    </tr>
-    <tr>
-      <td colspan=3>
-        <div id="game_gameDescription"></div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan=3>
-        <table style="width:100%;height:100%">
-          <tr id="difficulty_tr">
-            <th>Agon Difficulty</th>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td colspan=3>
-        <table style="width:100%;height:100%">
-          <tr id="correlation_tr">
-            <th>Score/Skill PCC</th>
-          </tr>
-        </table>
-      </td>
-    </tr>    
-    <tr>
-      <td colspan=3>
-        <div id="gameStatsDiv"></div>
-      </td>
-    </tr>
-  </table>
-  </center>
-  <br>
-
+      <center>
+        <div id='gamePrimaryDiv'></div><br><br>
+        <div id='gameStatsDiv'></div>
+      </center>
     </div>
-    <div class="major_spacer"></div>
     <div class="major_right">    
       <div id='gameMatchesDiv'></div>
     </div>
@@ -91,54 +41,76 @@
         if (x == 9) return "Nine";
         return "10+";
       }
-
-      var gameName = translateRepositoryCodename(window.location.pathname.split("/").slice(4).join('/'));      
-      var gameRawName = window.location.pathname.split("/")[5];
       
-      var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/games/' + gameName);
-      if ("agonScaledDifficulty" in statsJSON && statsJSON.agonScaledDifficulty) {
-        var difficultyHTML = "";
-        var theWidth = (75/statsJSON.agonScaledDifficulty.length);
-        for (var i = 0; i < statsJSON.agonScaledDifficulty.length; i++) {
-          difficultyHTML += "<td width=10px></td>";          
-          difficultyHTML += "<td style='text-align: center; width: " + theWidth + "%; background-color: " + generateAgonViewColor(1-statsJSON.agonScaledDifficulty[i]) + "'>" + cleanFloat(statsJSON.agonDifficulty[i]) + "</td>";
-        }
-        document.getElementById('difficulty_tr').innerHTML += difficultyHTML;
-      }
-      delete statsJSON.agonScaledDifficulty;
-      delete statsJSON.agonDifficulty;
-      if ("roleCorrelationWithSkill" in statsJSON && statsJSON.roleCorrelationWithSkill) {
-        var correlationHTML = "";
-        var theWidth = (75/statsJSON.roleCorrelationWithSkill.length);
-        for (var i = 0; i < statsJSON.roleCorrelationWithSkill.length; i++) {
-          correlationHTML += "<td width=10px></td>";
-          correlationHTML += "<td style='text-align: center; width: " + theWidth + "%; background-color: " + generateAgonViewColor((1+statsJSON.roleCorrelationWithSkill[i])/2.0) + "'>" + cleanFloat(statsJSON.roleCorrelationWithSkill[i]) + "</td>";
-        }
-        document.getElementById('correlation_tr').innerHTML += correlationHTML;
-      }
-      delete statsJSON.roleCorrelationWithSkill;
-      if ("averageMoves" in statsJSON && statsJSON.averageMoves) {
-        statsJSON.averageMoves = statsJSON.averageMoves;
-        document.getElementById('gameStatsDiv').innerHTML = "On average this game takes " + cleanFloat(statsJSON.averageMoves[0]) + " moves, based on " + statsJSON.averageMoves[1] + " matches.<br>";        
-      }
-      delete statsJSON.averageMoves;
-      delete statsJSON.rolePlayerAverageScore; // TODO: Actually render this one.
-      document.getElementById('gameStatsDiv').innerHTML += renderJSON(statsJSON);
+      function renderGamePrimary(gameName, theGame) {
+        var theHTML = '<table><tr>';
+        theHTML += '<td rowspan=8 class="imageHolder"><img width=150 height=150 src="http://placekitten.com/g/150/150" /></td>';
+        theHTML += '<td rowspan=8 width=10></td>';
+        theHTML += '<th colspan=2><center><h1>' + theGame.gameName + '</h1></center></td></tr>';
 
+        theHTML += '<tr><td></td><td rowspan=3><center> <table style="border-width: 1px"><tr>';
+        theHTML += '<td class="padded">' + ("rulesheet" in theGame ? '<a href=' + gameName + theGame.rulesheet + '><img src="/viewer/images/glyphicons/glyphicons_023_cogwheels.png" title="Game rules written in GDL are available for this game."></img></a>' : "") + '</td>';
+        theHTML += '<td class="padded">' + ("stylesheet" in theGame ? '<a href=' + gameName + theGame.stylesheet + '><img src="/viewer/images/glyphicons/glyphicons_086_display.png" title="Game visualization is available for this game."></img></a>' : "") + '</td>';
+        theHTML += '<td class="padded">' + ("user_interface" in theGame ? '<a href=' + gameName + theGame.user_interface + '><img src="/viewer/images/glyphicons/glyphicons_035_woman.png" title="User interface is available for playing this game as a human."></img></a>' : "") + '</td>';
+        theHTML += '<td class="padded">' + ("description" in theGame ? '<a href=' + gameName + theGame.description + '><img src="/viewer/images/glyphicons/glyphicons_195_circle_info.png" title="Human-readable game description is available for this game."></img></a>' : "") + '</td>';
+        theHTML += '</tr></table> </center></td></tr>';
+
+        theHTML += "<tr style='text-align:left'><th>Version " + toProperString(theGame.version) + "</th></tr>";
+        theHTML += "<tr style='text-align:left'><th>" + toProperString(theGame.numRoles) + " Players</th></tr>";        
+        if ("description" in theGame) {
+          theHTML += "<tr style='text-align:left'><td colspan=3 style='max-width:400px'>\"" + ResourceLoader.load_raw(gameName + theGame.description) + "\"</td></tr>";
+        } else {
+          theHTML += "<tr style='text-align:left'><td colspan=3 style='max-width:400px'><i>Game description not yet available.</i></td></tr>";
+        }        
+        
+        theHTML += "</table>";
+        return theHTML;        
+      }
+      
+      function renderGameStats(statsJSON) {
+        var theHTML = '<table style="width: 575px">';
+              
+        if ("agonScaledDifficulty" in statsJSON && statsJSON.agonScaledDifficulty) {
+          theHTML += "<tr><th>Agon Difficulty</th>";
+          var theWidth = (70/statsJSON.agonScaledDifficulty.length);
+          for (var i = 0; i < statsJSON.agonScaledDifficulty.length; i++) {
+            theHTML += "<td width=10px></td>";          
+            theHTML += "<td style='text-align: center; width: " + theWidth + "%; background-color: " + generateAgonViewColor(1-statsJSON.agonScaledDifficulty[i]) + "'>" + cleanFloat(statsJSON.agonDifficulty[i]) + "</td>";
+          }
+          theHTML += "</tr>";
+          delete statsJSON.agonScaledDifficulty;
+          delete statsJSON.agonDifficulty;          
+        }        
+        
+        if ("roleCorrelationWithSkill" in statsJSON && statsJSON.roleCorrelationWithSkill) {
+          theHTML += "<tr><th>Score/Skill PCC</th>";
+          var theWidth = (70/statsJSON.roleCorrelationWithSkill.length);
+          for (var i = 0; i < statsJSON.roleCorrelationWithSkill.length; i++) {
+            theHTML += "<td width=10px></td>";
+            theHTML += "<td style='text-align: center; width: " + theWidth + "%; background-color: " + generateAgonViewColor((1+statsJSON.roleCorrelationWithSkill[i])/2.0) + "'>" + cleanFloat(statsJSON.roleCorrelationWithSkill[i]) + "</td>";
+          }
+          theHTML += "</tr>";
+          delete statsJSON.roleCorrelationWithSkill;
+        }
+         
+        if ("averageMoves" in statsJSON && statsJSON.averageMoves) {
+          theHTML += "<tr><td colspan=7>Matches take " + cleanFloat(statsJSON.averageMoves[0]) + " moves on average, based on " + statsJSON.averageMoves[1] + " matches.</td></tr>";
+          delete statsJSON.averageMoves;
+        }
+        
+        delete statsJSON.rolePlayerAverageScore; // TODO: Actually render this one.
+        
+        theHTML += "<tr><td>" + renderJSON(statsJSON) + "</td></tr></table>";
+        return theHTML;
+      }
+
+      var gameName = translateRepositoryCodename(window.location.pathname.split("/").slice(4).join('/'));
+      var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/games/' + gameName);      
       var theGame = ResourceLoader.load_json(gameName);
+      if (!("gameName" in theGame)) theGame.gameName = window.location.pathname.split("/")[5];
       
-      if ("gameName" in theGame) {
-        document.getElementById('game_gameName').innerHTML = theGame.gameName;
-      } else {
-        document.getElementById('game_gameName').innerHTML = gameRawName;
-      }
-      document.getElementById('game_gameVersion').innerHTML = "<b>Version " + theGame.version + "</b>";
-      document.getElementById('game_gameNumRoles').innerHTML = "<b>" + toProperString(theGame.numRoles) + " players</b>";
-      if ("description" in theGame) {
-        document.getElementById('game_gameDescription').innerHTML = "<b>Game description:</b> " + ResourceLoader.load_raw(gameName + theGame.description);
-      } else {
-        document.getElementById('game_gameDescription').innerHTML = "<b>Game description:</b> <i>Not yet available.</i>";
-      }
+      document.getElementById('gamePrimaryDiv').innerHTML = renderGamePrimary(gameName, theGame);
+      document.getElementById('gameStatsDiv').innerHTML = renderGameStats(statsJSON);
 
       var gameMatchesHTML = '';
       var ongoingMatches = ResourceLoader.load_json('//database.ggp.org/query/filterActiveSet,recent,'+getHostHashedPK()).queryMatches;
