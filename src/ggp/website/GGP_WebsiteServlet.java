@@ -75,6 +75,8 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
         for (int i = 1; i < splitURI.length; i++) {
             reqURI += "/" + splitURI[i];
         }
+        if (splitURI[0].equals("ambient"))
+        	return "/viewer/ambient.html";
         if (reqURI.isEmpty())
             return "/viewer/host.html";            
 

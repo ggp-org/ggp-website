@@ -1,0 +1,143 @@
+<html>
+  <head>
+    <title>GGP.org - View</title>
+    <meta name="description" content="General game playing is about playing games that you've never seen before. Watch intelligent computers play games against each other here!" />  
+    <link rel="shortcut icon" href="http://www.ggp.org/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:bold">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script type='text/javascript' src='/_ah/channel/jsapi'></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+  </head>
+  <body onresize="spectatorView.render()">
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/compulog.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/AJAXSLT.js'></script>        
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/StateRenderer.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/StateMachine.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/SymbolList.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/SpectatorView.js'></script>    
+    <script type='text/javascript' src='//database.ggp.org/subscribe/channel.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>    
+
+    <div style="float: left; margin: 0; background-color: #E6E6E6; height: 100%; width: 20%">
+      <div id="sidePanel" style="padding: 10px;"></div>
+    </div>
+    <div style="float: left; margin-left: 1%; margin-top: 1%; height: 99%; width:79%;">
+      <center style="width: 100%; height: 100%">
+        <div id="spectator_div" style="width: 100%; height: 100%"></div>
+        <div id='recentMatchesInfo'></div>
+      </center>
+    </div>
+    <div id="temp"></div>
+
+    <script type='text/javascript'>
+      function renderSidePanel() {
+        var spectatorMatch = spectatorView.matchData;      
+        if ("playerNamesFromHost" in spectatorMatch) {
+          var nPlayers = spectatorMatch.playerNamesFromHost.length;
+        } else if ("moves" in spectatorMatch && spectatorMatch.moves.length > 0) {
+          var nPlayers = spectatorMatch.moves[0].length;
+        } else {
+          var nPlayers = -1;
+        }
+
+        var sidePanelHTML = '<br>';
+        var theDate = new Date(spectatorMatch.startTime);
+        sidePanelHTML += '<b>Game:</b> <a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(spectatorMatch.gameMetaURL) + '">' + getGameNameForDisplay(spectatorView.metadata, spectatorMatch.gameMetaURL) + '</a><br><br>';
+        sidePanelHTML += '<b>Started at:</b> ' + UserInterface.renderDateTime(theDate) + '<br><br>';
+        sidePanelHTML += '<b>Start clock:</b> ' + spectatorMatch.startClock + '<br>';
+        sidePanelHTML += '<b>Play clock:</b> ' + spectatorMatch.playClock + '<br><br>';
+        sidePanelHTML += '<a href="javascript: spectatorView.switchView(spectatorView.VISUAL_VIEW);">Visual View</a><br>';
+        sidePanelHTML += '<a href="javascript: spectatorView.switchView(spectatorView.LISTING_VIEW);">Listing View</a><br><br>';
+        sidePanelHTML += '(<a href="' + spectatorView.matchURL + '/viz.html">Spectator Page</a>)<br><br>';
+        sidePanelHTML += '<b>Players involved:</b> <br> <table>';
+        for (var i = 0; i < nPlayers; i++) {
+          sidePanelHTML += '<tr><td width=10px></td><td style="text-align: right;">';
+          if ("playerNamesFromHost" in spectatorMatch) {
+            sidePanelHTML += '<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + spectatorMatch.playerNamesFromHost[i] + '">' + trimTo(spectatorMatch.playerNamesFromHost[i],12) + '</a>';
+          } else {
+            sidePanelHTML += 'Anonymous';
+          }
+          if ("gameRoleNames" in spectatorMatch) {
+            sidePanelHTML += '</td><td>as <b>' + spectatorMatch.gameRoleNames[i] + '</b></td>';
+          } else {
+            // TODO: Come up with a better way to get this information.
+            sidePanelHTML += '</td><td>as Player ' + i + '</td>';
+          }
+          if ("goalValues" in spectatorMatch) {
+            sidePanelHTML += '<td><i>(' + spectatorMatch.goalValues[i] + ')</i></td>';
+          }
+          sidePanelHTML += '</tr>';
+        }
+        sidePanelHTML += '</table><br>';
+        if ("playerNamesFromHost" in spectatorMatch && (spectatorMatch.playerNamesFromHost.indexOf("GreenShell") >= 0 || spectatorMatch.playerNamesFromHost.indexOf("CloudKingdom") >= 0) && spectatorMatch.isCompleted) {
+          sidePanelHTML += '<b>Time series:</b> <br><table>';
+          for (var i = 0; i < nPlayers; i++) {
+            if (spectatorMatch.playerNamesFromHost[i] == "GreenShell" || spectatorMatch.playerNamesFromHost[i] == "CloudKingdom") {
+              sidePanelHTML += '<a href="' + window.location.href.replace("matches", "logs") + spectatorMatch.playerNamesFromHost[i] + '"><img src="/viewer/images/glyphicons/glyphicons_040_stats.png" title="Player log time series for ' + spectatorMatch.playerNamesFromHost[i] + '"></img></a> ';
+            }      
+          }
+          sidePanelHTML += '</table><br>';
+        }
+        
+        var nSteps = spectatorMatch.moves.length;
+        if (spectatorMatch.isCompleted) {
+          sidePanelHTML += '<b>Match done!</b> (in ' + nSteps + ' steps)';
+        } else {
+          sidePanelHTML += '<i>Match ongoing, ' + nSteps + ' steps in...</i>';
+        }
+        document.getElementById('sidePanel').innerHTML = sidePanelHTML;      
+      }
+
+      function renderMatch(matchURL) {
+        spectatorView = SpectatorView.construct(matchURL, document.getElementById('spectator_div'), {"update": renderSidePanel});
+        // TODO: Fix the width/height calculation properly.
+        spectatorView.getHeight = function () { return document.getElementById("spectator_div").clientHeight * 0.95; };
+        spectatorView.getWidth = function () { return document.getElementById("spectator_div").clientWidth * 0.95; };
+        //spectatorView.getHeight = function () { return window.innerHeight - 70; };
+        //spectatorView.getWidth = function () { return window.innerWidth * 0.79; };      
+        spectatorView.render();
+        renderSidePanel();
+      }
+
+      var currentMatch = null;
+      function updateMatchList() {
+        var ongoingMatches = ResourceLoader.load_json('//database.ggp.org/query/filterActiveSet,recent,90bd08a7df7b8113a45f1e537c1853c3974006b2').queryMatches;
+        if (ongoingMatches.length > 0 && currentMatch != ongoingMatches[0]) {
+          currentMatch = ongoingMatches[0];
+          document.getElementById('spectator_div').innerHTML = "";
+          renderMatch(currentMatch);
+        }
+      }
+      updateMatchList();
+      
+      function update_query_via_channel(channelMessage) {
+        console.log('Got message from: ' + channelMessage.data);
+        if (channelMessage.data != '//database.ggp.org/query/filter,recent,90bd08a7df7b8113a45f1e537c1853c3974006b2') {
+          // Channel update notification was about a different match.
+          // Ignore it -- it was meant for a different SpectatorView.
+          return;
+        }
+        updateMatchList();
+      }
+
+      // Open a Browser Channel to the Database Server.
+      // We will receive updates to the recent matches query over this channel.
+      // We share a global channel with anybody else interested in using
+      // a channel to communicate with the spectator server.
+      if (window.theGlobalChannel == undefined) {
+        window.theGlobalChannel = new goog.appengine.Channel(theChannelToken);
+        window.theGlobalChannelCallbacks = [];
+        window.theGlobalChannel.open().onmessage = function (x) {
+          for (var i = 0; i < window.theGlobalChannelCallbacks.length; i++) {
+            window.theGlobalChannelCallbacks[i](x);
+          }
+        }
+      }
+      window.theGlobalChannelCallbacks.push(update_query_via_channel);
+      ResourceLoader.load_raw('//database.ggp.org/subscribe/query/filter,recent,90bd08a7df7b8113a45f1e537c1853c3974006b2/clientId=' + theChannelID);      
+    </script>
+  </body>  
+</html>
