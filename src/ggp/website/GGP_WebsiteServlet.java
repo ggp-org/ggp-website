@@ -75,8 +75,6 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
         for (int i = 1; i < splitURI.length; i++) {
             reqURI += "/" + splitURI[i];
         }
-        if (splitURI[0].equals("ambient"))
-        	return "/viewer/ambient.html";
         if (reqURI.isEmpty())
             return "/viewer/host.html";            
 
@@ -85,6 +83,9 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
             if (reqURI.isEmpty())
                 return "/viewer/matches/index.html";
             return "/viewer/matches/match.html";
+        }
+        if (reqURI.startsWith("/live")) {
+        	return "/viewer/live.html";
         }
         if (reqURI.startsWith("/logs")) {
             reqURI = reqURI.replaceFirst("/logs", "");
