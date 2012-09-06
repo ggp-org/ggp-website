@@ -59,13 +59,8 @@
             sidePanelHTML += '<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + spectatorMatch.playerNamesFromHost[i] + '">' + trimTo(spectatorMatch.playerNamesFromHost[i],12) + '</a>';
           } else {
             sidePanelHTML += 'Anonymous';
-          }
-          if ("gameRoleNames" in spectatorMatch) {
-            sidePanelHTML += '</td><td>as <b>' + spectatorMatch.gameRoleNames[i] + '</b></td>';
-          } else {
-            // TODO: Come up with a better way to get this information.
-            sidePanelHTML += '</td><td>as Player ' + i + '</td>';
-          }
+          }          
+          sidePanelHTML += '</td><td>as <b>' + spectatorView.metadata.roleNames[i] + '</b></td>';
           if ("goalValues" in spectatorMatch) {
             sidePanelHTML += '<td><i>(' + spectatorMatch.goalValues[i] + ')</i></td>';
           }

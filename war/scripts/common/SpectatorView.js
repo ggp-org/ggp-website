@@ -89,11 +89,7 @@ var SpectatorView = {
     textHTML += "<tr height=20px>";
     for (var i = 0; i < 2; i++) {
       for (var j = 0; j < roleCols; j++) {
-        if ("gameRoleNames" in this.matchData) {
-          textHTML += "<th>" + this.matchData.gameRoleNames[j] + "</th>";
-        } else {
-          textHTML += "<th>Player " + j + "</th>";
-        }
+    	textHTML += "<th>" + this.metadata.roleNames[j] + "</th>";
       }
     }
     textHTML += "</tr>";
