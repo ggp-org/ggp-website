@@ -9,6 +9,7 @@
   </head>
   <body>
     <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
     <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">google.load('visualization', '1', {packages: ['corechart']});</script>
@@ -103,8 +104,8 @@
         var varProperName = varName;
         if (varNameMapping[varName]) varProperName = varNameMapping[varName];
         var varValue = cleanFloat(statsJSON[varName]);
-        if (varName == "updatedAt") varValue = Math.round((new Date() - 1*statsJSON[varName])/1000) + 's ago';
-        if (varName == "computedAt") varValue = Math.round((new Date() - 1*statsJSON[varName])/1000) + 's ago';        
+        if (varName == "updatedAt") varValue = UserInterface.renderDateTime(new Date(statsJSON[varName])) + ' ago';
+        if (varName == "computedAt") varValue = UserInterface.renderDateTime(new Date(statsJSON[varName])) + ' ago';        
         if (varName == "computeRAM") varValue = cleanFloat(1*statsJSON[varName]/(1024*1024)) + ' MB';  
         varsHTML += '<tr><td class="name">'+varProperName+'</td><td>'+varValue+'</td></tr>';
       }
