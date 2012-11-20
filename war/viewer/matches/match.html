@@ -46,7 +46,7 @@
         var sidePanelHTML = '<br>';
         var theDate = new Date(spectatorMatch.startTime);
         sidePanelHTML += '<b>Game:</b> <a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(spectatorMatch.gameMetaURL) + '">' + getGameNameForDisplay(spectatorView.metadata, spectatorMatch.gameMetaURL) + '</a><br><br>';
-        sidePanelHTML += '<b>Started at:</b> ' + UserInterface.renderDateTime(theDate) + '<br><br>';
+        sidePanelHTML += '<b>Started ' + UserInterface.renderDateTime(theDate) + ' ago</b><br><br>';
         sidePanelHTML += '<b>Start clock:</b> ' + spectatorMatch.startClock + '<br>';
         sidePanelHTML += '<b>Play clock:</b> ' + spectatorMatch.playClock + '<br><br>';
         sidePanelHTML += '<a href="javascript: spectatorView.switchView(spectatorView.VISUAL_VIEW);">Visual View</a><br>';
