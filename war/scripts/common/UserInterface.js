@@ -87,19 +87,19 @@ var UserInterface = {
     var nowDate = new Date();
     var timeDelta = nowDate - d;
     if (timeDelta < 1000) {
-      shortForm = timeDelta + "ms";
+      shortForm = timeDelta + "ms ago";
     } else {
       timeDelta = Math.floor(timeDelta / 1000);
       if (timeDelta < 60) {
-        shortForm = timeDelta + "s";
+        shortForm = timeDelta + "s ago";
       } else {
         timeDelta = Math.floor(timeDelta / 60);
         if (timeDelta < 60) {
-          shortForm = timeDelta + "m";
+          shortForm = timeDelta + "m ago";
         } else {
           timeDelta = Math.floor(timeDelta / 60);
           if (timeDelta < 24) {
-            shortForm = timeDelta + "h";
+            shortForm = timeDelta + "h ago";
           } else if (nowDate.getYear() == d.getYear()) {
             shortForm = d.getDate() + " " + month;  
           } else {
