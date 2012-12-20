@@ -53,6 +53,26 @@ function renderJSON(x) {
   return s;
 }
 
+var cachedPlayerData = null;
+function getPerPlayerData() {
+	if (cachedPlayerData == null) {
+		cachedPlayerData = {};
+		var theHost = window.location.pathname.split("/")[2];
+		if (theHost == "tiltyard" || theHost == "all") {
+			cachedPlayerData = ResourceLoader.load_json('//tiltyard.ggp.org/data/players/');
+		}		
+	}
+	return cachedPlayerData;
+}
+function getPerPlayerImageURL(playerName) {
+	var perPlayerData = getPerPlayerData();
+	if (playerName in perPlayerData && "imageURL" in perPlayerData[playerName]) {
+		return perPlayerData[playerName].imageURL;
+	} else {
+		return 'http://placekitten.com/25/25';
+	}
+}
+
 function renderMatchEntries(theMatchEntries, theOngoingMatches, topCaption, playerToHighlight) {
     loadBellerophonMetadataForGames();
     
@@ -203,8 +223,9 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
         theMatchHTML += '<tr>'
     }
     if ("playerNamesFromHost" in theMatchJSON) {
-      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="//tiltyard.ggp.org/data/players/' + theMatchJSON.playerNamesFromHost[j] + '/image"/></td>';
-      theMatchHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + theMatchJSON.playerNamesFromHost[j] + '">' + trimTo(theMatchJSON.playerNamesFromHost[j],15) + '</a></td>';
+      var playerName = theMatchJSON.playerNamesFromHost[j];
+      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="' + getPerPlayerImageURL(playerName) + '"/></td>';
+      theMatchHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + playerName + '">' + trimTo(playerName,15) + '</a></td>';
     } else {
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." /></td>';
       theMatchHTML += '<td>Anonymous</td>';
