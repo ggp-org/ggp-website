@@ -64,12 +64,20 @@ function getPerPlayerData() {
 	}
 	return cachedPlayerData;
 }
-function getPerPlayerImageURL(playerName) {
+function getPerPlayerImageURL(playerName, fullSize) {
 	var perPlayerData = getPerPlayerData();
 	if (playerName in perPlayerData && "imageURL" in perPlayerData[playerName]) {
-		return perPlayerData[playerName].imageURL;
+		if (fullSize) {
+			return perPlayerData[playerName].imageURL;
+		} else {
+			return perPlayerData[playerName].thumbURL;
+		}
 	} else {
-		return 'http://placekitten.com/25/25';
+		if (fullSize) {
+			return 'http://placekitten.com/150/150';
+		} else {
+			return 'http://placekitten.com/25/25';
+		}
 	}
 }
 
@@ -224,7 +232,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     }
     if ("playerNamesFromHost" in theMatchJSON) {
       var playerName = theMatchJSON.playerNamesFromHost[j];
-      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="' + getPerPlayerImageURL(playerName) + '"/></td>';
+      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="' + getPerPlayerImageURL(playerName, false) + '"/></td>';
       theMatchHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + playerName + '">' + trimTo(playerName,15) + '</a></td>';
     } else {
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." /></td>';
