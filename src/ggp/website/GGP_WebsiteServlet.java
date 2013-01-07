@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.ggp.shared.website.CachedStaticServlet;
+
 @SuppressWarnings("serial")
 public class GGP_WebsiteServlet extends CachedStaticServlet {
     @Override
@@ -110,4 +112,15 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
         }
         return null;
     }
+
+	@Override
+	protected void handleCronRequest(String arg0) throws IOException {
+		;
+	}
+
+	@Override
+	protected boolean handleTaskQueueRequest(String arg0, int arg1)
+			throws IOException {
+		return true;
+	}
 }
