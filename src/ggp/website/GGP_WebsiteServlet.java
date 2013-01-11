@@ -112,6 +112,11 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
         }
         return null;
     }
+    
+    @Override
+    protected String getContentTypeForUnknown(String theURL) {
+    	return "text/html";
+    }
 
 	@Override
 	protected void handleCronRequest(String arg0) throws IOException {
