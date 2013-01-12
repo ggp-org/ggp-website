@@ -20,7 +20,7 @@
       <div id="matches_viz" style="width:800px;height:300px;"></div>
     </center>
     <div style="margin-left: 25%; width: 50%">
-    <p>lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum  
+    <p><span id="host_desc"></span>
     </div>
     
     <center>
@@ -32,8 +32,20 @@
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
       
-      var theHost = toTitle(getHostFromHashedPK(getHostHashedPK()));      
+      var hostTextMap = {
+        "Tiltyard":"GGP.org's <a href='//tiltyard.ggp.org/about'>Tiltyard server</a> continuously runs matches between GGP players.",
+        "Dresden":"The <a href='http://130.208.241.192/ggpserver/'>Dresden GGP server</a> continuously runs round-robin matches between GGP players.",
+        "Artemis":"The Artemis human-vs-human GGP server lets humans play GGP games against each other.",
+        "All":"This view shows all matches, regardless of which server they were hosted on.",
+        "Unsigned":"This view shows matches that were not signed by any server -- thus nobody vouches that they actually happened.",
+        "Sample":"This view shows matches that were signed using the sample keys bundled with GGP Base. Since anyone can sign matches using these keys, effectively nobody vouches that they actually happened.",
+      }
+      
+      var theHost = toTitle(getHostFromHashedPK(getHostHashedPK()));
       var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall');
+      if (theHost in hostTextMap) {      
+        document.getElementById('host_desc').innerHTML = hostTextMap[theHost];
+      }
       
       yMe = statsJSON.matchesStartedChart;
       yOther = ResourceLoader.load_json('//database.ggp.org/statistics/all/overall').matchesStartedChart;;
@@ -58,7 +70,7 @@
       for (var i = 0; i < zDataLabels.length; ++i) {
         var zData = zDataSets[i];
         for (var j = 0; j < zData.length; ++j) {
-          data.setCell(j, i+1, zData[j]);
+          data.setCell(j, i+1, Math.max(0,zData[j]));
         }
       }
       
@@ -66,8 +78,8 @@
       draw(data,
            {title:"Weekly Matches by Host",
             width:800, height:300, isStacked:true,
-            colors:zDataColors,
-            hAxis: {showTextEvery:20}}
+            colors:zDataColors, bar: {groupWidth:"100%"},
+            hAxis: {minValue:0, showTextEvery:30}}
       );
       
       // ===========================
@@ -111,7 +123,6 @@
         varsHTML += '<tr><td class="name">'+varProperName+'</td><td>'+varValue+'</td></tr>';
       }
       document.getElementById('server_stats').children[0].innerHTML += varsHTML;
-      
     </script>
   </body>  
 </html>

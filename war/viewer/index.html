@@ -82,8 +82,8 @@
       draw(data,
            {title:"Weekly Matches by Host",
             width:800, height:300, isStacked:true,
-            colors:zDataColors,
-            hAxis: {showTextEvery:20}}
+            colors:zDataColors, bar: {groupWidth:"100%"},
+            hAxis: {minValue:0, showTextEvery:30}}            
       );           
     </script>
   </body>  
