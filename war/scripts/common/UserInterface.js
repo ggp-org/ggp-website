@@ -66,6 +66,40 @@ var UserInterface = {
     var logDiv = document.getElementById("log_div");
     if (logDiv) logDiv.innerHTML = "";
   },
+  
+  renderDuration = function(x) {
+      if (x <= 0) return "0s";
+      
+      var s = Math.round(x/1000);
+      var sV = "" + (s % 60);
+      
+      var m = Math.floor(s/60);
+      var mV = "" + (m % 60);
+      
+      var h = Math.floor(m/60);
+      var hV = "" + h;
+      
+      if (m != 0) {
+          while (sV.length < 2) sV = "0" + sV;
+      }
+      if (h != 0) {
+          while (mV.length < 2) mV = "0" + mV;
+          while (sV.length < 2) sV = "0" + sV;
+      }
+
+      hV += ":";
+      mV += ":";
+      
+      if (h == 0) {
+        if (m == 0) {
+          mV = "";
+          sV += "s";
+        }
+        hV = "";
+      }
+
+      return hV + mV + sV;
+  },
     
   renderDateTime: function(d) {
     var monthShortNames = {0:"Jan",1:"Feb",2:"Mar",3:"Apr",4:"May",5:"Jun",6:"Jul",7:"Aug",8:"Sep",9:"Oct",10:"Nov",11:"Dec"};
