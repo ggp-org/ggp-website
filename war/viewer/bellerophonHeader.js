@@ -81,16 +81,22 @@ function getPerPlayerImageURL(playerName, fullSize) {
 	}
 }
 
-function renderMatchEntries(theMatchEntries, theOngoingMatches, topCaption, playerToHighlight) {
+function renderMatchEntries(renderIntoDiv, theMatchEntries, theOngoingMatches, topCaption, emptyCaption, playerToHighlight) {
     loadBellerophonMetadataForGames();
     
     var theHTML = '<center><table class="matchlist">';
     theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=10>' + topCaption + '</th></tr>';
-    for (var i = 0; i < theMatchEntries.length; i++) {
-      theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight, i%2);
+    if (theMatchEntries == null || theMatchEntries.length == 0) {
+    	theHTML += "<td>" + emptyCaption + "</td>";
+    } else {
+    	for (var i = 0; i < theMatchEntries.length; i++) {
+    		theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight, i%2);
+    	}
     }
-    theHTML += "</table></center>";
-    return theHTML;
+    theHTML += "</table>";
+    theHTML += "</center>";
+    
+    renderIntoDiv.innerHTML = theHTML;
 }
 
 function trimTo(x,y) {

@@ -182,16 +182,11 @@
       
       document.getElementById('playerPrimaryDiv').innerHTML = renderPlayerPrimary(playerName, statsJSON);
             
-      var playerMatchesHTML = '';
       var ongoingMatches = ResourceLoader.load_json('//database.ggp.org/query/filterActiveSet,recent,'+getHostHashedPK()).queryMatches;      
       var recentMatches = ResourceLoader.load_json('//database.ggp.org/query/filterPlayer,recent,'+getHostHashedPK()+',' + playerName).queryMatches;
-      if (recentMatches.length == 0) {
-        playerMatchesHTML += '<b>This player has not played in any matches recently.</b>';
-      } else {
-        var matchListCaption = 'What are the ' + recentMatches.length + ' matches this player has played in recently?';
-        playerMatchesHTML += renderMatchEntries(recentMatches, ongoingMatches, matchListCaption, playerName);
-      }
-      document.getElementById('playerMatchesDiv').innerHTML = playerMatchesHTML;
+      var matchListCaption = 'What are the ' + recentMatches.length + ' matches this player has played in recently?';
+      var matchListEmptyCaption = '<b>This player has not played in any matches recently.</b>'; 
+      renderMatchEntries(document.getElementById('playerMatchesDiv'), recentMatches, ongoingMatches, matchListCaption, matchListEmptyCaption, playerName);
     </script>
   </body>  
 </html>
