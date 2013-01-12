@@ -106,9 +106,8 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
 	    		theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight, i%2);
 	    	}
 	    }
-	    theHTML += "</table><br><a id='renderMore'>(more)</a></center>";
+	    theHTML += "</table></center>";
 	    renderIntoDiv.innerHTML = theHTML;
-	    document.getElementById('renderMore').onclick = renderMore;
     }
     
     var renderMore = function () {
@@ -118,8 +117,14 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
     	rMEB_lastCursorForQuery[matchQuery] = nextMatchEntriesResponse.queryCursor;    	
     	renderMatchesIntoDiv();
     }
-    
+
     renderMatchesIntoDiv();
+    
+    $(window).scroll(function(){  
+        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+          renderMore();
+        }
+    });
 }
 
 function trimTo(x,y) {
