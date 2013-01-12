@@ -5,7 +5,7 @@ body {
 
 h1 {
 	color: #222222;
-	font-family: 'Droid Sans', bold;
+	font-family: 'Roboto', bold;
 	font-size: 100px;
 	text-align: center;
 	font-variant: small-caps;
@@ -14,7 +14,7 @@ h1 {
 }
 h2 {
 	color: #222222;
-	font-family: 'Droid Sans', bold;
+	font-family: 'Roboto', bold;
 	font-size: 40px;
 	text-align: center;
 	font-variant: small-caps;
@@ -23,7 +23,7 @@ h2 {
 }
 h3 {
 	color: #222222;
-	font-family: 'Droid Sans', bold;
+	font-family: 'Roboto', bold;
 	font-size: 20px;
 	text-align: left;
 	font-variant: small-caps;
@@ -32,13 +32,13 @@ h3 {
 }
 div.main_text {
 	color: #222222;
-	font-family: 'Droid Sans';
+	font-family: 'Roboto';
 	font-size: 14px;
 	text-align: left;	
 }
 div.tiny_text {
 	color: #222222;
-	font-family: 'Droid Sans';
+	font-family: 'Roboto';
 	font-size: 11px;
 	text-align: center;	
 }
