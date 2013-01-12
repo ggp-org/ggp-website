@@ -67,7 +67,7 @@ var UserInterface = {
     if (logDiv) logDiv.innerHTML = "";
   },
   
-  renderDuration = function(x) {
+  renderDuration: function(x) {
       if (x <= 0) return "0s";
       
       var s = Math.round(x/1000);

@@ -81,22 +81,45 @@ function getPerPlayerImageURL(playerName, fullSize) {
 	}
 }
 
-function renderMatchEntries(renderIntoDiv, theMatchEntries, theOngoingMatches, topCaption, emptyCaption, playerToHighlight) {
+rMEB_extraMatchesForQuery = [];
+rMEB_lastCursorForQuery = [];
+function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption, emptyCaption, playerToHighlight) {
     loadBellerophonMetadataForGames();
     
-    var theHTML = '<center><table class="matchlist">';
-    theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=10>' + topCaption + '</th></tr>';
-    if (theMatchEntries == null || theMatchEntries.length == 0) {
-    	theHTML += "<td>" + emptyCaption + "</td>";
+    var theOngoingMatches = ResourceLoader.load_json('//database.ggp.org/query/' + ongoingQuery).queryMatches;
+    var theMatchEntriesResponse = ResourceLoader.load_json('//database.ggp.org/query/' + matchQuery);
+    var theMatchEntries = theMatchEntriesResponse.queryMatches;
+    if (matchQuery in rMEB_extraMatchesForQuery) {
+    	theMatchEntries = theMatchEntries.concat(rMEB_extraMatchesForQuery[matchQuery]);
     } else {
-    	for (var i = 0; i < theMatchEntries.length; i++) {
-    		theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight, i%2);
-    	}
+    	rMEB_lastCursorForQuery[matchQuery] = theMatchEntriesResponse.queryCursor;
+    	rMEB_extraMatchesForQuery[matchQuery] = [];
     }
-    theHTML += "</table>";
-    theHTML += "</center>";
     
-    renderIntoDiv.innerHTML = theHTML;
+    function renderMatchesIntoDiv() {
+	    var theHTML = '<center><table class="matchlist">';
+	    theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=10>' + topCaption + '</th></tr>';
+	    if (theMatchEntries == null || theMatchEntries.length == 0) {
+	    	theHTML += "<td>" + emptyCaption + "</td>";
+	    } else {
+	    	for (var i = 0; i < theMatchEntries.length; i++) {
+	    		theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight, i%2);
+	    	}
+	    }
+	    theHTML += "</table><br><a id='renderMore'>(more)</a></center>";
+	    renderIntoDiv.innerHTML = theHTML;
+	    document.getElementById('renderMore').onclick = renderMore;
+    }
+    
+    var renderMore = function () {
+    	var nextMatchEntriesResponse = ResourceLoader.load_json('//database.ggp.org/query/' + matchQuery + "," + rMEB_lastCursorForQuery[matchQuery]);
+    	theMatchEntries = theMatchEntries.concat(nextMatchEntriesResponse.queryMatches);
+    	rMEB_extraMatchesForQuery[matchQuery] = rMEB_extraMatchesForQuery[matchQuery].concat(nextMatchEntriesResponse.queryMatches);
+    	rMEB_lastCursorForQuery[matchQuery] = nextMatchEntriesResponse.queryCursor;    	
+    	renderMatchesIntoDiv();
+    }
+    
+    renderMatchesIntoDiv();
 }
 
 function trimTo(x,y) {

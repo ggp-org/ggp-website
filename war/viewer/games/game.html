@@ -112,12 +112,13 @@
       
       document.getElementById('gamePrimaryDiv').innerHTML = renderGamePrimary(gameName, theGame);
       document.getElementById('gameStatsDiv').innerHTML = renderGameStats(statsJSON);
-
-      var ongoingMatches = ResourceLoader.load_json('//database.ggp.org/query/filterActiveSet,recent,'+getHostHashedPK()).queryMatches;
-      var recentMatches = ResourceLoader.load_json('//database.ggp.org/query/filterGame,recent,'+getHostHashedPK()+',' + gameName).queryMatches;      
-      var matchListCaption = 'What are the ' + recentMatches.length + ' matches this game has been used in recently?';
-      var matchListEmptyCaption = '<b>This game has not been used in any matches recently.</b>'; 
-      renderMatchEntries(document.getElementById('gameMatchesDiv'), recentMatches, ongoingMatches, matchListCaption, matchListEmptyCaption, null);
+      
+      renderMatchEntryBox(document.getElementById('gameMatchesDiv'),
+                          'filterGame,recent,'+getHostHashedPK()+',' + gameName,
+                          'filterActiveSet,recent,'+getHostHashedPK(),
+                          'What are the matches this game has been used in recently?',
+                          'This game has not been used in any matches recently.',
+                          null);
     </script>
   </body>  
 </html>

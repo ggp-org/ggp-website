@@ -24,10 +24,12 @@
       generateHeader(document.getElementById('header'));    
 
       function updateMatchList() {
-        var ongoingMatches = ResourceLoader.load_json('//database.ggp.org/query/filterActiveSet,recent,'+getHostHashedPK()).queryMatches;
-        var recentMatches = ResourceLoader.load_json('//database.ggp.org/query/filter,recent,'+getHostHashedPK()).queryMatches;      
-        var matchListCaption = 'Listing of the ' + recentMatches.length + ' most recently played matches, of which ' + ongoingMatches.length + ' are ongoing:';
-        renderMatchEntries(document.getElementById('recentMatchesInfo'), recentMatches, ongoingMatches, matchListCaption, "<b>No recent matches found.</b>", null);
+        renderMatchEntryBox(document.getElementById('recentMatchesInfo'),
+                            'filter,recent,'+getHostHashedPK(),
+                            'filterActiveSet,recent,'+getHostHashedPK(),
+                            'Listing of the most recently played matches:',
+                            "No recent matches found.",
+                            null);
       }
       updateMatchList();
       
