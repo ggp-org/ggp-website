@@ -10,7 +10,7 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
   </head>
-  <body onload="spectatorView.render()" onresize="spectatorView.render()">
+  <body onload="rerender()" onresize="rerender()">
     <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>    
     <script type='text/javascript' src='//www.ggp.org/scripts/common/compulog.js'></script>
     <script type='text/javascript' src='//www.ggp.org/scripts/common/AJAXSLT.js'></script>
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
 
     <div id='header'></div>
-    <div style="float: left; margin: 0; background-color: #E6E6E6; height: 90%; width: 20%">
+    <div id="sidePanelDiv" style="float: left; margin: 0; background-color: #E6E6E6; width: 20%">
       <div id="sidePanel" style="padding: 10px;"></div>
     </div>
     <div style="float: left; margin-left: 1%; margin-top: 1%; height: 89%; width:79%;">
@@ -85,20 +85,23 @@
           sidePanelHTML += '<i>Match ongoing, ' + nSteps + ' steps in...</i>';
         }
         document.getElementById('sidePanel').innerHTML = sidePanelHTML;      
-      }    
-    
+      }
+
       generateHeader(document.getElementById('header'));
       document.getElementById('navBuffer').innerHTML = '<td colspan=2 style="padding: 0; width: 20%"><table style="border: 0; margin: 0; border-spacing: 0px 0px; width: 100%"><tr><td class="navbarBottomAbrupt" height=10px></td></tr></table></td>' + document.getElementById('navBuffer').innerHTML;
 
       var matchURL = 'http://matches.ggp.org/matches/' + window.location.pathname.split("/")[4];
       spectatorView = SpectatorView.construct(matchURL, document.getElementById('spectator_div'), {"update": renderSidePanel});
       // TODO: Fix the width/height calculation properly.
-      spectatorView.getHeight = function () { return document.getElementById("spectator_div").clientHeight * 0.95; };
-      spectatorView.getWidth = function () { return document.getElementById("spectator_div").clientWidth * 0.95; };
-      //spectatorView.getHeight = function () { return window.innerHeight - 70; };
-      //spectatorView.getWidth = function () { return window.innerWidth * 0.79; };      
-      spectatorView.render();
+      spectatorView.getHeight = function () { return window.innerHeight - 150; };
+      spectatorView.getWidth = function () { return window.innerWidth * 0.79; };
       renderSidePanel();
+      
+      function rerender() {
+        spectatorView.render();
+        document.getElementById("sidePanelDiv").setAttribute("style", "float: left; margin: 0; background-color: #E6E6E6; width: 20%; height: " + (window.innerHeight-40) + "px;");        
+      }
+      rerender();
     </script>
   </body>  
 </html>
