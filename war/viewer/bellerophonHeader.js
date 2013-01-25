@@ -229,7 +229,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     } else {
         theMatchHTML += '<tr>'
     }
-    if ("playerNamesFromHost" in theMatchJSON) {
+    if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost[j].length > 0) {
       var playerName = theMatchJSON.playerNamesFromHost[j];
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="' + getPerPlayerImageURL(playerName, false) + '"/></td>';
       theMatchHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + playerName + '">' + trimTo(playerName,15) + '</a></td>';
