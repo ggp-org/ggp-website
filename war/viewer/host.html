@@ -116,10 +116,10 @@
         var varName = sortedVarNames[i];
         var varProperName = varName;
         if (varNameMapping[varName]) varProperName = varNameMapping[varName];
-        var varValue = cleanFloat(statsJSON[varName]);
+        var varValue = UserInterface.cleanFloat(statsJSON[varName]);
         if (varName == "updatedAt") varValue = UserInterface.renderDateTime(new Date(statsJSON[varName]));
         if (varName == "computedAt") varValue = UserInterface.renderDateTime(new Date(statsJSON[varName]));        
-        if (varName == "computeRAM") varValue = cleanFloat(1*statsJSON[varName]/(1024*1024)) + ' MB';  
+        if (varName == "computeRAM") varValue = UserInterface.cleanFloat(1*statsJSON[varName]/(1024*1024)) + ' MB';  
         varsHTML += '<tr><td class="name">'+varProperName+'</td><td>'+varValue+'</td></tr>';
       }
       document.getElementById('server_stats').children[0].innerHTML += varsHTML;

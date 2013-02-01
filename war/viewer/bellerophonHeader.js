@@ -292,42 +292,6 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   return theMatchHTML + "</tr>";
 }
 
-// Expects an HSV value w/ H in degrees and s,v in [0,1]      
-function convertRGB (h,s,v) {
-  if (s == 0) return [Math.round(255*v),Math.round(255*v),Math.round(255*v)];
-  if (s < 0) s = 0.0; if (s > 1) s = 1.0;
-  if (v < 0) v = 0.0; if (v > 1) v = 1.0;        
-  if (h < 0) h = 0.0; if (h > 360) h = 360.0;
-  var dh = (h/60.0)-Math.floor(h/60.0);      
-  var z1 = v*(1-s);
-  var z2 = v*(1-s*dh);
-  var z3 = v*(1-s*(1-dh));        
-  switch(Math.floor(h/60.0)) {
-    case 0: r=v;g=z3;b=z1; break;
-    case 1: r=z2;g=v;b=z1; break;
-    case 2: r=z1;g=v;b=z3; break;
-    case 3: r=z1;g=z2;b=v; break;
-    case 4: r=z3;g=z1;b=v; break;
-    case 5: r=v;g=z1;b=z2; break;
-    default: r=0;g=0;b=0; break;
-  }
-  return [Math.round(255*r),Math.round(255*g),Math.round(255*b)];
-}
-
-// Lower is red, higher is green.
-var cleanFloat = function (x) { return Math.round(x*100)/100; };
-var generateAgonView = function (scaledRank, realRank, theText) {
-  var theHTML = "<span style='background-color: " + generateAgonViewColor(scaledRank) + ";'>";
-  theHTML += theText + cleanFloat(realRank);
-  theHTML += "</span>";
-  return theHTML;
-}
-var generateAgonViewColor = function (scaledRank) {
-  if (Math.abs(scaledRank) > 1.5) return "rgb(0,0,0)";
-  var rgb = convertRGB(scaledRank*120,1.0,1.0)
-  return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
-}
-
 global_gameMetadata = {};
 function loadBellerophonMetadataForGames() {
   function loadRepositoryIntoMetadata(repoURL) {

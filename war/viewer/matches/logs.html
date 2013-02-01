@@ -12,6 +12,7 @@
   </head>
   <body>
     <script type='text/javascript' src='//www.ggp.org/scripts/common/ResourceLoader.js'></script>
+    <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
     <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
     
     <script src="http://code.highcharts.com/highcharts.js"></script>
@@ -32,15 +33,13 @@
 
     <script type='text/javascript'>
       generateHeader(document.getElementById('header'));
-      var expURL = 'http://database.ggp.org/logs/' + window.location.pathname.split("/")[4] + '/' + window.location.pathname.split("/")[5];      
-      var cleanFloat = function (x) { return Math.round(x*100)/100; };
-      
-      var cleanFloat = function (x) { return Math.round(x*100)/100; };
+      var expURL = 'http://database.ggp.org/logs/' + window.location.pathname.split("/")[4] + '/' + window.location.pathname.split("/")[5];
+            
       function listMessages(name, points) {
         var theDiv = document.getElementById(name);
         var theList = "";
         for (var i = 0; i < points.length; i++) {
-          theList = theList + "[" + Math.floor(points[i][0]/60000.0) + "m " + cleanFloat((points[i][0]/1000.0) % 60) + "s]: " + points[i][1] + "<br>";
+          theList = theList + "[" + Math.floor(points[i][0]/60000.0) + "m " + UserInterface.cleanFloat((points[i][0]/1000.0) % 60) + "s]: " + points[i][1] + "<br>";
         }
         theDiv.innerHTML = theList;
       }

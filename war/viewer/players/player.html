@@ -33,15 +33,15 @@
       getGameName = function (x) { return getGameInfo(x).bellerophonName; };
 
       function renderAvg(x) {
-        return '<table width=100% padding=0px cellspacing=0px><tr><td width=100%><b>' + cleanFloat(x[0]) + '</b></td><td><i>' + x[1] + '</i></td></tr></table>';
+        return '<table width=100% padding=0px cellspacing=0px><tr><td width=100%><b>' + UserInterface.cleanFloat(x[0]) + '</b></td><td><i>' + x[1] + '</i></td></tr></table>';
       }
       
       function renderColoredAvg(x) {
-        var theText = 'Average score ' + cleanFloat(x[0]) + ' over ' + x[1] + ' matches.';
+        var theText = 'Average score ' + UserInterface.cleanFloat(x[0]) + ' over ' + x[1] + ' matches.';
         
         nHue = 120.0 * (x[0]/100.0);
         nValue = x[1]/200.0 + 0.4;
-        var rgb = convertRGB(nHue, 1.0, nValue);
+        var rgb = UserInterface.convertRGB(nHue, 1.0, nValue);
         
         return "<td title='" + theText + "' style='width: 10px; height: 10px; background-color: rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ");'></td>";
       }
@@ -57,7 +57,7 @@
 	    
 	    nHue = 120.0 * ((nWins + nTies) / (nWins + nTies + nLoss));
 	    nValue = (nWins + nTies + nLoss)/200.0 + 0.4;	    
-	    var rgb = convertRGB(nHue, 1.0, nValue);
+	    var rgb = UserInterface.convertRGB(nHue, 1.0, nValue);
 	    
 	    return "<td title='" + x + "' style='width: 10px; height: 10px; background-color: rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ");'></td>"
       }
@@ -146,24 +146,24 @@
         delete statsJSON.lastPlayed;
         delete statsJSON.computedEdgeOn;
         if ("netScore" in statsJSON) {
-          theHTML += "<tr style='text-align:left'><th>Net Score</th><td>" + cleanFloat(statsJSON.netScore) + "</td></tr>";
+          theHTML += "<tr style='text-align:left'><th>Net Score</th><td>" + UserInterface.cleanFloat(statsJSON.netScore) + "</td></tr>";
           delete statsJSON.netScore;
         }        
         if ("eloRank" in statsJSON) {
-          theHTML += "<tr style='text-align:left'><th>Elo Rank</th><td>" + cleanFloat(statsJSON.eloRank) + "</td></tr>";
+          theHTML += "<tr style='text-align:left'><th>Elo Rank</th><td>" + UserInterface.cleanFloat(statsJSON.eloRank) + "</td></tr>";
           delete statsJSON.eloRank;
         }        
         if ("agonScaledSkill" in statsJSON) {
-          theHTML += "<tr style='text-align:left'><th>Agon Skill</th><td>" + generateAgonView(statsJSON.agonScaledSkill, statsJSON.agonSkill, "") + "</td></tr>";
+          theHTML += "<tr style='text-align:left'><th>Agon Skill</th><td>" + UserInterface.generateAgonView(statsJSON.agonScaledSkill, statsJSON.agonSkill, "") + "</td></tr>";
           delete statsJSON.agonScaledSkill;
           delete statsJSON.agonSkill;  
         }
         if ("averageScore" in statsJSON) {
-          theHTML += "<tr style='text-align:left'><th>Avg Score</th><td>" + cleanFloat(statsJSON.averageScore[0]) + " over " + statsJSON.averageScore[1] + " matches.</td></tr>";
+          theHTML += "<tr style='text-align:left'><th>Avg Score</th><td>" + UserInterface.cleanFloat(statsJSON.averageScore[0]) + " over " + statsJSON.averageScore[1] + " matches.</td></tr>";
           delete statsJSON.averageScore;
         }
         if ("decayedAverageScore" in statsJSON) {
-          theHTML += "<tr style='text-align:left'><th>Avg* Score</th><td>" + cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.</td></tr>";
+          theHTML += "<tr style='text-align:left'><th>Avg* Score</th><td>" + UserInterface.cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.</td></tr>";
           delete statsJSON.decayedAverageScore;
         }        
         theHTML += '<tr><td>' + renderJSON(statsJSON) + '</td></tr></table>';

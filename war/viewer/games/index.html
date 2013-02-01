@@ -68,7 +68,7 @@
             var agonScaledDifficulty = statsJSON.agonScaledDifficulty[gameKey];            
             gameListHTML += '<table style="height: 25px; width: 100px;"><tr>';
             for (var j = 0; j < agonDifficulty.length; j++) {
-              gameListHTML += '<td title="' + cleanFloat(agonDifficulty[j]) + '" style="background-color: ' + generateAgonViewColor(1-agonScaledDifficulty[j]) + ';"></td>';
+              gameListHTML += '<td title="' + UserInterface.cleanFloat(agonDifficulty[j]) + '" style="background-color: ' + UserInterface.generateAgonViewColor(1-agonScaledDifficulty[j]) + ';"></td>';
             }
             gameListHTML += '</tr></table>';
           }
@@ -77,7 +77,7 @@
             var roleCorrelationWithSkill = statsJSON.roleCorrelationWithSkill[gameKey];            
             gameListHTML += '<table style="height: 25px; width: 100px;"><tr>';
             for (var j = 0; j < roleCorrelationWithSkill.length; j++) {
-              gameListHTML += '<td title="' + cleanFloat(roleCorrelationWithSkill[j]) + '" style="background-color: ' + generateAgonViewColor((1+roleCorrelationWithSkill[j])/2.0) + ';"></td>';
+              gameListHTML += '<td title="' + UserInterface.cleanFloat(roleCorrelationWithSkill[j]) + '" style="background-color: ' + UserInterface.generateAgonViewColor((1+roleCorrelationWithSkill[j])/2.0) + ';"></td>';
             }
             gameListHTML += '</tr></table>';
           }

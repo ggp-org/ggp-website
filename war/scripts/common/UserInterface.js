@@ -151,18 +151,59 @@ var UserInterface = {
   // the number of roles in a given game, that range is sufficient.
   // It shouldn't be difficult to expand if needed.
   properNameForInteger: function (x) {
-      if (x < 0) return "Negative " + properNameForInteger(-x);
+    if (x < 0) return "Negative " + properNameForInteger(-x);
       
-      if (x == 0) return "Zero";
-      if (x == 1) return "One";
-      if (x == 2) return "Two";
-      if (x == 3) return "Three";
-      if (x == 4) return "Four";
-      if (x == 5) return "Five";
-      if (x == 6) return "Six";
-      if (x == 7) return "Seven";
-      if (x == 8) return "Eight";
-      if (x == 9) return "Nine";
-      return "Ten+";
+    if (x == 0) return "Zero";
+    if (x == 1) return "One";
+    if (x == 2) return "Two";
+    if (x == 3) return "Three";
+    if (x == 4) return "Four";
+    if (x == 5) return "Five";
+    if (x == 6) return "Six";
+    if (x == 7) return "Seven";
+    if (x == 8) return "Eight";
+    if (x == 9) return "Nine";
+    return "Ten+";
+  },
+  
+  // Expects an HSV value w/ H in degrees and s,v in [0,1]      
+  convertRGB: function (h,s,v) {
+    if (s == 0) return [Math.round(255*v),Math.round(255*v),Math.round(255*v)];
+    if (s < 0) s = 0.0; if (s > 1) s = 1.0;
+    if (v < 0) v = 0.0; if (v > 1) v = 1.0;        
+    if (h < 0) h = 0.0; if (h > 360) h = 360.0;
+    var dh = (h/60.0)-Math.floor(h/60.0);      
+    var z1 = v*(1-s);
+    var z2 = v*(1-s*dh);
+    var z3 = v*(1-s*(1-dh));        
+    switch(Math.floor(h/60.0)) {
+      case 0: r=v;g=z3;b=z1; break;
+      case 1: r=z2;g=v;b=z1; break;
+      case 2: r=z1;g=v;b=z3; break;
+      case 3: r=z1;g=z2;b=v; break;
+      case 4: r=z3;g=z1;b=v; break;
+      case 5: r=v;g=z1;b=z2; break;
+      default: r=0;g=0;b=0; break;
     }
+    return [Math.round(255*r),Math.round(255*g),Math.round(255*b)];
+  },
+
+  // Round a float
+  cleanFloat: function (x) {
+	return Math.round(x*100)/100;
+  },
+    
+  // Lower is red, higher is green.  
+  generateAgonView : function (scaledRank, realRank, theText) {
+    var theHTML = "<span style='background-color: " + UserInterface.generateAgonViewColor(scaledRank) + ";'>";
+    theHTML += theText + UserInterface.cleanFloat(realRank);
+    theHTML += "</span>";
+    return theHTML;
+  },
+  
+  generateAgonViewColor : function (scaledRank) {
+    if (Math.abs(scaledRank) > 1.5) return "rgb(0,0,0)";
+    var rgb = UserInterface.convertRGB(scaledRank*120,1.0,1.0)
+    return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
+  }
 }
