@@ -93,7 +93,7 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
             reqURI = reqURI.replaceFirst("/logs", "");
             if (reqURI.isEmpty())
                 return null;
-            return "/viewer/matches/logs.html";            
+            return "/viewer/matches/logs.html";
         }
         if (reqURI.startsWith("/games")) {
             reqURI = reqURI.replaceFirst("/games", "");

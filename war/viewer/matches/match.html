@@ -68,14 +68,15 @@
           sidePanelHTML += '</tr>';
         }
         sidePanelHTML += '</table><br>';
-        if ("playerNamesFromHost" in spectatorMatch && (spectatorMatch.playerNamesFromHost.indexOf("GreenShell") >= 0 || spectatorMatch.playerNamesFromHost.indexOf("CloudKingdom") >= 0) && spectatorMatch.isCompleted) {
-          sidePanelHTML += '<b>Time series:</b> <br><table>';
-          for (var i = 0; i < nPlayers; i++) {
-            if (spectatorMatch.playerNamesFromHost[i] == "GreenShell" || spectatorMatch.playerNamesFromHost[i] == "CloudKingdom") {
-              sidePanelHTML += '<a href="' + window.location.href.replace("matches", "logs") + spectatorMatch.playerNamesFromHost[i] + '"><img src="/viewer/images/glyphicons/glyphicons_040_stats.png" title="Player log time series for ' + spectatorMatch.playerNamesFromHost[i] + '"></img></a> ';
-            }      
+        if ("playerNamesFromHost" in spectatorMatch && spectatorMatch.isCompleted) {
+          var playerLogs = ResourceLoader.load_json("//database.ggp.org/query/filterLog," + matchURL + '/').playerLogs;
+          if (playerLogs.length > 0) {
+            sidePanelHTML += '<b>Time series:</b> <br><table>';
+            for (var i = 0; i < playerLogs.length; i++) {
+              sidePanelHTML += '<a href="' + window.location.href.replace("matches", "logs") + playerLogs[i] + '"><img src="/viewer/images/glyphicons/glyphicons_040_stats.png" title="Player log time series for ' + playerLogs[i] + '"></img></a> ';
+            }            
+            sidePanelHTML += '</table><br>';
           }
-          sidePanelHTML += '</table><br>';
         }
         
         var nSteps = spectatorMatch.moves.length;

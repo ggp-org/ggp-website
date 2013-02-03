@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <body>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>    
+  
+    <center><table border=1><tr><td><b>Executive Summary</b><br><div id='data0'></div></td></tr></table></center><br>
+    <center><table border=1><tr><td><b>Error Listing</b><br><div id='data1'></div></td></tr></table></center><br>
+    <div id='viz1' style='min-width: 400px; height: 400px; margin: 0 auto'></div>
+    <div id='viz2' style='min-width: 400px; height: 400px; margin: 0 auto'></div>
+    <div id='viz3' style='min-width: 400px; height: 400px; margin: 0 auto'></div>
+    <div id='viz4' style='min-width: 400px; height: 400px; margin: 0 auto'></div>
+    <div id='viz5' style='min-width: 400px; height: 400px; margin: 0 auto'></div>
+    <div id='viz6' style='min-width: 400px; height: 400px; margin: 0 auto'></div>
+    <div id='viz7' style='min-width: 400px; height: 400px; margin: 0 auto'></div>
+    <div id='viz8' style='min-width: 400px; height: 400px; margin: 0 auto'></div>
+
+    <script type='text/javascript'>
+      var listMessages = function(name, points) {
+        var theDiv = document.getElementById(name);
+        var theList = '';
+        var cleanFloat = function (x) {return Math.round(x*100)/100;};
+        for (var i = 0; i < points.length; i++) {
+          theList = theList + '[' + Math.floor(points[i][0]/60000.0) + 'm ' + cleanFloat((points[i][0]/1000.0) % 60) + 's]: ' + points[i][1] + '<br>';
+        }
+        theDiv.innerHTML = theList;
+      }
+
+      var graphSeries = function(name, points, moves, yAxis, into) {
+        var opts = {};
+        opts.chart = { renderTo: into, type: 'spline' };
+        opts.title = { text: name };
+        opts.xAxis = { type: 'datetime', dateTimeLabelFormats: { month: '%e. %b', year: '%b' } };
+        opts.yAxis = yAxis;
+        opts.series = [{
+                name: name,
+                data: points,
+        }];
+        new Highcharts.Chart(opts);
+      }
+
+      var graphProfile = function(name, data, into) {
+        var opts = {};
+        opts.chart = { renderTo: into, type: 'area' };
+        opts.title = { text: name };
+        //opts.subtitle = { text: 'An example of irregular time data in Highcharts JS' };
+
+		opts.plotOptions = {
+			area: {
+				stacking: 'percent',
+				lineColor: '#ffffff',
+				lineWidth: 1,
+			}
+		};
+		var f = function(z) { q = []; for (var i = 0; i < z.length; i++) q.push(z[i][1]); return q; };
+		var g = function(a,x) { q = []; for (var i = 0; i < a.length; i++) { var n = a[i]; for (var j = 0; j < x.length; j++) n = n - x[j][i]; q.push(n); } return q; };
+		var z = function(z) { q = []; for (var i = 0; i < z.length; i++) q.push(0); return q; };		
+		
+		// Total ~= Simulation + Update + Setup
+		// Simulation ~= DepthCharge + GuidingCharge + GuidingMove
+				
+		var p_Total = f(data.profileTotal);
+		var p_CompleteTotal = ('profileCompleteTotal' in data) ? f(data.profileCompleteTotal) : p_Total;
+		var p_Update = f(data.profileUpdate);
+		var p_Simulation = f(data.profileSimulation);		
+		var p_DepthCharge = f(data.profileDepthCharge);
+		var p_GuideCharge = f(data.profileGuidingCharge);
+		var p_GuideMove = f(data.profileGuidingMove);
+		var p_Setup = ('profileSetup' in data) ? f(data.profileSetup) : z(data.profileTotal);  		
+		var p_OtherSim = g(p_Simulation, [p_DepthCharge, p_GuideCharge, p_GuideMove]);
+		var p_Other = g(p_Total, [p_Update, p_Simulation, p_Setup]);
+		var p_External = g(p_CompleteTotal, [p_Total]); 
+
+		opts.series = [{
+			name: 'Depth Charge',
+			data: p_DepthCharge
+		}, {
+			name: 'Guided Charge',
+			data: p_GuideCharge
+		}, {
+			name: 'Guided Move',
+			data: p_GuideMove
+		}, {
+			name: 'UCT Update',
+			data: p_Update
+		}, {
+			name: 'Setup',
+			data: p_Setup			
+		}, {
+			name: 'Other Sim',
+			data: p_OtherSim
+		}, {
+			name: 'Other',
+			data: p_Other			
+		}, {
+			name: 'External',
+			data: p_External
+		}];
+
+        new Highcharts.Chart(opts);      
+      }
+      
+      function receiveMessage(event) {
+        if(event.origin == 'http://www.ggp.org') {
+          logData = JSON.parse(event.data);
+          if (logData != null) {
+            var x = logData;
+            graphSeries('Planned Score', x.plannedScore, x.selectingMove, { min: 0, max: 100, title: { text: 'Score' } }, 'viz1');
+            graphSeries('Expected Depth', x.expectedDepth, x.selectingMove, { min: 0, title: { text: 'Moves' } }, 'viz2');
+            graphSeries('Depth Charges per Second', x.chargesPerSec, x.selectingMove, { min: 0, title: { text: 'Charges' } }, 'viz3');
+            graphSeries('States Expanded per Second', x.statesPerSec, x.selectingMove, { min: 0, title: { text: 'States' } }, 'viz4');
+            graphSeries('GC Time', x.gcTime, x.selectingMove, { min: 0, title: { text: 'Milliseconds' } }, 'viz5');
+            graphSeries('CacheRate', x.cacheHitRate, x.selectingMove, { min: 0, max: 100, title: { text: 'Cache Hit Rate' } }, 'viz6');
+            graphSeries('Memory Usage', x.memoryUsed, x.selectingMove, { min: 0, max: 10000, title: { text: 'Megabytes' } }, 'viz7');
+            graphProfile('Profile', x, 'viz8');
+            listMessages('data0', x.summary);
+            listMessages('data1', x.errors);
+          }
+        }      
+      }
+      window.addEventListener("message", receiveMessage, false);
+    </script>
+  </body>  
+</html>
