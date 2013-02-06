@@ -31,14 +31,13 @@
       } else if (playerData == null) {
         alert("Could not find data for player " + window.location.pathname.split("/")[5]);
       } else {
+        window.addEventListener("message", function (event) { event.source.postMessage(expData, event.origin); }, false);
         var exp_frame = document.getElementById("exp_iframe");
         if ("exponentVizURL" in playerData && playerData.exponentVizURL.length > 0) {
           exp_frame.src = playerData.exponentVizURL;
         } else {
           exp_frame.src = "https://googledrive.com/host/0B7YDIhGuSOOKQjdjaXVrTVJEUVk/GenericLogViz.html";
         }
-        var f = function() { exp_frame.contentWindow.postMessage(expData, "*") }
-        setTimeout(f,1000);
       }
     </script>
     
