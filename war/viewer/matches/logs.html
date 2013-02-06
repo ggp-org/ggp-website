@@ -35,9 +35,9 @@
         if ("exponentVizURL" in playerData && playerData.exponentVizURL.length > 0) {
           exp_frame.src = playerData.exponentVizURL;
         } else {
-          exp_frame.src = "http://www.ggp.org/TurboTurtle/GenericLogViz.html";
+          exp_frame.src = "https://googledrive.com/host/0B7YDIhGuSOOKQjdjaXVrTVJEUVk/GenericLogViz.html";
         }
-        var f = function() { exp_frame.contentWindow.postMessage(expData, "http://www.ggp.org") }
+        var f = function() { exp_frame.contentWindow.postMessage(expData, "*") }
         setTimeout(f,1000);
       }
     </script>
