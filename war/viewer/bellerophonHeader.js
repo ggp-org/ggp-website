@@ -248,6 +248,8 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     theMatchHTML += '<td width=5></td>';
     if ("goalValues" in theMatchJSON) {
       theMatchHTML += '<td class="padded" style="text-align: right;">' + theMatchJSON.goalValues[j] + '</td>';
+    } else if ("isAborted" in theMatchJSON && theMatchJSON.isAborted) {
+      theMatchHTML += '<td class="padded""><img src="/viewer/images/warnings/Abort.png" title="This match was aborted midway through."></td>';
     } else {
       theMatchHTML += '<td class="padded"></td>';
     }
