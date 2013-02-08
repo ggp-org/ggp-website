@@ -8,7 +8,8 @@ a {
 }
 a.logo {
 	color: #222222;
-	font-family: 'Roboto', bold;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 700;
 	font-size: 20px;
 	text-shadow: #AAAAAA 0px 0px 10px;
 	margin: 5px;
@@ -16,7 +17,8 @@ a.logo {
 }
 span.logo2 {
 	color: #222222;
-	font-family: 'Roboto', bold;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 700;
 	font-size: 16px;
 	text-shadow: #AAAAAA 0px 0px 10px;
 	font-variant: small-caps;
@@ -27,7 +29,8 @@ a.darklink {
 }
 a.biglink {
 	color: #222222;
-	font-family: 'Roboto', bold;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 700;
 	font-size: 20px;
 	text-shadow: #AAAAAA 0px 0px 10px;
 	margin: 5px;
@@ -35,7 +38,8 @@ a.biglink {
 }
 a.hugelink {
 	color: #222222;
-	font-family: 'Roboto', bold;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 700;
 	font-size: 60px;
 	text-align: left;
 	font-variant: small-caps;
@@ -45,7 +49,8 @@ a.hugelink {
 }
 div.login {
 	color: #222222;
-	font-family: 'Roboto', bold;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 700;
 	font-size: 14px;
 	text-shadow: #AAAAAA 0px 0px 5px;
 	margin: 5px;
@@ -147,7 +152,7 @@ td.navbarBottomAbrupt {
   );
 }
 
-@media (min-width: 1115px) {
+@media (min-width: 1165px) {
   div.major_left {
     padding-left: 5px;
     min-width: 600px;
@@ -156,7 +161,7 @@ td.navbarBottomAbrupt {
   div.major_right {
     padding-left: 5px;
     padding-right: 5px;
-    width: 500px;
+    width: 550px;
     float: right;
   }
 }
@@ -164,4 +169,8 @@ td.navbarBottomAbrupt {
   div.major_right {
     padding-top: 20px;
   }
+}
+
+body {
+  font-family: 'Roboto'; font-weight: 300;
 }

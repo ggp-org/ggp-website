@@ -97,7 +97,7 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
     }
     
     function renderMatchesIntoDiv() {
-	    var theHTML = '<center><table class="matchlist">';
+	    var theHTML = '<center><table class="matchlist" style="font-family: \'Roboto\', sans-serif; font-weight: 300;">';
 	    theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=10>' + topCaption + '</th></tr>';
 	    if (theMatchEntries == null || theMatchEntries.length == 0) {
 	    	theHTML += "<td>" + emptyCaption + "</td>";
@@ -185,16 +185,6 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     var allErrorsForSomePlayer = theMatchJSON.allErrorsForSomePlayer;
   }
   
-  // TODO(schreib): Find the right place for this.
-  /*
-  updateLiveDuration = function (objName, startTime) {
-    var theSpan = document.getElementById(objName);
-    if (theSpan == null) return;
-    theSpan.innerHTML = UserInterface.renderDuration(new Date() - new Date(startTime));
-    setTimeout("updateLiveDuration('" + objName + "'," + startTime + ")", 1000);
-  }
-  */
-
   var theMatchHTML = "<tr>";
   if (showShadow == 1) {
     theMatchHTML = "<tr bgcolor=#E0E0E0>";
@@ -206,9 +196,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   var theDate = new Date(theMatchJSON.startTime);
   theMatchHTML += '<td class="padded">';  
   if (theOngoingMatches.indexOf(theMatchJSON.matchURL) >= 0) {
-    //theMatchHTML += '<br><center><b>(Ongoing! <span id="dlx_' + theMatchJSON.randomToken + '">' + UserInterface.renderDuration(new Date() - new Date(theMatchJSON.startTime)) + '</span>)</b></center>';
-    //setTimeout("updateLiveDuration('dlx_" + theMatchJSON.randomToken + "'," + theMatchJSON.startTime + ")", 1000);
-    theMatchHTML += "<b>" + UserInterface.renderDateTime(theDate) + "</b>";
+    theMatchHTML += "<i>" + UserInterface.renderDateTime(theDate) + "</i>";
   } else {
     theMatchHTML += UserInterface.renderDateTime(theDate);
   }
@@ -245,11 +233,11 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
       theMatchHTML += '<img src="/viewer/images/warnings/WhiteAlert.png" title="This player had errors in this match.">';
     }
     theMatchHTML += '</td>'
-    theMatchHTML += '<td width=5></td>';
+    //theMatchHTML += '<td width=5></td>';
     if ("goalValues" in theMatchJSON) {
       theMatchHTML += '<td class="padded" style="text-align: right;">' + theMatchJSON.goalValues[j] + '</td>';
     } else if ("isAborted" in theMatchJSON && theMatchJSON.isAborted) {
-      theMatchHTML += '<td class="padded""><img src="/viewer/images/warnings/Abort.png" title="This match was aborted midway through."></td>';
+      theMatchHTML += '<td class="padded""><img src="/viewer/images/warnings/Abort.png" title="This match was aborted midway through." style="float:right;"></td>';
     } else {
       theMatchHTML += '<td class="padded"></td>';
     }
@@ -265,8 +253,8 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   if ("hashedMatchHostPK" in theMatchJSON) {
     var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);    
     var theHostImage = "/viewer/images/hosts/Unknown.png";
-    if (theHostName == "tiltyard") theHostImage = "/viewer/images/hosts/Tiltyard2.png";
-    if (theHostName == "dresden") theHostImage = "/viewer/images/hosts/Dresden3.png";
+    if (theHostName == "tiltyard") theHostImage = "/viewer/images/hosts/Tiltyard.png";
+    if (theHostName == "dresden") theHostImage = "/viewer/images/hosts/Dresden.png";
     if (theHostName == "artemis") theHostImage = "/viewer/images/hosts/Party.png";
     toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
     theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + toTitle(theHostName) + '."></img></a></td>';
@@ -276,6 +264,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   theMatchHTML += '<td width=5></td>';
   
   // Warning badge.
+  /*
   if (allErrors) {
     theMatchHTML += '<td class="imageHolder"><img src="/viewer/images/warnings/OrangeAlert.png" title="Every player had all errors during this match."></img></td>';
   } else if (allErrorsForSomePlayer) {
@@ -286,10 +275,11 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     theMatchHTML += '<td></td>';
   }
   theMatchHTML += '<td width=5></td>';
+  */
   
   // Match page URL.
   var matchURL = theMatchJSON.matchURL.replace("http://matches.ggp.org/matches/", "");
-  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/matches/' + matchURL + '">View</a></td>';
+  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/matches/' + matchURL + '"><img src="/viewer/images/glyphicons/glyphicons_086_display.png" title="View more details about this match."></img></a></td>';
   theMatchHTML += '<td width=5></td>';
   return theMatchHTML + "</tr>";
 }
