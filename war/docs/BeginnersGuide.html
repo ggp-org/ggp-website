@@ -1,41 +1,101 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
-    <title>An Interactive Beginner's Guide to General Game Playing</title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Vollkorn">
-    <style>
-      body {
-        margin: 15%;
-        font-family: 'Vollkorn', serif;
-      }
-      h1 {
-        font-size: 48px;
-        text-shadow: 2px 2px 2px #aaa;
-        text-align: center;
-      }
-      h2 {
-        font-size: 24px;
-        text-shadow: 1px 1px 1px #aaa;
-        text-align: justify;
-      }
-      h3 {
-        font-size: 24px;
-        text-shadow: 1px 1px 1px #aaa;     
-        text-align: center;        
-      }      
-      p {
-        font-size: 20px;
-        text-indent: 2em;
-      }
-    </style>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">    
     <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <title>General Game Playing</title>
+    <style>
+
+div.header div h2:before {
+  border:solid #bbb;
+  border-width:0 0 0 1px;
+  content:"";
+  float:left;
+  height:44px;
+  margin:0 12px 0 14px;
+}
+div.header {
+  color:#444;
+  min-height:44px;
+  background:#fff;
+  font-family:"Roboto";
+  padding:14px 15px 13px;
+  border-bottom:1px solid #ddd;
+  background-image:-moz-linear-gradient(top,#fff,#ddd);
+  background-image:-webkit-linear-gradient(top,#fff,#ddd);
+  background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fff),color-stop(1,#ddd));
+  filter:"progid:DXImageTransform.Microsoft.gradient(startColorStr=#fff, EndColorStr=#ddd)";
+  background-image:linear-gradient(top,#fff,#ddd);
+}
+div.header div {
+  margin:auto;
+  max-width:1000px;
+}
+div.header div h1,h2 {
+  float:left;
+  font-size:32px;
+  font-weight:300;
+  line-height:1.375;
+  margin:0
+}
+div.header div h1 {
+  color:#333;
+  font-weight: 700;
+}
+div.header div h2 {
+  color:#666;
+}
+div.header div h1 img {
+  vertical-align: center;
+}
+body {
+  margin:0;
+  font-family: Roboto;
+}
+
+div.content h1 {
+  font-size: 48px;
+  text-shadow: 2px 2px 2px #aaa;
+  text-align: center;
+}
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content h3 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;     
+  text-align: center;        
+}      
+div.content p {
+  font-size: 20px;
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+    </style>
   </head>
   <body>
-    <h1>An Interactive Beginner's Guide<br> to General Game Playing</h1>
+    <div class="header">
+      <div>
+        <h1><img src="/HeaderLogo.png" /> GGP.org</h1>
+        <h2>Beginner's Guide</h2>
+      </div>
+    </div>
+
+    <div class="content">
+    <br>
+
+    <h1>An Interactive Beginner's Guide to General Game Playing</h1>
     <h3>by Sam Schreiber</h3>
     <br>
     
-    <h2>What is General Game Playing?</h2>    
+    <h2>What is General Game Playing?</h2><br>
     <p>General game playing is about playing games that you've never seen before.
 While humans can already do this, it remains a challenging task for computer programs.
 There is a long and varied history of humans building artificial gamers, from the
@@ -61,21 +121,23 @@ programmers devised. This demonstrates that the original programmers understand 
 game, but it doesn't demonstrate that the programs themselves really understand 
 the game in a meaningful way.</p>
 
-    <p><b>General game playing requires building computer programs which can play
-any arbitrary game.</b> These programs are written without knowing the games
+    <p><i>General game playing requires building computer programs which can play
+any arbitrary game.</i> These programs are written without knowing the games
 they are playing in advance, and so they have to be able to play any game that
 they are presented with. Chess programs can only play chess; checkers programs
 can only play checkers; but a general game playing program can play any game.</p>
-  </body>
   
-  <h2>How can it play any game?</h2>  
-  <p>At the beginning of a match, the general game playing program is sent the rules
+    <h2>How can it play any game?</h2><br>
+    <p>At the beginning of a match, the general game playing program is sent the rules
   of the game. These rules are encoded in a logic language called the "Game Description
   Language", which is based on first order logic. The GDL description of the game
   specifies only the rules of the game: the game playing program's task is to read in
   these rules and decide on a strategy.</p>
   
-  <p><i>To be continued...</i></p>
+    <p><i>To be continued...</i></p>
   
-  <p><i>For now, see the <a href="http://games.stanford.edu/">Stanford page</a>, the <a href="http://www.general-game-playing.de/">Dresden page</a>, and the <a href="http://en.wikipedia.org/wiki/General_Game_Playing">Wikipedia</a> page for more information.</i></p>
+    <p><i>For now, see the <a href="http://games.stanford.edu/">Stanford page</a>, the <a href="http://www.general-game-playing.de/">Dresden page</a>, and the <a href="http://en.wikipedia.org/wiki/General_Game_Playing">Wikipedia</a> page for more information.</i></p>
+
+    </div>
+  </body>
 </html>
