@@ -11,8 +11,11 @@ function getGameNameForDisplay(gameMetadata, gameMetadataURL) {
 }
 
 function getHostFromView() {
-    var theHost = window.location.pathname.split("/")[2];
+	// Only allow a specific set of hosts, to avoid confusion if URLs are messed with.
+	var legitHosts = ["all", "artemis", "dresden", "sample", "tiltyard", "unsigned"];
+    var theHost = window.location.pathname.split("/")[2];    
     if (!theHost) theHost = "all";
+    if (legitHosts.indexOf(theHost) == -1) theHost = "all";
     return theHost;
 }
 
@@ -20,8 +23,10 @@ function generateHeaderForViewer(theDiv) {
 	var theHost = getHostFromView();
 	var thePageTitle = '<a href="/view/' + theHost + '/">' + toTitle(theHost) + '</a>';
 	if (window.location.pathname.split("/").length > 3) {
-		var thePageType = window.location.pathname.split("/")[3];
-		if (thePageType && thePageType.length > 0) {
+		// Only allow a specific set of page types, again to avoid confusion.
+		var legitTypes = ["logs", "matches", "games", "players"];
+		var thePageType = window.location.pathname.split("/")[3];		
+		if (thePageType && legitTypes.indexOf(thePageType) >= 0) {
 			thePageTitle += " " + toTitle(thePageType);
 		}
 	}
@@ -74,7 +79,7 @@ var cachedPlayerData = null;
 function getPerPlayerData() {
 	if (cachedPlayerData == null) {
 		cachedPlayerData = {};
-		var theHost = window.location.pathname.split("/")[2];
+		var theHost = getHostFromView();
 		if (theHost == "tiltyard" || theHost == "all") {
 			cachedPlayerData = ResourceLoader.load_json('//tiltyard.ggp.org/data/players/');
 		}		
@@ -238,7 +243,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost[j].length > 0) {
       var playerName = theMatchJSON.playerNamesFromHost[j];
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="' + getPerPlayerImageURL(playerName, false) + '"/></td>';
-      theMatchHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + playerName + '">' + trimTo(playerName,15) + '</a></td>';
+      theMatchHTML += '<td><a href="/view/' + getHostFromView() + '/players/' + playerName + '">' + trimTo(playerName,15) + '</a></td>';
     } else {
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." /></td>';
       theMatchHTML += '<td>Anonymous</td>';
@@ -264,7 +269,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   theMatchHTML += '</table></td>';
 
   // Match game profile.
-  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + trimTo(getGameName(theMatchJSON.gameMetaURL),20) + '</a></td>';
+  theMatchHTML += '<td class="padded"><a href="/view/' + getHostFromView() + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + trimTo(getGameName(theMatchJSON.gameMetaURL),20) + '</a></td>';
   theMatchHTML += '<td width=5></td>';
   
   // Signature badge.
@@ -297,7 +302,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   
   // Match page URL.
   var matchURL = theMatchJSON.matchURL.replace("http://matches.ggp.org/matches/", "");
-  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/matches/' + matchURL + '"><img src="//www.ggp.org/viewer/images/other/RightArrow.png" title="View more details about this match."></img></a></td>';
+  theMatchHTML += '<td class="padded"><a href="/view/' + getHostFromView() + '/matches/' + matchURL + '"><img src="//www.ggp.org/viewer/images/other/RightArrow.png" title="View more details about this match."></img></a></td>';
   theMatchHTML += '<td width=5></td>';
   return theMatchHTML + "</tr>";
 }
@@ -339,7 +344,7 @@ function loadBellerophonMetadataForGames() {
       gameInfo = {};
     }
 
-    gameInfo.bellerophonLink = '/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(gameVersionedURL);
+    gameInfo.bellerophonLink = '/view/' + getHostFromView() + '/games/' + translateRepositoryIntoCodename(gameVersionedURL);
     gameInfo.bellerophonVersionFromURL = versionFromURL;
     gameInfo.bellerophonName = getGameNameForDisplay(gameInfo, gameVersionedURL);
     return gameInfo;
