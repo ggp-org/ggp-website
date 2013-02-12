@@ -22,8 +22,8 @@
     <script type='text/javascript' src='//database.ggp.org/subscribe/channel.js'></script>
     <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
 
-    <div id='header'></div>
-    <div id="sidePanelDiv" style="float: left; margin: 0; background-color: #E6E6E6; width: 20%">
+    <div id='header' class='header'></div>
+    <div id="sidePanelDiv" style="float: left; margin: 0; background-color: #CCC; width: 20%">
       <div id="sidePanel" style="padding: 10px;"></div>
     </div>
     <div style="float: left; margin-left: 1%; margin-top: 1%; height: 89%; width:79%;">
@@ -34,6 +34,8 @@
     <div id="temp"></div>
 
     <script type='text/javascript'>
+      generateHeaderForViewer(document.getElementById('header'));
+    
       function renderSidePanel() {
         var spectatorMatch = spectatorView.matchData;      
         if ("playerNamesFromHost" in spectatorMatch) {
@@ -88,9 +90,6 @@
         document.getElementById('sidePanel').innerHTML = sidePanelHTML;      
       }
 
-      generateHeader(document.getElementById('header'));
-      document.getElementById('navBuffer').innerHTML = '<td colspan=2 style="padding: 0; width: 20%"><table style="border: 0; margin: 0; border-spacing: 0px 0px; width: 100%"><tr><td class="navbarBottomAbrupt" height=10px></td></tr></table></td>' + document.getElementById('navBuffer').innerHTML;
-
       var matchURL = 'http://matches.ggp.org/matches/' + window.location.pathname.split("/")[4];
       spectatorView = SpectatorView.construct(matchURL, document.getElementById('spectator_div'), {"update": renderSidePanel});
       // TODO: Fix the width/height calculation properly.
@@ -100,7 +99,7 @@
       
       function rerender() {
         spectatorView.render();
-        document.getElementById("sidePanelDiv").setAttribute("style", "float: left; margin: 0; background-color: #E6E6E6; width: 20%; height: " + (window.innerHeight-40) + "px;");        
+        document.getElementById("sidePanelDiv").setAttribute("style", "float: left; margin: 0; background-color: #CCC; width: 20%; height: " + (window.innerHeight-40) + "px;");        
       }
       rerender();
     </script>

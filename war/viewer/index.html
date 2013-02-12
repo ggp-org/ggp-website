@@ -14,7 +14,7 @@
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">google.load('visualization', '1', {packages: ['corechart']});</script>
 
-    <div id='header'></div>
+    <div id='header' class='header'></div>
     <center>
       <div id="matches_viz" style="width:800px;height:300px;"></div>
     </center>
@@ -31,7 +31,7 @@
     </div>
     
     <script type='text/javascript'>
-      generateHeader(document.getElementById('header'));
+      generateHeader(document.getElementById('header'), 'Viewer', '');
       
       getTimeSeriesData = function (z) {
         return ResourceLoader.load_json('//database.ggp.org/statistics/'+z+'/overall').matchesStartedChart;

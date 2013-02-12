@@ -192,6 +192,20 @@ var UserInterface = {
   cleanFloat: function (x) {
 	return Math.round(x*100)/100;
   },
+  
+  // Trim a string to a specific length
+  trimTo: function (data,to) {
+	  if (data.length > to) {
+		  return data.substring(0,n-3)+"...";
+	  } else {
+		  return data;
+	  }
+  },
+  
+  // Convert a word to title case
+  toTitle: function (word) {
+	  return word[0].toUpperCase()+word.substring(1);
+  },
     
   // Lower is red, higher is green.  
   generateAgonView : function (scaledRank, realRank, theText) {

@@ -4,7 +4,7 @@
     <title>GGP.org - View</title>
     <meta name="description" content="General game playing is about playing games that you've never seen before." />  
     <link rel="shortcut icon" href="http://www.ggp.org/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:bold">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:700,300" />
     <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -13,6 +13,7 @@
       html {overflow: auto;} 
       html, body, iframe {margin: 0px; padding: 0px; height: 100%; border: none;} 
       iframe {display: block; width: 100%; border: none; overflow-y: auto; overflow-x: hidden;} 
+      #container {position: absolute; bottom: 0; width: 100%; overflow: hidden;}
     </style> 
   </head>
   <body>
@@ -20,9 +21,15 @@
     <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
     <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
 
-    <iframe seamless id="exp_iframe" frameborder="0" marginheight="0" marginwidth="0" width="100%" height="100%" scrolling="auto">Your browser doesn't support iFrames.</iframe>
+    <div id="header" class="header"></div>
+    <div id="container">
+      <iframe seamless id="exp_iframe" frameborder="0" marginheight="0" marginwidth="0" width="100%" height="100%" scrolling="auto">Your browser doesn't support iFrames.</iframe>
+    </div>
     
     <script type="text/javascript">
+      generateHeaderForViewer(document.getElementById('header'));
+      document.getElementById("container").style.cssText += "top: " + document.getElementById("header").getClientRects()[0].height + "px;";
+    
       var expURL = 'http://database.ggp.org/logs/' + window.location.pathname.split("/")[4] + '/' + window.location.pathname.split("/")[5];
       var expData = ResourceLoader.load_raw(expURL);
       var playerData = ResourceLoader.load_json('http://tiltyard.ggp.org/data/players/' + window.location.pathname.split("/")[5]);

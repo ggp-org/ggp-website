@@ -15,7 +15,7 @@
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">google.load('visualization', '1', {packages: ['corechart']});</script>
 
-    <div id='header'></div>
+    <div id='header' class='header'></div>
     <center>
       <div id="matches_viz" style="width:800px;height:300px;"></div>
     </center>
@@ -30,7 +30,7 @@
     </center>
     
     <script type='text/javascript'>
-      generateHeader(document.getElementById('header'));
+      generateHeaderForViewer(document.getElementById('header'));
       
       var hostTextMap = {
         "Tiltyard":"GGP.org's <a href='//tiltyard.ggp.org/about'>Tiltyard server</a> continuously runs matches between GGP players.",

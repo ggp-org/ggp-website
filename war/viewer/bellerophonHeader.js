@@ -10,27 +10,44 @@ function getGameNameForDisplay(gameMetadata, gameMetadataURL) {
     }
 }
 
-function generateHeader(theDiv) {    
+function getHostFromView() {
     var theHost = window.location.pathname.split("/")[2];
-    if (!theHost) theHost = "all";    
-    
+    if (!theHost) theHost = "all";
+    return theHost;
+}
+
+function generateHeaderForViewer(theDiv) {
+	var theHost = getHostFromView();
+	var thePageTitle = '<a href="/view/' + theHost + '/">' + toTitle(theHost) + '</a>';
+	if (window.location.pathname.split("/").length > 3) {
+		var thePageType = window.location.pathname.split("/")[3];
+		if (thePageType && thePageType.length > 0) {
+			thePageTitle += " " + toTitle(thePageType);
+		}
+	}
+
+	// TODO(schreib): Consider not displaying a tab for the page we're currently on?
+	var thePageTabs = "";
+	var tabs = ["games", "players", "matches"];
+	for (var i = 0; i < tabs.length; i++) {
+		thePageTabs += '<td><a href="/view/' + theHost + '/' + tabs[i] + '/">' + tabs[i] + ' list</td>';
+		if (i+1 < tabs.length) {
+			thePageTabs += '<td width=' + Math.floor(50/tabs.length) + '%></td>';
+		}
+	}
+
+	generateHeader(theDiv, thePageTitle, thePageTabs);
+}
+
+function generateHeader(theDiv, pageTitle, pageTabs) {
     var theHTML = "";
-    theHTML += '<center>';
-    theHTML += '<table style="width: 100%; border: 0; margin: 0; border-spacing: 0px 0px; bgcolor: rgb(160,160,160);">';
-    theHTML += '  <tr class="navbarTop">';
-    theHTML += '    <td width=2% align="left"></td>';
-    theHTML += '    <td width=18% align="left" valign="bottom"><a class=logo href="/">GGP.org</a><span class=logo2>view</span></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/">' + toTitle(theHost) + '</a></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/games/">Games</a></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/players/">Players</a></td>';
-    theHTML += '    <td width=10% align="center" valign="bottom"><a class=biglink href="/view/' + theHost + '/matches/">Matches</a></td>';
-    theHTML += '    <td width=40% align="right" valign="bottom"></td>';
-    theHTML += '  </tr>';
-    theHTML += '  <tr id="navBuffer" class="navbarBottom">'; 
-    theHTML += '    <td colspan=10 height=10px></td>';
-    theHTML += '  </tr>';
-    theHTML += '</table>';
-    theHTML += '</center>';
+    theHTML += '<div>';
+    theHTML += '<h1><a href="//www.ggp.org/"><img src="//www.ggp.org/viewer/images/other/HeaderLogo.png" /> GGP.org</a></h1>';
+    theHTML += '<h2>' + pageTitle + '</h2>';
+	theHTML += '<table align="center" height=36><tr>';
+	theHTML += pageTabs;
+	theHTML += '</tr></table>';
+	theHTML += '</div>';
     theDiv.innerHTML = theHTML;    
 }
 
@@ -127,6 +144,7 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
     });
 }
 
+// TODO(schreib): Phase this out in favor of the UserInterface.js version
 function trimTo(x,y) {
   if (x.length > y) {
     return x.substring(0,y-3)+"...";
@@ -228,16 +246,16 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     theMatchHTML += '<td width=5></td>';
     theMatchHTML += '<td class="imageHolder">'
     if (allErrorsForPlayer[j]) {
-      theMatchHTML += '<img src="/viewer/images/warnings/YellowAlert.png" title="This player had all errors in this match.">';
+      theMatchHTML += '<img src="//www.ggp.org/viewer/images/warnings/YellowAlert.png" title="This player had all errors in this match.">';
     } else if (hasErrorsForPlayer[j]) {
-      theMatchHTML += '<img src="/viewer/images/warnings/WhiteAlert.png" title="This player had errors in this match.">';
+      theMatchHTML += '<img src="//www.ggp.org/viewer/images/warnings/WhiteAlert.png" title="This player had errors in this match.">';
     }
     theMatchHTML += '</td>'
     //theMatchHTML += '<td width=5></td>';
     if ("goalValues" in theMatchJSON) {
       theMatchHTML += '<td class="padded" style="text-align: right;">' + theMatchJSON.goalValues[j] + '</td>';
     } else if ("isAborted" in theMatchJSON && theMatchJSON.isAborted) {
-      theMatchHTML += '<td class="padded""><img src="/viewer/images/warnings/Abort.png" title="This match was aborted midway through." style="float:right;"></td>';
+      theMatchHTML += '<td class="padded""><img src="//www.ggp.org/viewer/images/warnings/Abort.png" title="This match was aborted midway through." style="float:right;"></td>';
     } else {
       theMatchHTML += '<td class="padded"></td>';
     }
@@ -252,25 +270,25 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   // Signature badge.
   if ("hashedMatchHostPK" in theMatchJSON) {
     var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);    
-    var theHostImage = "/viewer/images/hosts/Unknown.png";
-    if (theHostName == "tiltyard") theHostImage = "/viewer/images/hosts/Tiltyard.png";
-    if (theHostName == "dresden") theHostImage = "/viewer/images/hosts/Dresden.png";
-    if (theHostName == "artemis") theHostImage = "/viewer/images/hosts/Party.png";
+    var theHostImage = "//www.ggp.org/viewer/images/hosts/Unknown.png";
+    if (theHostName == "tiltyard") theHostImage = "//www.ggp.org/viewer/images/hosts/Tiltyard.png";
+    if (theHostName == "dresden") theHostImage = "//www.ggp.org/viewer/images/hosts/Dresden.png";
+    if (theHostName == "artemis") theHostImage = "//www.ggp.org/viewer/images/hosts/Party.png";
     toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
     theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + toTitle(theHostName) + '."></img></a></td>';
   } else {
-    theMatchHTML += '<td class="imageHolder"><a href="/view/unsigned/matches/"><img width=25 height=25 src="/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></a></td>';
+    theMatchHTML += '<td class="imageHolder"><a href="/view/unsigned/matches/"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></a></td>';
   }
   theMatchHTML += '<td width=5></td>';
   
   // Warning badge.
   /*
   if (allErrors) {
-    theMatchHTML += '<td class="imageHolder"><img src="/viewer/images/warnings/OrangeAlert.png" title="Every player had all errors during this match."></img></td>';
+    theMatchHTML += '<td class="imageHolder"><img src="//www.ggp.org/viewer/images/warnings/OrangeAlert.png" title="Every player had all errors during this match."></img></td>';
   } else if (allErrorsForSomePlayer) {
-    theMatchHTML += '<td class="imageHolder"><img src="/viewer/images/warnings/YellowAlert.png" title="At least one player had all errors during this match."></img></td>';
+    theMatchHTML += '<td class="imageHolder"><img src="//www.ggp.org/viewer/images/warnings/YellowAlert.png" title="At least one player had all errors during this match."></img></td>';
   } else if (hasErrors) {
-    theMatchHTML += '<td class="imageHolder"><img src="/viewer/images/warnings/WhiteAlert.png" title="Players had errors during this match."></img></td>';
+    theMatchHTML += '<td class="imageHolder"><img src="//www.ggp.org/viewer/images/warnings/WhiteAlert.png" title="Players had errors during this match."></img></td>';
   } else {
     theMatchHTML += '<td></td>';
   }
@@ -279,7 +297,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   
   // Match page URL.
   var matchURL = theMatchJSON.matchURL.replace("http://matches.ggp.org/matches/", "");
-  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/matches/' + matchURL + '"><img src="/viewer/images/glyphicons/glyphicons_086_display.png" title="View more details about this match."></img></a></td>';
+  theMatchHTML += '<td class="padded"><a href="/view/' + window.location.pathname.split("/")[2] + '/matches/' + matchURL + '"><img src="//www.ggp.org/viewer/images/other/RightArrow.png" title="View more details about this match."></img></a></td>';
   theMatchHTML += '<td width=5></td>';
   return theMatchHTML + "</tr>";
 }
@@ -336,7 +354,7 @@ function translateRepositoryIntoCodename(x) {
 }
 
 function getHostHashedPK() {
-  var hostName = window.location.pathname.split("/")[2];
+  var hostName = getHostFromView();
   if (hostName == "tiltyard") return "90bd08a7df7b8113a45f1e537c1853c3974006b2";
   if (hostName == "dresden") return "f69721b2f73839e513eed991e96824f1af218ac1";
   if (hostName == "artemis") return "5bc94f8e793772e8585a444f2fc95d2ac087fed0";

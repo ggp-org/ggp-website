@@ -14,14 +14,14 @@
     <script type='text/javascript' src='//www.ggp.org/scripts/common/UserInterface.js'></script>
     <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
   
-    <div id='header'></div>
+    <div id='header' class='header'></div>
     <br>
     <center>
     <div id='gameList'></div>
     </center>
 
     <script type='text/javascript'>
-      generateHeader(document.getElementById('header'));      
+      generateHeaderForViewer(document.getElementById('header'));
 
       var toProperString = function (x) {
         if (x <= 0) return "Zero";

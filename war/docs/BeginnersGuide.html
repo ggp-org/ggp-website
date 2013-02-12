@@ -1,58 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
-    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">    
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
     <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
     <title>General Game Playing</title>
     <style>
-
-div.header div h2:before {
-  border:solid #bbb;
-  border-width:0 0 0 1px;
-  content:"";
-  float:left;
-  height:44px;
-  margin:0 12px 0 14px;
-}
-div.header {
-  color:#444;
-  min-height:44px;
-  background:#fff;
-  font-family:"Roboto";
-  padding:14px 15px 13px;
-  border-bottom:1px solid #ddd;
-  background-image:-moz-linear-gradient(top,#fff,#ddd);
-  background-image:-webkit-linear-gradient(top,#fff,#ddd);
-  background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fff),color-stop(1,#ddd));
-  filter:"progid:DXImageTransform.Microsoft.gradient(startColorStr=#fff, EndColorStr=#ddd)";
-  background-image:linear-gradient(top,#fff,#ddd);
-}
-div.header div {
-  margin:auto;
-  max-width:1000px;
-}
-div.header div h1,h2 {
-  float:left;
-  font-size:32px;
-  font-weight:300;
-  line-height:1.375;
-  margin:0
-}
-div.header div h1 {
-  color:#333;
-  font-weight: 700;
-}
-div.header div h2 {
-  color:#666;
-}
-div.header div h1 img {
-  vertical-align: center;
-}
-body {
-  margin:0;
-  font-family: Roboto;
-}
-
 div.content h1 {
   font-size: 48px;
   text-shadow: 2px 2px 2px #aaa;
@@ -77,17 +31,10 @@ div.content {
   margin-top: 0;
   margin-bottom: 0;
 }
-
     </style>
   </head>
   <body>
-    <div class="header">
-      <div>
-        <h1><img src="/HeaderLogo.png" /> GGP.org</h1>
-        <h2>Beginner's Guide</h2>
-      </div>
-    </div>
-
+    <div class="header" id="header"></div>
     <div class="content">
     <br>
 
@@ -139,5 +86,8 @@ can only play checkers; but a general game playing program can play any game.</p
     <p><i>For now, see the <a href="http://games.stanford.edu/">Stanford page</a>, the <a href="http://www.general-game-playing.de/">Dresden page</a>, and the <a href="http://en.wikipedia.org/wiki/General_Game_Playing">Wikipedia</a> page for more information.</i></p>
 
     </div>
+    <script>
+      generateHeader(document.getElementById('header'), "Beginner's Guide", "");
+    </script>
   </body>
 </html>
