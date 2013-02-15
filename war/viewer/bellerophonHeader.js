@@ -115,13 +115,13 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
     }
     
     function renderMatchesIntoDiv() {
-	    var theHTML = '<center><table class="matchlist" style="font-family: \'Roboto\', sans-serif; font-weight: 300;">';
-	    theHTML += '<tr bgcolor=#E0E0E0><th height=30px colspan=10>' + topCaption + '</th></tr>';
+	    var theHTML = '<center><table class="matchlist">';
+	    theHTML += '<tr class="zebra"><th height=30px colspan=10>' + topCaption + '</th></tr>';
 	    if (theMatchEntries == null || theMatchEntries.length == 0) {
 	    	theHTML += "<td>" + emptyCaption + "</td>";
 	    } else {
 	    	for (var i = 0; i < theMatchEntries.length; i++) {
-	    		theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight, i%2);
+	    		theHTML += renderMatchEntry(theMatchEntries[i], theOngoingMatches, playerToHighlight);
 	    	}
 	    }
 	    theHTML += "</table></center>";
@@ -145,7 +145,7 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
     });
 }
 
-function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, showShadow) {
+function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
   getGameName = function (x) { return getGameInfo(x).bellerophonName; };
     
   if ("errors" in theMatchJSON) {
@@ -195,13 +195,8 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     var allErrorsForSomePlayer = theMatchJSON.allErrorsForSomePlayer;
   }
   
-  var theMatchHTML = "<tr>";
-  if (showShadow == 1) {
-    theMatchHTML = "<tr bgcolor=#E0E0E0>";
-  } else {
-    theMatchHTML = "<tr bgcolor=#F5F5F5>";
-  }
-  
+  var theMatchHTML = '<tr class="zebra">';
+
   // Match start time.
   var theDate = new Date(theMatchJSON.startTime);
   theMatchHTML += '<td class="padded">';  
@@ -213,7 +208,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   theMatchHTML += "</td>"  
   
   // Match players...
-  theMatchHTML += '<td class="padded"><table class="matchlist" width=100%>';
+  theMatchHTML += '<td class="padded"><table class="playerlist" width=100%>';
   if ("matchRoles" in theMatchJSON) {
     var nPlayers = theMatchJSON.matchRoles;
   } else if ("playerNamesFromHost" in theMatchJSON) {
@@ -223,7 +218,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   }
   for (var j = 0; j < nPlayers; j++) {
     if ("playerNamesFromHost" in theMatchJSON && playerToHighlight == theMatchJSON.playerNamesFromHost[j]) {
-        theMatchHTML += '<tr style="background-color: #CCEECC;">'
+        theMatchHTML += '<tr class="highlighted">'
     } else {
         theMatchHTML += '<tr>'
     }

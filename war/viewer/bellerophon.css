@@ -87,10 +87,6 @@ table.player {
     width: 450px;
     margin: 5px;
 }
-table.matchlist {
-  border:1px solid #cccccc;
-  border-collapse:collapse;
-}
 th.padded {
   padding-left: 10px;
 }
@@ -164,6 +160,26 @@ td.navbarBottomAbrupt {
   div.major_right {
     padding-top: 20px;
   }
+}
+
+table.matchlist {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+    border:1px solid #cccccc;
+    border-collapse:collapse;
+}
+table.matchlist tr.zebra:nth-child(odd) {
+	background-color: #E0E0E0;
+}
+table.matchlist tr.zebra:nth-child(even) {
+	background-color: #F5F5F5;
+}
+table.matchlist tr td table.playerlist {
+    border:1px solid #cccccc;
+    border-collapse:collapse;
+}
+table.matchlist tr td table.playerlist tr.highlighted {
+	background-color: #CCEECC;
 }
 
 body {
