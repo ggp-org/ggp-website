@@ -196,7 +196,7 @@ var UserInterface = {
   // Trim a string to a specific length
   trimTo: function (data,to) {
 	  if (data.length > to) {
-		  return data.substring(0,n-3)+"...";
+		  return data.substring(0,to-3)+"...";
 	  } else {
 		  return data;
 	  }
