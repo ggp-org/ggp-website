@@ -207,8 +207,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
   }
   theMatchHTML += "</td>"  
   
-  // Match players...
-  theMatchHTML += '<td class="padded"><table class="playerlist" width=100%>';
+  // Match players...  
   if ("matchRoles" in theMatchJSON) {
     var nPlayers = theMatchJSON.matchRoles;
   } else if ("playerNamesFromHost" in theMatchJSON) {
@@ -216,7 +215,8 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
   } else {
     var nPlayers = -1;
   }
-  for (var j = 0; j < nPlayers; j++) {
+  theMatchHTML += '<td class="padded"><table class="playerlist" width=100%>';
+  for (var j = 0; j < nPlayers; j++) {	  
     if ("playerNamesFromHost" in theMatchJSON && playerToHighlight == theMatchJSON.playerNamesFromHost[j]) {
         theMatchHTML += '<tr class="highlighted">'
     } else {
@@ -224,10 +224,10 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
     }
     if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost[j].length > 0) {
       var playerName = theMatchJSON.playerNamesFromHost[j];
-      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="' + getPerPlayerImageURL(playerName, false) + '"/></td>';
+      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 title="' + playerName + '" src="' + getPerPlayerImageURL(playerName, false) + '"/></td>';
       theMatchHTML += '<td><a href="/view/' + getHostFromView() + '/players/' + playerName + '">' + UserInterface.trimTo(playerName,15) + '</a></td>';
     } else {
-      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." /></td>';
+      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 title="Anonymous" src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." /></td>';
       theMatchHTML += '<td>Anonymous</td>';
     }
     theMatchHTML += '<td width=5></td>';
@@ -270,6 +270,80 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
   var matchURL = theMatchJSON.matchURL.replace("http://matches.ggp.org/matches/", "");
   theMatchHTML += '<td class="padded"><a href="/view/' + getHostFromView() + '/matches/' + matchURL + '"><img src="//www.ggp.org/viewer/images/other/RightArrow.png" title="View more details about this match."></img></a></td>';
   theMatchHTML += '<td width=5></td>';
+  return theMatchHTML + "</tr>";
+}
+
+// This is a prototype that renders one match entry per line... still a work in progress.
+function renderMatchEntryLinearly(theMatchJSON, theOngoingMatches, playerToHighlight) {
+  getGameName = function (x) { return getGameInfo(x).bellerophonName; };	  
+  var theMatchHTML = '<tr class="zebra">';
+
+  // Match start time.
+  var theDate = new Date(theMatchJSON.startTime);
+  theMatchHTML += '<td class="padded">';  
+  if (theOngoingMatches.indexOf(theMatchJSON.matchURL) >= 0) {
+    theMatchHTML += "<i>" + UserInterface.renderDateTime(theDate) + "</i>";
+  } else {
+    theMatchHTML += UserInterface.renderDateTime(theDate);
+  }
+  theMatchHTML += "</td>"
+
+  // Match game profile.
+  theMatchHTML += '<td class="padded"><a href="/view/' + getHostFromView() + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + UserInterface.trimTo(getGameName(theMatchJSON.gameMetaURL),20) + '</a></td>';
+  theMatchHTML += '<td width=5></td>';
+  
+  // Signature badge.
+  if ("hashedMatchHostPK" in theMatchJSON) {
+    var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);    
+    var theHostImage = "//www.ggp.org/viewer/images/hosts/Unknown.png";
+    if (theHostName == "tiltyard") theHostImage = "//www.ggp.org/viewer/images/hosts/Tiltyard.png";
+    if (theHostName == "dresden") theHostImage = "//www.ggp.org/viewer/images/hosts/Dresden.png";
+    if (theHostName == "artemis") theHostImage = "//www.ggp.org/viewer/images/hosts/Party.png";
+    theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + UserInterface.toTitle(theHostName) + '."></img></a></td>';
+  } else {
+    theMatchHTML += '<td class="imageHolder"><a href="/view/unsigned/matches/"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></a></td>';
+  }
+  theMatchHTML += '<td width=5></td>';
+  
+  // Match page URL.
+  var matchURL = theMatchJSON.matchURL.replace("http://matches.ggp.org/matches/", "");
+  theMatchHTML += '<td class="padded"><a href="/view/' + getHostFromView() + '/matches/' + matchURL + '"><img src="//www.ggp.org/viewer/images/other/RightArrow.png" title="View more details about this match."></img></a></td>';
+  theMatchHTML += '<td width=5></td>';
+  
+  // Match players...  
+  if ("matchRoles" in theMatchJSON) {
+    var nPlayers = theMatchJSON.matchRoles;
+  } else if ("playerNamesFromHost" in theMatchJSON) {
+    var nPlayers = theMatchJSON.playerNamesFromHost.length;
+  } else {
+    var nPlayers = -1;
+  }
+  theMatchHTML += '<td class="padded"><table><tr>';
+  for (var j = 0; j < nPlayers; j++) {
+	var fgColor = 'rgb(0,0,0)';
+	var bgColor = 'rgb(0,0,0)';
+    if ("goalValues" in theMatchJSON) {
+    	var x = theMatchJSON.goalValues[j];
+    	fgColor = 'rgb(' + 255*(x/100) + ',' + 255*(x/100) + ',' + 255*(1-(x/100)) + ')';
+    } else if ("isAborted" in theMatchJSON && theMatchJSON.isAborted) {
+    	fgColor = 'rgb(150,150,150)';
+    } else {
+    	;
+    }
+    bgColor = fgColor;
+    if ("playerNamesFromHost" in theMatchJSON && playerToHighlight == theMatchJSON.playerNamesFromHost[j]) {
+    	fgColor = 'rgb(0,255,0)';
+    }
+    theMatchHTML += '<td class="imageHolder" style="border: 2px dotted ' + fgColor + '; background-color: ' + bgColor + '; width:25px;">';
+    if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost[j].length > 0) {
+      var playerName = theMatchJSON.playerNamesFromHost[j];
+      theMatchHTML += '<a href="/view/' + getHostFromView() + '/players/' + playerName + '"><img width=25 height=25 title="' + playerName + '" src="' + getPerPlayerImageURL(playerName, false) + '"/></a>';
+    } else {
+      theMatchHTML += '<img width=25 height=25 title="Anonymous" src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." />';
+    }
+    theMatchHTML += '</td>';
+  }	  
+  theMatchHTML += '</tr></table>';	  
   return theMatchHTML + "</tr>";
 }
 
