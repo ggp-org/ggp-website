@@ -42,7 +42,7 @@
         "Sample":"This view shows matches that were signed using the sample keys bundled with GGP Base. Since anyone can sign matches using these keys, effectively nobody vouches that they actually happened.",
       }
       
-      var theHost = toTitle(getHostFromHashedPK(getHostHashedPK()));
+      var theHost = UserInterface.toTitle(getHostFromHashedPK(getHostHashedPK()));
       var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall');
       if (theHost in hostTextMap) {      
         document.getElementById('host_desc').innerHTML = hostTextMap[theHost];

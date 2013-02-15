@@ -1,12 +1,8 @@
-function toTitle(x) {
-  return x[0].toUpperCase()+x.substring(1);
-}
-
 function getGameNameForDisplay(gameMetadata, gameMetadataURL) {
     if ("gameName" in gameMetadata) {
         return gameMetadata.gameName;
     } else {
-        return toTitle(translateRepositoryIntoCodename(gameMetadataURL).split("/").splice(1)[0]);
+        return UserInterface.toTitle(translateRepositoryIntoCodename(gameMetadataURL).split("/").splice(1)[0]);
     }
 }
 
@@ -21,13 +17,13 @@ function getHostFromView() {
 
 function generateHeaderForViewer(theDiv) {
 	var theHost = getHostFromView();
-	var thePageTitle = '<a href="/view/' + theHost + '/">' + toTitle(theHost) + '</a>';
+	var thePageTitle = '<a href="/view/' + theHost + '/">' + UserInterface.toTitle(theHost) + '</a>';
 	if (window.location.pathname.split("/").length > 3) {
 		// Only allow a specific set of page types, again to avoid confusion.
 		var legitTypes = ["logs", "matches", "games", "players"];
 		var thePageType = window.location.pathname.split("/")[3];		
 		if (thePageType && legitTypes.indexOf(thePageType) >= 0) {
-			thePageTitle += " " + toTitle(thePageType);
+			thePageTitle += " " + UserInterface.toTitle(thePageType);
 		}
 	}
 
@@ -149,15 +145,6 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
     });
 }
 
-// TODO(schreib): Phase this out in favor of the UserInterface.js version
-function trimTo(x,y) {
-  if (x.length > y) {
-    return x.substring(0,y-3)+"...";
-  } else {
-    return x;
-  }
-}
-
 function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, showShadow) {
   getGameName = function (x) { return getGameInfo(x).bellerophonName; };
     
@@ -243,7 +230,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost[j].length > 0) {
       var playerName = theMatchJSON.playerNamesFromHost[j];
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="' + getPerPlayerImageURL(playerName, false) + '"/></td>';
-      theMatchHTML += '<td><a href="/view/' + getHostFromView() + '/players/' + playerName + '">' + trimTo(playerName,15) + '</a></td>';
+      theMatchHTML += '<td><a href="/view/' + getHostFromView() + '/players/' + playerName + '">' + UserInterface.trimTo(playerName,15) + '</a></td>';
     } else {
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." /></td>';
       theMatchHTML += '<td>Anonymous</td>';
@@ -256,7 +243,6 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
       theMatchHTML += '<img src="//www.ggp.org/viewer/images/warnings/WhiteAlert.png" title="This player had errors in this match.">';
     }
     theMatchHTML += '</td>'
-    //theMatchHTML += '<td width=5></td>';
     if ("goalValues" in theMatchJSON) {
       theMatchHTML += '<td class="padded" style="text-align: right;">' + theMatchJSON.goalValues[j] + '</td>';
     } else if ("isAborted" in theMatchJSON && theMatchJSON.isAborted) {
@@ -269,7 +255,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
   theMatchHTML += '</table></td>';
 
   // Match game profile.
-  theMatchHTML += '<td class="padded"><a href="/view/' + getHostFromView() + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + trimTo(getGameName(theMatchJSON.gameMetaURL),20) + '</a></td>';
+  theMatchHTML += '<td class="padded"><a href="/view/' + getHostFromView() + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + UserInterface.trimTo(getGameName(theMatchJSON.gameMetaURL),20) + '</a></td>';
   theMatchHTML += '<td width=5></td>';
   
   // Signature badge.
@@ -279,26 +265,11 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight, sh
     if (theHostName == "tiltyard") theHostImage = "//www.ggp.org/viewer/images/hosts/Tiltyard.png";
     if (theHostName == "dresden") theHostImage = "//www.ggp.org/viewer/images/hosts/Dresden.png";
     if (theHostName == "artemis") theHostImage = "//www.ggp.org/viewer/images/hosts/Party.png";
-    toTitle = function(x) { return x[0].toUpperCase()+x.substring(1); }
-    theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + toTitle(theHostName) + '."></img></a></td>';
+    theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + UserInterface.toTitle(theHostName) + '."></img></a></td>';
   } else {
     theMatchHTML += '<td class="imageHolder"><a href="/view/unsigned/matches/"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></a></td>';
   }
   theMatchHTML += '<td width=5></td>';
-  
-  // Warning badge.
-  /*
-  if (allErrors) {
-    theMatchHTML += '<td class="imageHolder"><img src="//www.ggp.org/viewer/images/warnings/OrangeAlert.png" title="Every player had all errors during this match."></img></td>';
-  } else if (allErrorsForSomePlayer) {
-    theMatchHTML += '<td class="imageHolder"><img src="//www.ggp.org/viewer/images/warnings/YellowAlert.png" title="At least one player had all errors during this match."></img></td>';
-  } else if (hasErrors) {
-    theMatchHTML += '<td class="imageHolder"><img src="//www.ggp.org/viewer/images/warnings/WhiteAlert.png" title="Players had errors during this match."></img></td>';
-  } else {
-    theMatchHTML += '<td></td>';
-  }
-  theMatchHTML += '<td width=5></td>';
-  */
   
   // Match page URL.
   var matchURL = theMatchJSON.matchURL.replace("http://matches.ggp.org/matches/", "");

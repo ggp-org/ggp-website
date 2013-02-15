@@ -112,7 +112,7 @@
         // real rows
         for (var i = 0; i < theGames.length; i++) {        
           theTableHTML += '<tr>';
-          theTableHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theGames[i]) + '">' + trimTo(getGameName(theGames[i]),12) + '</a></td>';
+          theTableHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(theGames[i]) + '">' + UserInterface.trimTo(getGameName(theGames[i]),12) + '</a></td>';
           // avg score column
           theTableHTML += renderColoredAvg(perGame[theGames[i]]);
           // real columns
@@ -128,7 +128,7 @@
         }
         // puzzle info, shoehorned in
         for (var aGame in perPuzzleGame) {
-          theTableHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(aGame) + '">' + trimTo(getGameName(aGame),12) + '</a></td>';
+          theTableHTML += '<td><a href="/view/' + window.location.pathname.split("/")[2] + '/games/' + translateRepositoryIntoCodename(aGame) + '">' + UserInterface.trimTo(getGameName(aGame),12) + '</a></td>';
           theTableHTML += renderColoredAvg(perGame[aGame]);
           theTableHTML += '</tr>';
         }

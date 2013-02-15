@@ -95,7 +95,7 @@
         }
         
         theHTML += renderPaddedCell(pingStatusIcon(aPlayer));
-        theHTML += renderPaddedCell('<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer.name + '">' + trimTo(aPlayer.name,20) + '</a>');
+        theHTML += renderPaddedCell('<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + aPlayer.name + '">' + UserInterface.trimTo(aPlayer.name,20) + '</a>');
         theHTML += ownerInfo(aPlayer);
         theHTML += renderPaddedCell(("theURL" in aPlayer) ? "Yours!" : null);
         
