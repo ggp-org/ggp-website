@@ -31,7 +31,6 @@
         <div id="spectator_div" style="width: 100%; height: 100%"></div>
       </center>
     </div>
-    <div id="temp"></div>
 
     <script type='text/javascript'>
       generateHeaderForViewer(document.getElementById('header'));
@@ -45,6 +44,10 @@
         } else {
           var nPlayers = -1;
         }
+        var playersWithLogs = [];
+        if ("playerNamesFromHost" in spectatorMatch && spectatorMatch.isCompleted) {
+          playersWithLogs = ResourceLoader.load_json("//database.ggp.org/query/filterLog," + matchURL + '/').playerLogs;
+        }
 
         var sidePanelHTML = '<br>';
         var theDate = new Date(spectatorMatch.startTime);
@@ -55,11 +58,18 @@
         sidePanelHTML += '<a href="javascript: spectatorView.switchView(spectatorView.VISUAL_VIEW);">Visual View</a><br>';
         sidePanelHTML += '<a href="javascript: spectatorView.switchView(spectatorView.LISTING_VIEW);">Listing View</a><br><br>';
         sidePanelHTML += '(<a href="' + spectatorView.matchURL + '/viz.html">Spectator Page</a>)<br><br>';
-        sidePanelHTML += '<b>Players involved:</b> <br> <table>';
+        sidePanelHTML += '<span width=10px></span><b>Players involved:</b> <br> <table>';
         for (var i = 0; i < nPlayers; i++) {
-          sidePanelHTML += '<tr><td width=10px></td><td style="text-align: right;">';
-          if ("playerNamesFromHost" in spectatorMatch && spectatorMatch.playerNamesFromHost[i].length > 0) {
-            sidePanelHTML += '<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + spectatorMatch.playerNamesFromHost[i] + '">' + UserInterface.trimTo(spectatorMatch.playerNamesFromHost[i],12) + '</a>';
+          var hasPlayerName = "playerNamesFromHost" in spectatorMatch && spectatorMatch.playerNamesFromHost[i].length > 0;
+          var playerName = hasPlayerName ? spectatorMatch.playerNamesFromHost[i] : null; // only makes sense when hasPlayerName is true
+          
+          sidePanelHTML += '<tr><td>';
+          if (hasPlayerName && playersWithLogs.indexOf(playerName) >= 0) {
+            sidePanelHTML += '<a href="' + window.location.href.replace("matches", "logs") + playerName + '"><img src="/viewer/images/glyphicons/glyphicons_040_stats.png" width=20px title="Player log time series for ' + playerName + '"></img></a>';
+          }
+          sidePanelHTML += '</td><td style="text-align: right;">';
+          if (hasPlayerName) {
+            sidePanelHTML += '<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + playerName + '">' + UserInterface.trimTo(playerName,12) + '</a>';
           } else {
             sidePanelHTML += 'Anonymous';
           }          
@@ -70,16 +80,6 @@
           sidePanelHTML += '</tr>';
         }
         sidePanelHTML += '</table><br>';
-        if ("playerNamesFromHost" in spectatorMatch && spectatorMatch.isCompleted) {
-          var playerLogs = ResourceLoader.load_json("//database.ggp.org/query/filterLog," + matchURL + '/').playerLogs;
-          if (playerLogs.length > 0) {
-            sidePanelHTML += '<b>Time series:</b> <br><table>';
-            for (var i = 0; i < playerLogs.length; i++) {
-              sidePanelHTML += '<a href="' + window.location.href.replace("matches", "logs") + playerLogs[i] + '"><img src="/viewer/images/glyphicons/glyphicons_040_stats.png" title="Player log time series for ' + playerLogs[i] + '"></img></a> ';
-            }            
-            sidePanelHTML += '</table><br>';
-          }
-        }
         
         var nSteps = spectatorMatch.moves.length;
         if (spectatorMatch.isCompleted) {
