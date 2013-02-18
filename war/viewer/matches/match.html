@@ -45,7 +45,7 @@
           var nPlayers = -1;
         }
         var playersWithLogs = [];
-        if ("playerNamesFromHost" in spectatorMatch && spectatorMatch.isCompleted) {
+        if ("playerNamesFromHost" in spectatorMatch && (spectatorMatch.isCompleted || spectatorMatch.isAborted)) {
           playersWithLogs = ResourceLoader.load_json("//database.ggp.org/query/filterLog," + matchURL + '/').playerLogs;
         }
 
@@ -84,6 +84,8 @@
         var nSteps = spectatorMatch.moves.length;
         if (spectatorMatch.isCompleted) {
           sidePanelHTML += '<b>Match done!</b> (in ' + nSteps + ' steps)';
+        } else if (spectatorMatch.isAborted) {
+          sidePanelHTML += '<b>Match aborted.</b> (after ' + nSteps + ' steps)';
         } else {
           sidePanelHTML += '<i>Match ongoing, ' + nSteps + ' steps in...</i>';
         }
