@@ -113,10 +113,11 @@ var UserInterface = {
     if (hours == 0) { hours = 12; }
     if (minutes < 10) { minutes = "0" + minutes; }
     var month = monthShortNames[d.getMonth()];
-    var year = (d.getYear()-100);
-    if (year < 10) { year = "0" + year; }    
+    var year = d.getYear()-100;
+    if (year < 10 && year >= 0) { year = "0" + year; }
+    if (year < 0) { year = 2000 + year; }
     longForm += hours + ":" + minutes + " " + suffix + " - ";
-    longForm += d.getDate() + " " + month + " 20" + year;
+    longForm += d.getDate() + " " + month + " " + year;
 
     var nowDate = new Date();
     var timeDelta = nowDate - d;

@@ -23,12 +23,12 @@
     <script type='text/javascript'>
       generateHeaderForViewer(document.getElementById('header'));
 
-      function renderPlayerListEntry(aPlayer, nPlayer, statsJSON) {
+      function renderPlayerListEntry(aPlayer, statsJSON, insertDivider) {
         var theHTML = '';
-        if (nPlayer % 2 == 0) {
-          theHTML += "<tr bgcolor=#F5F5F5>";
+        if (insertDivider) {
+          theHTML += '<tr class="zebra" style="border-bottom: 1px solid grey;">';
         } else {          
-          theHTML += "<tr bgcolor=#E0E0E0>";
+          theHTML += '<tr class="zebra">';
         }
         
         function renderCell(x, padded) {
@@ -99,6 +99,7 @@
         theHTML += ownerInfo(aPlayer);
         theHTML += renderPaddedCell(("theURL" in aPlayer) ? "Yours!" : null);
         
+        theHTML += renderPaddedCell(("lastPlayed" in aPlayer && aPlayer.lastPlayed) ? UserInterface.renderDateTime(new Date(aPlayer.lastPlayed)) : null);
         theHTML += renderPaddedCell(aPlayer.totalMatches);
         theHTML += renderPaddedCell(UserInterface.cleanFloat(aPlayer.averageScore));
         theHTML += renderPaddedCell(UserInterface.cleanFloat(aPlayer.netScore));
@@ -181,30 +182,31 @@
         return thePlayersList;
       }
       
-      function drawPlayersList(thePlayersList) {
+      function drawPlayersList(thePlayersList, mode) {
+        thePlayersList.sort(getPlayerComesAfter(mode));
         var playerListHTML = '<center><table class="matchlist" cellpadding="5px">';
         playerListHTML += '<tr bgcolor=#E0E0E0><th></th>';
         playerListHTML += '<th style="text-align: left;" height=30px><a class="darklink" href="#" onclick="redrawPlayersList(\'mine\');"><u>Player Name</u></a></th>';
         playerListHTML += '<th colspan=2><center>Contact</center></th><th></th>';
+        playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'lastPlayed\');"><u>Last Active</u></a></th>';
         playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'totalMatches\');"><u>Matches</u></a></th>';
         playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'averageScore\');"><u>Avg Score</u></a></th>';
         playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'netScore\');" title="NetScore increases by 1 when you get 100 points in a match, decreases by 1 when you get 0 points in a match, and does not change when you get 50 points in a match."><u>NetScore</u></a></th>';
         playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'eloRank\');" title="EloRank is the standard Chess ranking system. It ignores puzzle games and cooperative games."><u>EloRank</u></a></th>';
         playerListHTML += '<th><a class="darklink" href="#" onclick="redrawPlayersList(\'agonSkill\');" title="AgonSkill is a variant of Chess ranking designed for General Game Playing, in which you play against the game in addition to playing against your opponent. It counts puzzles. (Better description forthcoming)"><u>Agon Skill</u></a></th><th></th></tr>';
         for (var i = 0; i < thePlayersList.length; i++) {
-          playerListHTML += renderPlayerListEntry(thePlayersList[i], i, statsJSON);
+          var insertDivider = (mode == "bestActive" && i < thePlayersList.length - 1 && thePlayersList[i].agonSkill < thePlayersList[i+1].agonSkill);
+          playerListHTML += renderPlayerListEntry(thePlayersList[i], statsJSON, insertDivider);
         }
         playerListHTML += '</table></center>';
         document.getElementById('playerList').innerHTML = playerListHTML;   
       }
       
       var thePlayersList = getPlayersList();
-      thePlayersList.sort(getPlayerComesAfter("bestActive"));
-      drawPlayersList(thePlayersList);
+      drawPlayersList(thePlayersList, "bestActive");
       
-      function redrawPlayersList(mode) {
-        thePlayersList.sort(getPlayerComesAfter(mode));
-        drawPlayersList(thePlayersList);        
+      function redrawPlayersList(mode) {        
+        drawPlayersList(thePlayersList, mode);        
       }
     </script>
   </body>  
