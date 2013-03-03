@@ -15,6 +15,7 @@ var SpectatorView = {
   topDiv: null,
   midDiv: null,
   textDiv: null,
+  rawJSONDiv: null,
   gameVizDiv: null,
   gameOldVizDiv: null,
   callbacks: null,
@@ -35,6 +36,7 @@ var SpectatorView = {
   
   VISUAL_VIEW: 0,
   LISTING_VIEW: 1,
+  RAW_JSON_VIEW: 2,
   
   // Render the current state of the match, using a
   // smooth transition between old and new states.
@@ -65,6 +67,7 @@ var SpectatorView = {
 
     this.topDiv.style.height = this.gameVizDiv.children[0].clientHeight + 'px';
     
+    this.rawJSONDiv.replaceChild(document.createTextNode(JSON.stringify(this.matchData)), this.rawJSONDiv.firstChild);
     this.renderTextPage();
 
     var thisRef = this;
@@ -143,6 +146,9 @@ var SpectatorView = {
     this.textDiv = document.createElement('div');    
     this.textDiv.style.cssText = "position: relative; width: 100%; height: 100%; display: none; ";
     this.textDiv.innerHTML = "";
+    this.rawJSONDiv = document.createElement('div');    
+    this.rawJSONDiv.style.cssText = "position: relative; width: 100%; height: 100%; display: none; ";
+    this.rawJSONDiv.appendChild(document.createTextNode(''));
     
     this.gameVizDiv = document.createElement('div');
     this.gameOldVizDiv = document.createElement('div');
@@ -154,6 +160,7 @@ var SpectatorView = {
     this.midDiv.appendChild(this.gameOldVizDiv);
     this.topDiv.appendChild(this.midDiv);
     this.topDiv.appendChild(this.textDiv);
+    this.topDiv.appendChild(this.rawJSONDiv);
     spectator_div.appendChild(this.topDiv);
     
     // Next, load the resources for the match. We need to load the current state,
@@ -256,6 +263,8 @@ var SpectatorView = {
         thisRef.switchView(thisRef.VISUAL_VIEW);
       } else if (key == 66) {
         thisRef.switchView(thisRef.LISTING_VIEW);
+      } else if (key == 67) {
+    	  thisRef.switchView(thisRef.LITERAL_JSON_VIEW);
       }
 
       thisRef.state = SymbolList.symbolListIntoArray(thisRef.matchData.states[thisRef.visibleStateIndex]);
@@ -264,13 +273,9 @@ var SpectatorView = {
   },
 
   switchView: function (viewID) {
-    if (viewID == this.VISUAL_VIEW) {
-      this.midDiv.style.display = '';
-      this.textDiv.style.display = 'none';
-    } else if (viewID == this.LISTING_VIEW) {
-      this.midDiv.style.display = 'none';
-      this.textDiv.style.display = '';
-    }
+	this.midDiv.style.display = (viewID == this.VISUAL_VIEW) ? '' : 'none';
+	this.textDiv.style.display = (viewID == this.LISTING_VIEW) ? '' : 'none';
+	this.rawJSONDiv.style.display = (viewID == this.RAW_JSON_VIEW) ? '' : 'none';
   },
   
   // Constructor, to make new SpectatorViews.
