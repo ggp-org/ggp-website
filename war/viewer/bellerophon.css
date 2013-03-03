@@ -215,7 +215,7 @@ div.header div {
   margin:auto;
   max-width:1000px;
 }
-div.header div h1,h2 {
+div.header div h1, div.header div h2 {
   float:left;
   font-size:32px;
   font-weight:300;
