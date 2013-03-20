@@ -29,32 +29,41 @@ div.content {
     <div class="header" id="header"></div>
     <div class="content">
     <br>
+    General game playing involves game servers, which host matches, and game
+    players, which participate in those matches. To get started, you can download
+    a game server program and a configurable game player program. You can use the
+    game server to host your own matches, and you can have the configurable game
+    player participate in those matches.
 
-    These programs have been prepackaged as runnable JAR files. They can run
-    on any machine that has the JVM installed. To get started, just download
-    one of the packages and run it.
+    <h2>Configurable Game Player</h2>
 
-    <h2>Packaged Parametric Player</h2>
-
-    <p>Configure your own player without having to write a line of code, using
-       the <a href="https://googledrive.com/host/0B7YDIhGuSOOKQjdjaXVrTVJEUVk/ParametricPlayer.jar">
-       packaged parametric player.</a> Choose the gaming algorithm, manage resource
-       tradeoffs, and control all of the important parameters involved in building a
-       competitive game player.</p>
-
-    <h2>Packaged Game Server</h2>
+    <p>Set up your own player without having to write a line of code, using
+       the <a href="https://googledrive.com/host/0B7YDIhGuSOOKQjdjaXVrTVJEUVk/ConfigurablePlayer.jar">
+       configurable game player.</a> Instead of writing code, you can adjust various
+       settings that determine how the player chooses its moves. For example, you can
+       make the player choose moves randomly, or based on statistical game simulations,
+       or based on searching every possible way to play through the game.</p>
+       
+    <p>Once you've made your choices, the configurable gamer displays useful graphs
+       as it plays, so you can get immediate feedback about your choices. For example,
+       if you want to know what impact remembering explored game states will have on the
+       player's memory consumption, you can play a match with that feature enabled and one
+       with it disabled, and compare the graphs of memory consumption.</p>
+       
+    <h2>Game Server</h2>
 
     <p>Once you get your player running, you'll want to have it play games. Use the
        <a href="https://googledrive.com/host/0B7YDIhGuSOOKQjdjaXVrTVJEUVk/GameServer.jar">
-       prepackaged game server</a> to host matches on your machine. Choose games to play
-       from a large online repository, select players to participate in the match, and get
-       started! You can save the match transcript on your computer, or publish it to the
-       web so that everyone can watch the match live. Published matches will count toward
-       an online leaderboard where players are ranked based on the matches they've played.
+       game server program</a> to host matches on your machine. Choose from a large library
+       of games to play, select which players will participate in the match, and get started!
+       You can save the match transcript on your computer, or publish it to the web so that
+       everyone can watch the match live. Published matches will count toward an
+       <a href="//www.ggp.org/view/cs227b/players/">online leaderboard</a> where players are
+       ranked based on the matches they've played.</p>
       
     </div>
     <script>
-      generateHeader(document.getElementById('header'), "CS227b Packaged Programs", "");
+      generateHeader(document.getElementById('header'), "CS227b Programs", "");
     </script>
   </body>
 </html>
