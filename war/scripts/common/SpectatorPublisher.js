@@ -17,7 +17,7 @@ var SpectatorPublisher = {
 
       var contentToPost = "AUTH=" + this.authToken + "&DATA="+JSON.stringify(matchData);
       var matchIdentifier = ResourceLoader.post_raw("http://matches.ggp.org/", contentToPost, "application/x-www-form-urlencoded");
-      this.spectator_link = 'http://matches.ggp.org/matches/' + matchIdentifier + '/viz.html';
+      this.spectator_link = 'http://www.ggp.org/view/all/matches/' + matchIdentifier + '/';
   },
   
   link: function () {

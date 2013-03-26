@@ -163,7 +163,7 @@
         }
         tableHTML += '<td><input type="radio" checked name="role'+i+'" value="random" onchange="document.getElementById(\'config_role'+i+'address\').disabled=true;">Random</input></td> <td width=10px></td>';
         tableHTML += '<td><input type="radio" name="role'+i+'" value="remote" onchange="document.getElementById(\'config_role'+i+'address\').disabled=false;">Remote:</input></td> <td width=10px></td>';
-        tableHTML += '<td><input type="text" size=30 id="config_role'+i+'address" value="http://'+i+'.player.ggp.org:80/" disabled=true></input></td>';
+        tableHTML += '<td><input type="text" size=30 id="config_role'+i+'address" value="http://127.0.0.1:'+(9147+i)+'/" disabled=true></input></td>';
         tableHTML += '</tr>';
       }
       tableBlock.innerHTML = tableHTML;
