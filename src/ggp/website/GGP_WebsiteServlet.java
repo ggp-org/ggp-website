@@ -16,7 +16,8 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
     protected byte[] getResponseBytesForURI(String reqURI) throws IOException {
         if (reqURI.equals("/docs")) reqURI += "/";
         if (reqURI.equals("/view")) reqURI += "/";
-        if (reqURI.equals("/kiosk")) reqURI += "/";        
+        if (reqURI.equals("/kiosk")) reqURI += "/";
+        if (reqURI.equals("/developers")) reqURI += "/";
 
         if (reqURI.startsWith("/view/")) {
             // Hooks for the Bellerophon viewer.

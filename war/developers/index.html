@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <title>GGP.org - for Developers</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <br>
+    Developers building general game playing systems can benefit from open source
+    projects hosted by GGP.org: they can build players and servers using the libraries
+    in <b>GGP Base</b>, and they can test their players and publish matches online
+    using <b>GGP Galaxy</b> online services like Tiltyard.
+
+    <h2>GGP Base</h2>
+
+    <iframe style="float: right; width: 35%; height: 300px" src="https://docs.google.com/presentation/d/1-sU8doqVfiQ41jkDG41oUPC4TRAbH8HdUaa7pQYJiXo/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    
+    <p>GGP Base is a set of libraries and applications in Java that assist with the
+       development of GGP players by providing a common infrastructure to base work on.
+       GGP Base handles the mechanical aspects of communicating with the match host,
+       parsing GDL, representing the game as a state machine, determining which moves
+       are legal, and so on. Developers using GGP Base can focus on writing innovative
+       gaming algorithms.</p>
+
+    <p>GGP Base also provides useful tools for writing games and testing gamers.
+       This includes programs to verify that rulesheets contain legal GDL, programs to
+       visualize matches and let humans easily interact with gamers, programs to
+       automatically run large sets of matches between gamers and analyze the results,
+       and so on. Development, testing, and visualization tools built using the GGP Base
+       can benefit everybody using it.</p>
+    
+    <p>Get started building your own player using GGP Base using
+       <a href="https://docs.google.com/document/d/1Rm_sjou46e4FlbrheCaoig21CkV0eJPexavRhT09YUA/edit?usp=sharing">this tutorial</a>.</p>
+
+    <p>Want to test out your player? Register it with <a href="//tiltyard.ggp.org">Tiltyard</a>
+       to play continuously against humans and computers around the world.</p>
+
+    <p>Learn more at the <a href="http://code.google.com/p/ggp-base/">GGP Base project page</a>.</p>
+    
+    <h2>GGP Galaxy</h2>
+    
+    <p>All of the online services hosted on GGP.org are part of the "GGP Galaxy"
+       project, which aims to bring general game playing to a wider audience through
+       the use of web technologies. That includes <a href="https://code.google.com/p/ggp-galaxy/source/browse/trunk/ggp-website/war/developers/index.html">
+       this page</a>.
+       
+    <p>Developers can use the GGP.org services to access large repositories of games,
+       publish matches so they can be viewed online, subscribe to feeds of match results,
+       and so on.</p>
+
+    <p>Learn more at the <a href="http://code.google.com/p/ggp-galaxy/">GGP Galaxy project page</a>.</p>       
+      
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), "for Developers", "");
+    </script>
+  </body>
+</html>
