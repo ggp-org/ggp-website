@@ -359,10 +359,13 @@ function loadBellerophonMetadataForGames() {
   }
     
   // TODO: Make this more elegant.
-  if (getHostHashedPK() == "f69721b2f73839e513eed991e96824f1af218ac1" || getHostHashedPK() == "0ca7065b86d7646166d86233f9e23ac47d8320d4" || getHostHashedPK() == "all" || getHostHashedPK() == "unsigned") {
+  if (getHostFromView() == "dresden" || getHostFromView() == "sample" || getHostFromView() == "all" || getHostFromView() == "unsigned") {
     loadRepositoryIntoMetadata("//games.ggp.org/dresden/games/");
   }
-  if (getHostHashedPK() != "f69721b2f73839e513eed991e96824f1af218ac1") {
+  if (getHostFromView() == "cs227b" || getHostFromView() == "all" || getHostHashedPK() == "unsigned") {
+	loadRepositoryIntoMetadata("//games.ggp.org/stanford/games/");
+  }
+  if (getHostFromView() != "dresden" && getHostFromView() != "cs227b") {
     loadRepositoryIntoMetadata("//games.ggp.org/base/games/");
   }
   
@@ -394,10 +397,10 @@ function loadBellerophonMetadataForGames() {
 }
 
 function translateRepositoryCodename(x) {
-  return x.replace("base/", "http://games.ggp.org/base/games/").replace("dresden/", "http://games.ggp.org/dresden/games/");
+  return x.replace("base/", "http://games.ggp.org/base/games/").replace("dresden/", "http://games.ggp.org/dresden/games/").replace("stanford/", "http://games.ggp.org/stanford/games/");
 }
 function translateRepositoryIntoCodename(x) {
-    return x.replace("http://games.ggp.org/base/games/", "base/").replace("http://games.ggp.org/dresden/games/", "dresden/");
+    return x.replace("http://games.ggp.org/base/games/", "base/").replace("http://games.ggp.org/dresden/games/", "dresden/").replace("http://games.ggp.org/stanford/games/", "stanford/");
 }
 
 function getHostHashedPK() {
