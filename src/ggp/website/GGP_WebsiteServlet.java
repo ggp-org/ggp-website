@@ -18,6 +18,7 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
         if (reqURI.equals("/view")) reqURI += "/";
         if (reqURI.equals("/kiosk")) reqURI += "/";
         if (reqURI.equals("/developers")) reqURI += "/";
+        if (reqURI.equals("/researchers")) reqURI += "/";
 
         if (reqURI.startsWith("/view/")) {
             // Hooks for the Bellerophon viewer.

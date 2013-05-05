@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <script text="text/javascript" src="//www.ggp.org/scripts/common/ResourceLoader.js"></script>    
+    <title>GGP.org - for Researchers</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <br>
+    Researchers studying general game playing are welcome to take advantage of the extensive
+    GGP.org match archives, which contain <span id="match_count">250000+</span> historical matches
+    across <span id="game_count">400+</span> games, involving <span id="player_count">450+</span>
+    different players. The Dresden GGPServer and GGP.org's own Tiltyard server, and many smaller
+    match hosts, all publish their matches into this archive.
+    <br><br>
+    Using the GGP.org match archives, you can answer questions like:
+    <ul>
+      <li>Was the average length of Connect Four matches longer in 2012 than in 2011?
+      <li>What games, if any, tend to be won by the second player?
+      <li>Are players who are good at Chess also good at Checkers?
+      <li>Which opening moves in Nine-Board Tic-Tac-Toe were most common this month?
+    </ul>
+
+    <h2>Game Repositories</h2>
+
+    <p>Every match in the archive is tied to a specific game version in one of the
+    <a href="//games.ggp.org/">GGP.org game repositories</a>: this association is done
+    by URL, so the rules of a game aren't repeated in each of the thousands of matches
+    that use it.</p>
+    
+    <p>Do you suspect that the first player tends to win matches of Checkers? Are you curious
+    whether matches of Connect Four tend to take longer than games of Reversi? Find answers
+    based on real data about thousands of actual recorded matches of these exact games.</p> 
+        
+    <h2>Match Archives</h2>
+    
+    <p>Archived matches are represented in JSON...</p>
+    
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), "for Researchers", "");
+      
+      var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/all/overall');
+      document.getElementById('match_count').innerHTML = statsJSON.matches-1;
+      document.getElementById('game_count').innerHTML = statsJSON.observedGames.length-1;
+      document.getElementById('player_count').innerHTML = statsJSON.observedPlayers.length-1;
+    </script>
+  </body>
+</html>
