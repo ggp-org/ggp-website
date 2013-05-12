@@ -86,6 +86,12 @@
       // ===========================
       
       for(var x in statsJSON) {
+        if (typeof(statsJSON[x]) == "object" && "length" in statsJSON[x] && statsJSON[x].length == 2) {
+          statsJSON[x] = statsJSON[x][0];
+        }
+      }
+      
+      for(var x in statsJSON) {
         if (typeof(statsJSON[x]) == "object") {
           delete statsJSON[x];
         }
@@ -93,9 +99,11 @@
       
       var varNameMapping = {
         "matches": "Total Matches",
-        "matchesFinished": "Matches Finished",
+        "matchesFinished": "Matches Finished",        
         "matchesAbandoned": "Matches Abandoned",
-        "matchesStatErrors": "Matches Unreadable",
+        "matchesAborted": "Matches Aborted",
+        "matchesScrambled": "Matches Scrambled",
+        "matchesStatErrors": "Matches Unreadable",        
         "computeTime": "Time Updating Stats",
         "matchesPerDayMedian": "Median Matches/Day",
         "computedAt": "Stats Last Computed",
@@ -103,7 +111,8 @@
         "matchesAverageMoves": "Average Moves/Match",
         "matchesAveragePlayers": "Average Players/Match",
         "statsVersion": "Stats Version",
-        "computeRAM": "Memory Updating Stats"
+        "computeRAM": "Memory Updating Stats",
+        "playerHoursConsumed": "Player-Hours Consumed"
       };
       
       sortedVarNames = [];
@@ -120,7 +129,8 @@
         var varValue = UserInterface.cleanFloat(statsJSON[varName]);
         if (varName == "updatedAt") varValue = UserInterface.renderDateTime(new Date(statsJSON[varName]));
         if (varName == "computedAt") varValue = UserInterface.renderDateTime(new Date(statsJSON[varName]));        
-        if (varName == "computeRAM") varValue = UserInterface.cleanFloat(1*statsJSON[varName]/(1024*1024)) + ' MB';  
+        if (varName == "computeRAM") varValue = UserInterface.cleanFloat(1*statsJSON[varName]/(1024*1024)) + ' MB';
+        if (varName == "computeTime") varValue = statsJSON[varName] + "ms";  
         varsHTML += '<tr><td class="name">'+varProperName+'</td><td>'+varValue+'</td></tr>';
       }
       document.getElementById('server_stats').children[0].innerHTML += varsHTML;
