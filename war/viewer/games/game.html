@@ -106,8 +106,12 @@
       }
 
       var gameName = translateRepositoryCodename(window.location.pathname.split("/").slice(4).join('/'));
-      var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/games/' + gameName);      
       var theGame = ResourceLoader.load_json(gameName);
+      if (gameName.split("/").length != 8 || gameName.split("/")[6][0] != 'v') {
+        // When no version is specified, use the latest version in the game repo.
+        gameName += "v" + theGame.version + "/";
+      }
+      var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/games/' + gameName);
       if (!("gameName" in theGame)) theGame.gameName = window.location.pathname.split("/")[5];
       
       document.getElementById('gamePrimaryDiv').innerHTML = renderGamePrimary(gameName, theGame);
