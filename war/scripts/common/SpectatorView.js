@@ -112,7 +112,7 @@ var SpectatorView = {
             textHTML += "<td>???</td>";
           }
         }
-        textHTML += "<td>" + UserInterface.renderDateTime(new Date(this.matchData.stateTimes[i])) + "</td>";
+        textHTML += "<td>" + UserInterface.renderDuration(this.matchData.stateTimes[i]-this.matchData.startTime) + "</td>";
         textHTML += "</tr>";
     }
     if ("isCompleted" in this.matchData && this.matchData.isCompleted && "goalValues" in this.matchData) {
