@@ -1,3 +1,5 @@
+"use strict";
+
 if (typeof Object.create !== 'function') {
   Object.create = function (o) {
     var F = function () {}
@@ -88,7 +90,7 @@ var SpectatorView = {
     }
     var roleCols = this.matchData.moves[0].length;
     
-    textHTML = "<table border=1px><tr height=20px><th rowspan=2>Step</th><th colspan="+roleCols+">Moves</th><th colspan="+roleCols+">Errors</th><th rowspan=2>Time</th></tr>";
+    var textHTML = "<table border=1px><tr height=20px><th rowspan=2>Step</th><th colspan="+roleCols+">Moves</th><th colspan="+roleCols+">Errors</th><th rowspan=2>Time</th></tr>";
     textHTML += "<tr height=20px>";
     for (var i = 0; i < 2; i++) {
       for (var j = 0; j < roleCols; j++) {

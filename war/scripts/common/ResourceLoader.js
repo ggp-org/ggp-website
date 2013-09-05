@@ -1,3 +1,5 @@
+"use strict";
+
 var ResourceLoader = {
 
   // This function can load two types of rulesheets: KIF and HRF.

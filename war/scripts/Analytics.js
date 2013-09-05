@@ -1,4 +1,6 @@
-  var _gaq = _gaq || [];
+"use strict";  
+
+var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-15489024-4']);
   _gaq.push(['_setDomainName', '.ggp.org']);
   _gaq.push(['_trackPageview']);

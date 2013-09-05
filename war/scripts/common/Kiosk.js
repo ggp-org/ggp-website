@@ -1,3 +1,5 @@
+"use strict";
+
 // Requires StateMachine.js as a dependency.
 
 var RemotePlayer = {
@@ -312,7 +314,7 @@ var Kiosk = {
       for(var i = 0; i < this.matchData.gameRoleNames.length; i++) {
         if (this.playerResponses[i]) {
           var legalMoves = this.machine.get_legal_moves(this.state, this.matchData.gameRoleNames[i]);
-          for (j in legalMoves) { legalMoves[j] = SymbolList.arrayIntoSymbolList(legalMoves[j]); }
+          for (var j in legalMoves) { legalMoves[j] = SymbolList.arrayIntoSymbolList(legalMoves[j]); }
           if (legalMoves.indexOf(SymbolList.arrayIntoSymbolList(this.playerResponses[i])) > -1) {
             jointMove[i] = this.playerResponses[i];
             jointErrors.push("");
@@ -391,6 +393,7 @@ var Kiosk = {
 
 // NOTE: This function *must* define gameHandler as a global variable.
 // Otherwise, sections of the above code will not work.
+var gameHandler = null;
 function load_kiosk (serverName, gameName, playerURLs, startClock, playClock, gameDiv, width, height) {  
   gameHandler = Object.create(Kiosk);
   gameHandler.initialize(serverName, gameName, playerURLs, startClock, playClock, gameDiv, width, height);  

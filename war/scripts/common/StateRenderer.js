@@ -1,3 +1,5 @@
+"use strict";
+
 var StateRenderer = {
   xmlize_state: function (state) {
     var node = document.createElement('state');

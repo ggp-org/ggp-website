@@ -1,3 +1,5 @@
+"use strict";
+
 var UserInterface = {
   loadRepositoryGamesIntoMenu: function (theRepoPrefix, theMenu, requirePlayable, requireViewable) {
     function curry(f, x) {
@@ -176,7 +178,10 @@ var UserInterface = {
     var dh = (h/60.0)-Math.floor(h/60.0);      
     var z1 = v*(1-s);
     var z2 = v*(1-s*dh);
-    var z3 = v*(1-s*(1-dh));        
+    var z3 = v*(1-s*(1-dh));
+    var r=0;
+    var g=0;
+    var b=0;
     switch(Math.floor(h/60.0)) {
       case 0: r=v;g=z3;b=z1; break;
       case 1: r=z2;g=v;b=z1; break;

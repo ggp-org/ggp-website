@@ -1,3 +1,5 @@
+"use strict";
+
 var SymbolList = {
     arrayIntoSymbolList: function(z) {
         if(!this.isArray(z))
