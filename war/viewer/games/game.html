@@ -54,6 +54,7 @@
         theHTML += '<td class="padded">' + ("stylesheet" in theGame ? '<a href=' + gameName + theGame.stylesheet + '><img src="/viewer/images/glyphicons/glyphicons_086_display.png" title="Game visualization is available for this game."></img></a>' : "") + '</td>';
         theHTML += '<td class="padded">' + ("user_interface" in theGame ? '<a href=' + gameName + theGame.user_interface + '><img src="/viewer/images/glyphicons/glyphicons_035_woman.png" title="User interface is available for playing this game as a human."></img></a>' : "") + '</td>';
         theHTML += '<td class="padded">' + ("description" in theGame ? '<a href=' + gameName + theGame.description + '><img src="/viewer/images/glyphicons/glyphicons_195_circle_info.png" title="Human-readable game description is available for this game."></img></a>' : "") + '</td>';
+        theHTML += '<td class="padded">' + ("curator" in theGame ? '<img src="/viewer/images/glyphicons/glyphicons_324_tie.png" title="Curator listed as ' + theGame.curator + '"></img>' : "") + '</td>';
         theHTML += '</tr></table> </center></td></tr>';
 
         theHTML += "<tr style='text-align:left'><th>Version " + toProperString(theGame.version) + "</th></tr>";

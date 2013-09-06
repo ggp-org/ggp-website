@@ -44,7 +44,7 @@
         loadBellerophonMetadataForGames();
         
         var gameListHTML = '<table class="matchlist" cellpadding="5px">';
-        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded" colspan=4>Contents</th><th>Agon Difficulty</th><th>Score/Skill PCC</th></tr>';
+        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded" colspan=5>Contents</th><th>Agon Difficulty</th><th>Score/Skill PCC</th></tr>';
         for (var i = 0; i < observedGames.length; i++) {
           if (i % 2 == 0) {
             gameListHTML += "<tr bgcolor=#F5F5F5>";
@@ -62,6 +62,7 @@
           gameListHTML += '<td class="padded">' + ("stylesheet" in theGame ? '<a href=' + gameKey + theGame.stylesheet + '><img src="/viewer/images/glyphicons/glyphicons_086_display.png" title="Game visualization is available for this game."></img></a>' : "") + '</td>';
           gameListHTML += '<td class="padded">' + ("user_interface" in theGame ? '<a href=' + gameKey + theGame.user_interface + '><img src="/viewer/images/glyphicons/glyphicons_035_woman.png" title="User interface is available for playing this game as a human."></img></a>' : "") + '</td>';
           gameListHTML += '<td class="padded">' + ("description" in theGame ? '<a href=' + gameKey + theGame.description + '><img src="/viewer/images/glyphicons/glyphicons_195_circle_info.png" title="Human-readable game description is available for this game."></img></a>' : "") + '</td>';
+          gameListHTML += '<td class="padded">' + ("curator" in theGame ? '<img src="/viewer/images/glyphicons/glyphicons_324_tie.png" title="Curator listed as ' + theGame.curator + '"></img>' : "") + '</td>';
           gameListHTML += '<td class="padded">';
           if ("agonScaledDifficulty" in statsJSON && statsJSON.agonScaledDifficulty && gameKey in statsJSON.agonScaledDifficulty) {
             var agonDifficulty = statsJSON.agonDifficulty[gameKey];
