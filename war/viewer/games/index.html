@@ -23,20 +23,6 @@
     <script type='text/javascript'>
       generateHeaderForViewer(document.getElementById('header'));
 
-      var toProperString = function (x) {
-        if (x <= 0) return "Zero";
-        if (x == 1) return "One";
-        if (x == 2) return "Two";
-        if (x == 3) return "Three";
-        if (x == 4) return "Four";
-        if (x == 5) return "Five";
-        if (x == 6) return "Six";
-        if (x == 7) return "Seven";
-        if (x == 8) return "Eight";
-        if (x == 9) return "Nine";
-        return "10+";
-      }
-
       function drawGameList() {
         var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/' + getHostHashedPK() + '/overall');
         var observedGames = statsJSON.observedGames;
@@ -56,8 +42,8 @@
           var theGame = getGameInfo(gameKey);
           var theVersion = theGame.bellerophonVersionFromURL;
           gameListHTML += '<td class="padded"><a href="' + theGame.bellerophonLink + '">' + theGame.bellerophonName + '</a></td>';
-          gameListHTML += '<td class="padded">' + toProperString(theGame.numRoles) + '</td>';
-          gameListHTML += '<td class="padded">' + toProperString(theVersion) + '</td>';
+          gameListHTML += '<td class="padded">' + UserInterface.properNameForInteger(theGame.numRoles) + '</td>';
+          gameListHTML += '<td class="padded">' + UserInterface.properNameForInteger(theVersion) + '</td>';
           gameListHTML += '<td class="padded">' + ("rulesheet" in theGame ? '<a href=' + gameKey + theGame.rulesheet + '><img src="/viewer/images/glyphicons/glyphicons_023_cogwheels.png" title="Game rules written in GDL are available for this game."></img></a>' : "") + '</td>';
           gameListHTML += '<td class="padded">' + ("stylesheet" in theGame ? '<a href=' + gameKey + theGame.stylesheet + '><img src="/viewer/images/glyphicons/glyphicons_086_display.png" title="Game visualization is available for this game."></img></a>' : "") + '</td>';
           gameListHTML += '<td class="padded">' + ("user_interface" in theGame ? '<a href=' + gameKey + theGame.user_interface + '><img src="/viewer/images/glyphicons/glyphicons_035_woman.png" title="User interface is available for playing this game as a human."></img></a>' : "") + '</td>';
