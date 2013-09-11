@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <title>GGP.org - for Developers</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <h1>Developing Games</h1>
+    
+    <center><i>"The only legitimate use of a computer is to play games." (Eugene Jarvis)</i></center>    
+    
+    <p>Games are, unsurprisingly, an essential part of general game playing. In a broad sense,
+    general game playing involves building computer programs that can devise strategies and
+    carry out plans to accomplish goals. Games provide an environment with goals, and with
+    choices that must be made while trying to achieve those goals. Our computer programs would
+    be listless and unhappy without games. So it's up to us to give them games to play.</p>
+    
+    <h2>Game Description Language</h2>
+    
+    <p>Games are written in a logic language called the Game Description Language (GDL).
+    We use the GDL to describe which facts are true at each state of the game; how those
+    facts determine which moves--if any--a player can make; and how the facts of the game
+    state change when players make moves. For the official language spec, please see the
+    <a href="http://games.stanford.edu/games/gdl.html">most recent official writeup</a>.
+    I also highly recommend
+    <a href="http://alloyggp.blogspot.com/2012/12/the-game-description-language.html">this
+    blog post</a> which provides more details, examples, and discussion of GDL.</p>
+    
+    <h2>Writing Game Rules</h2>
+    
+    <p>I defer to <a href="http://alloyggp.blogspot.com/2013/01/writing-game-with-gdl-sim.html">
+    this blog post</a> on writing new games, and <a href="http://alloyggp.blogspot.com/2013/04/rewriting-checkers.html">
+    this blog post</a> on optimizing existing games.</p>
+        
+    <h2>Packaging Games in Repositories</h2>
+    
+    <p>Games aren't just rules: they have names, instructions, visualizations, user interfaces,
+    contact information for their authors and maintainers, and so on. And nobody's perfect, so
+    occasionally old rules will turn out to be broken or unfair, and a new version of the rules
+    will be developed to supersede them. And if many people are all comparing their results on
+    a particular game, it's useful for them to have a universal identifier for that game which
+    they can use to identify it, and distinguish it from other similar games in the same family.
+    All of this is managed by "game repositories."</p>
+    
+    <p>Game repositories are servers containing collections of packaged games. Packaged games
+    start with a metadata object, which contains simple information like the name and version
+    of the game, as well as links to files containing essential game content: the rules, the
+    instructions, the visualizations, the user interfaces, and so on. See the
+    <a href="https://code.google.com/p/ggp-galaxy/wiki/Fed0_Repositories">full specification</a>
+    for more details about packaging and game repositories. Or <a href="//games.ggp.org/">explore</a>
+    a game repository and see what's inside. Curious about why they're organized the way they are?
+    Read a <a href="https://code.google.com/p/ggp-galaxy/wiki/Repository_Servers">writeup</a> that
+    discusses the thinking behind packaging and game repositories.</p>
+    
+    <p>Many of the game validation tools in GGP Base depend on having your game properly packaged
+    and hosted on a game repository. This is easy to set up: just create a folder for your game in
+    the "games/games/" directory, put the rulesheet in that directory, and create a file called
+    METADATA that includes the game name and points to the rulesheet. This will add your game to
+    the local game repository. See the existing versions of Connect Four and Tic-Tac-Toe that are
+    already in this repository as examples.</p>
+    
+    <h2>Validating Games</h2>
+    
+    <p>Once your game has been added to the local game repository, you can run the Validator app,
+    select the "Local Game Repository" as your source of games, and choose your game from the list.
+    This app will run a number of validation steps to identify any possible problems in the game.
+    For example, if the game has a state where a player doesn't have any legal moves, but the game
+    isn't over, that's a validation error: that will never happen in a well-formed game. Likewise,
+    if a game has states where the game is over but a player isn't assigned a score, that's another
+    validation error. The Validator app isn't guaranteed to find all validation errors, but you should
+    fix any errors that it does find.</p>
+    
+    <h2>Developing Excellent Games</h2>
+    
+    <p>I highly recommend the article <a href="http://www.thegamesjournal.com/articles/DefiningtheAbstract.shtml">Defining the Abstract</a>
+    when thinking about how to develop excellent games for general game playing.</p>
+
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), "for Developers", "");
+    </script>
+  </body>
+</html>
