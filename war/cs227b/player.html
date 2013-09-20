@@ -55,7 +55,29 @@ div.content {
     
     <center><table border=1><tr><td><img src="DetailPanel.png"></img></td></tr></table></center>
     
-    <p><i>More tutorial coming soon...</i></p>
+    <p>The most important configuration choice that affects your player is the selection of the
+    gaming strategy. This determines how your player chooses moves when playing games. There are
+    several options available:
+    
+    <ul>
+      <li><b>Noop</b> - always plays "noop", even if it's not a legal move.</li>
+      <li><b>Legal</b> - always plays the first legal move, in lexicographical order.</li>
+      <li><b>Random</b> - always plays a random legal move.</li>
+      <li><b>Puzzle</b> - attempts to completely solve the game, under the assumption that it's the only player,
+        and then plays the move which results in the highest possible score.</li>
+      <li><b>Minimax</b> - attempts to completely solve the game using the <a href="http://en.wikipedia.org/wiki/Minimax">minimax</a> algorithm,
+        and then plays the move which results in the highest possible score.</li>
+      <li><b>Heuristic</b> - attempts to solve the game using the minimax algorithm, falling back
+        to a heuristic after exploring a certain number of plys, and then plays
+        the move which results in the highest score.</li>
+      <li><b>Monte Carlo</b> - for each legal move, does many simulations of random play through the game
+        after making that move, to determine an expected score if it makes that move,
+        and then plays the move with the highest expected score.</li>
+      <li><b>Monte Carlo Tree Search </b> - for each legal move, does many
+        <a href="http://mcts.ai/">MCTS</a> simulations through the game
+        after making that move, to determine an expected score if it makes that move,
+        and then plays the move with the highest expected score.</li>
+    </ul>
     
     </div>
     <script>
