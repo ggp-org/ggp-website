@@ -266,7 +266,7 @@ var SpectatorView = {
       } else if (key == 66) {
         thisRef.switchView(thisRef.LISTING_VIEW);
       } else if (key == 67) {
-    	thisRef.switchView(thisRef.LITERAL_JSON_VIEW);
+    	thisRef.switchView(thisRef.RAW_JSON_VIEW);
       }
 
       thisRef.state = SymbolList.symbolListIntoArray(thisRef.matchData.states[thisRef.visibleStateIndex]);
