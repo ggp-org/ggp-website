@@ -243,7 +243,7 @@ var SpectatorView = {
     
     document.onkeydown = function(e) {
       if (!e) e = window.event;
-      key = e.keyCode ? e.keyCode : e.which;      
+      var key = e.keyCode ? e.keyCode : e.which;      
 
       if (!thisRef.matchData.isCompleted || thisRef.rendering) {
         return;
