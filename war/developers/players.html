@@ -32,50 +32,47 @@ div.content {
     
     <center><i>"... every game of skill is susceptible of being played by an automaton." (Charles Babbage)</i></center>
     
-    <p>Developers building general game playing systems can benefit from open source
-    projects hosted by GGP.org: you can build games, players and servers using the
-    libraries in <b>GGP Base</b>, and you can test your players and publish matches
-    online using <b>GGP Galaxy</b> online services like Tiltyard.</p>
-
-    <h2>GGP Base</h2>
-        
+    <p>General game playing is all about building computer programs that can learn
+    how to play games they've never seen before, devising a strategy and choosing the
+    right moves to win. But that's easier said than done -- there's a lot that these
+    players have to do long before they get to choose their moves. They need to talk
+    with game servers, interpret the rules of the game, keep track of what's happening
+    in ongoing matches, determine what moves are available, and much more. And as a developer,
+    you'll need a way to try out your players, run experiments, write tests, and figure out
+    what's working and what's not.
+    
+    <p>Fortunately, there are GGP.org projects here to help.</p>
+    
+    <h2>Building upon GGP Base</h2>
+    
     <p>GGP Base is a set of Java libraries and apps that help you build GGP players.
        It provides a common infrastructure to build on, taking care of busy work
-       like communicating with match hosting systems, parsing GDL, representing the
-       game as a state machine, determining which moves are legal, and so on.       
+       like communicating with match hosting systems, parsing GDL rules, representing
+       the game as a state machine, determining which moves are legal, and so on.       
     
     <p>GGP Base also includes tools for writing games and testing gamers. You can use
        these tools to verify that rulesheets contain legal GDL and describe valid games,
        to visualize and participate in matches, and to automatically run many matches between
        gamers and analyze the results.</p>    
        
-    <p>When you use GGP Base to build your player, you focus on what's really important:
-       coming up with novel ways to analyze games and choose the best moves. GGP Base
-       takes care of the rest.</p>
-        
+    <p>When you use GGP Base to build your player, you get to focus on coming up with novel
+       ways to analyze games and choose the best moves. GGP Base takes care of the rest.</p>
+
     <p>Get started building your own player using GGP Base using
        <a href="https://docs.google.com/document/d/1Rm_sjou46e4FlbrheCaoig21CkV0eJPexavRhT09YUA/edit?usp=sharing">this tutorial</a>.</p>
-
-    <p>Want to test out your player? Register it with <a href="//tiltyard.ggp.org">Tiltyard</a>
-       to play continuously against humans and computers around the world.</p>
 
     <p>Learn more at the <a href="http://code.google.com/p/ggp-base/">GGP Base project page</a>.
        Questions? Ask on the <a href="http://groups.google.com/group/ggp-base-discuss">ggp-base-discuss</a>
        mailing list.</p>
-    
-    <h2>GGP Galaxy</h2>
-    
-    <p>All of the online services hosted on GGP.org are part of the "GGP Galaxy"
-       project, which aims to bring general game playing to a wider audience through
-       the use of web technologies. That includes <a href="https://code.google.com/p/ggp-galaxy/source/browse/trunk/ggp-website/war/developers/players.html">
-       this page</a>.
-       
-    <p>Developers can use the GGP.org services to access large repositories of games,
-       publish matches so they can be viewed online, subscribe to feeds of match results,
-       and so on.</p>
 
-    <p>Learn more at the <a href="http://code.google.com/p/ggp-galaxy/">GGP Galaxy project page</a>.</p>       
-      
+    <h2>Playing on Tiltyard</h2>
+    
+    <p>Once you've built a player that you're proud of, register it with <a href="//tiltyard.ggp.org">Tiltyard</a>
+    to play continuously against humans and computers around the world. This is a great way to
+    test out your player on a wide variety of games, against a wide variety of opponents. As your
+    player builds up a track record on Tiltyard, you'll be able to view statistics about which games
+    your player performs well on, and which still need improvement.</p>
+
     </div>
     <script>
       generateHeader(document.getElementById('header'), "for Developers", "");
