@@ -75,24 +75,25 @@ function renderJSON(x) {
   return s;
 }
 
-var cachedPlayerData = null;
-function getPerPlayerData() {
-	if (cachedPlayerData == null) {
-		cachedPlayerData = {};
-		var theHost = getHostFromView();
-		if (theHost == "tiltyard" || theHost == "all") {
-			cachedPlayerData = ResourceLoader.load_json('//tiltyard.ggp.org/data/players/');
-		}		
-	}
-	return cachedPlayerData;
+var cachedPlayerData = {};
+function getPlayerData(playerName) {
+	var theHost = getHostFromView();
+	if (theHost == "tiltyard" || theHost == "all") {
+		if (!(playerName in cachedPlayerData)) {
+			cachedPlayerData[playerName] = ResourceLoader.load_json('//tiltyard.ggp.org/data/players/' + playerName);
+		}
+		return cachedPlayerData[playerName];
+	} else {
+		return null;
+	}	
 }
-function getPerPlayerImageURL(playerName, fullSize) {
-	var perPlayerData = getPerPlayerData();
-	if (playerName in perPlayerData && "imageURL" in perPlayerData[playerName]) {
+function getPlayerImageURL(playerName, fullSize) {
+	var playerData = getPlayerData(playerName);
+	if (playerData && "imageURL" in playerData) {
 		if (fullSize) {
-			return perPlayerData[playerName].imageURL;
+			return playerData.imageURL;
 		} else {
-			return perPlayerData[playerName].thumbURL;
+			return playerData.thumbURL;
 		}
 	} else {
 		if (fullSize) {
@@ -228,7 +229,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
     }
     if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost[j].length > 0) {
       var playerName = theMatchJSON.playerNamesFromHost[j];
-      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 title="' + playerName + '" src="' + getPerPlayerImageURL(playerName, false) + '"/></td>';
+      theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 title="' + playerName + '" src="' + getPlayerImageURL(playerName, false) + '"/></td>';
       theMatchHTML += '<td><a href="/view/' + getHostFromView() + '/players/' + playerName + '">' + UserInterface.trimTo(playerName,15) + '</a></td>';
     } else {
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 title="Anonymous" src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." /></td>';
@@ -343,7 +344,7 @@ function renderMatchEntryLinearly(theMatchJSON, theOngoingMatches, playerToHighl
     theMatchHTML += '<td class="imageHolder" style="border: 2px dotted ' + fgColor + '; background-color: ' + bgColor + '; width:25px;">';
     if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost[j].length > 0) {
       var playerName = theMatchJSON.playerNamesFromHost[j];
-      theMatchHTML += '<a href="/view/' + getHostFromView() + '/players/' + playerName + '"><img width=25 height=25 title="' + playerName + '" src="' + getPerPlayerImageURL(playerName, false) + '"/></a>';
+      theMatchHTML += '<a href="/view/' + getHostFromView() + '/players/' + playerName + '"><img width=25 height=25 title="' + playerName + '" src="' + getPlayerImageURL(playerName, false) + '"/></a>';
     } else {
       theMatchHTML += '<img width=25 height=25 title="Anonymous" src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." />';
     }
