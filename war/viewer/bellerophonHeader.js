@@ -18,20 +18,24 @@ function getHostFromView() {
 function generateHeaderForViewer(theDiv) {
 	var theHost = getHostFromView();
 	var thePageTitle = '<a href="/view/' + theHost + '/">' + UserInterface.toTitle(theHost) + '</a>';
+	var thePageType = null;
 	if (window.location.pathname.split("/").length > 3) {
 		// Only allow a specific set of page types, again to avoid confusion.
 		var legitTypes = ["logs", "matches", "games", "players"];
-		var thePageType = window.location.pathname.split("/")[3];		
+		thePageType = window.location.pathname.split("/")[3];
 		if (thePageType && legitTypes.indexOf(thePageType) >= 0) {
 			thePageTitle += " " + UserInterface.toTitle(thePageType);
 		}
 	}
 
-	// TODO(schreib): Consider not displaying a tab for the page we're currently on?
 	var thePageTabs = "";
 	var tabs = ["games", "players", "matches"];
 	for (var i = 0; i < tabs.length; i++) {
-		thePageTabs += '<td><a href="/view/' + theHost + '/' + tabs[i] + '/">' + tabs[i] + ' list</td>';
+		if (tabs[i] == thePageType) {
+			thePageTabs += '<td>' + tabs[i] + ' list</td>';
+		} else {
+			thePageTabs += '<td><a href="/view/' + theHost + '/' + tabs[i] + '/">' + tabs[i] + ' list</td>';
+		}
 		if (i+1 < tabs.length) {
 			thePageTabs += '<td width=' + Math.floor(50/tabs.length) + '%></td>';
 		}
