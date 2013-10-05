@@ -56,25 +56,6 @@ function generateHeader(theDiv, pageTitle, pageTabs) {
     theDiv.innerHTML = theHTML;    
 }
 
-function renderJSON(x) {
-  var s = "";
-  if (typeof(x) == "object" && !x[0]) {
-    var hasEntries = false;
-    s += "<table border=\"1px\">";
-    for (y in x) {
-      s += "<tr><td><b>" + y + "</b></td><td>" + renderJSON(x[y]) + "</td></tr>";
-      hasEntries = true;
-    }
-    s += "</table>";
-    if (!hasEntries) {
-      return "";
-    }
-  } else {
-    s += x;
-  }
-  return s;
-}
-
 var cachedPlayerData = {};
 function getPlayerData(playerName) {
 	var theHost = getHostFromView();

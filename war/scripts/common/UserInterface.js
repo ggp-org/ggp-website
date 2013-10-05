@@ -69,6 +69,55 @@ var UserInterface = {
     if (logDiv) logDiv.innerHTML = "";
   },
   
+  getHTMLforNode: function (x) {
+	  var y = x.outerHTML;
+	  if (y) return y;
+	  return "";
+  },
+  
+  renderJSON: function (x) {
+	  if (x instanceof Array) {
+        var hasEntries = false;
+        var nodeTable = document.createElement("table");
+        nodeTable.setAttribute("border", "1px");
+        var nodeTR = document.createElement("tr");
+        nodeTable.appendChild(nodeTR);
+		for (var i = 0; i < x.length; i++) {
+		  var nodeTD = document.createElement("td");
+		  nodeTR.appendChild(nodeTD);
+		  nodeTD.appendChild(UserInterface.renderJSON(x[i]));
+	      hasEntries = true;
+	    }
+	    if (!hasEntries) {
+	      return document.createTextNode("");
+	    }
+	    return nodeTable;
+	  } else if (typeof(x) == "object") {
+	    var hasEntries = false;
+        var nodeTable = document.createElement("table");
+        nodeTable.setAttribute("border", "1px");
+	    for (var y in x) {
+	      var nodeTR = document.createElement("tr");
+	      nodeTable.appendChild(nodeTR);	    	
+		  var nodeTD = document.createElement("td");
+		  nodeTR.appendChild(nodeTD);
+		  var nodeB = document.createElement("b");
+		  nodeTD.appendChild(nodeB);
+		  nodeB.appendChild(document.createTextNode(y));		  
+		  var nodeTD2 = document.createElement("td");
+		  nodeTR.appendChild(nodeTD2);
+		  nodeTD2.appendChild(UserInterface.renderJSON(x[y]))
+	      hasEntries = true;
+	    }
+	    if (!hasEntries) {
+	      return document.createTextNode("");
+	    }
+	    return nodeTable;
+	  } else {
+		return document.createTextNode(x);
+	  }
+  },
+  
   renderDuration: function(x) {
       if (x <= 0) return "0s";
       

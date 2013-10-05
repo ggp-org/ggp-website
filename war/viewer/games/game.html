@@ -89,7 +89,7 @@
         
         delete statsJSON.rolePlayerAverageScore; // TODO: Actually render this one.
         
-        theHTML += "<tr><td>" + renderJSON(statsJSON) + "</td></tr></table>";
+        theHTML += "<tr><td>" + UserInterface.getHTMLforNode(UserInterface.renderJSON(statsJSON)) + "</td></tr></table>";
         return theHTML;
       }
 

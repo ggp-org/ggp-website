@@ -69,7 +69,7 @@ var SpectatorView = {
 
     this.topDiv.style.height = this.gameVizDiv.children[0].clientHeight + 'px';
     
-    this.rawJSONDiv.replaceChild(document.createTextNode(JSON.stringify(this.matchData)), this.rawJSONDiv.firstChild);
+    this.rawJSONDiv.replaceChild(UserInterface.renderJSON(this.matchData), this.rawJSONDiv.firstChild);
     this.renderTextPage();
 
     var thisRef = this;

@@ -166,7 +166,7 @@
           theHTML += "<tr style='text-align:left'><th>Avg* Score</th><td>" + UserInterface.cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.</td></tr>";
           delete statsJSON.decayedAverageScore;
         }        
-        theHTML += '<tr><td>' + renderJSON(statsJSON) + '</td></tr></table>';
+        theHTML += '<tr><td>' + UserInterface.getHTMLforNode(UserInterface.renderJSON(statsJSON)) + '</td></tr></table>';
         return theHTML;
       }
 
