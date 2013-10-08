@@ -54,9 +54,11 @@ var ResourceLoader = {
         if (completed) return;
         completed = true;
         callback(null);
-      }      
+      }
     }
-    setTimeout(timeoutCallback, timeout);
+    if (timeout) {
+      setTimeout(timeoutCallback, timeout);
+    }
     this.internals.load_raw_async(url, doneCallback);
   },
   
