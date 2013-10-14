@@ -31,11 +31,7 @@ function generateHeaderForViewer(theDiv) {
 	var thePageTabs = "";
 	var tabs = ["games", "players", "matches"];
 	for (var i = 0; i < tabs.length; i++) {
-		if (tabs[i] == thePageType) {
-			thePageTabs += '<td>' + tabs[i] + ' list</td>';
-		} else {
-			thePageTabs += '<td><a href="/view/' + theHost + '/' + tabs[i] + '/">' + tabs[i] + ' list</td>';
-		}
+		thePageTabs += '<td><a href="/view/' + theHost + '/' + tabs[i] + '/">' + tabs[i] + ' list</td>';
 		if (i+1 < tabs.length) {
 			thePageTabs += '<td width=' + Math.floor(50/tabs.length) + '%></td>';
 		}

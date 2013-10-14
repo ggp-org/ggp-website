@@ -149,15 +149,6 @@
           theHTML += "<tr style='text-align:left'><th>Net Score</th><td>" + UserInterface.cleanFloat(statsJSON.netScore) + "</td></tr>";
           delete statsJSON.netScore;
         }        
-        if ("eloRank" in statsJSON) {
-          theHTML += "<tr style='text-align:left'><th>Elo Rank</th><td>" + UserInterface.cleanFloat(statsJSON.eloRank) + "</td></tr>";
-          delete statsJSON.eloRank;
-        }        
-        if ("agonScaledSkill" in statsJSON) {
-          theHTML += "<tr style='text-align:left'><th>Agon Skill</th><td>" + UserInterface.generateAgonView(statsJSON.agonScaledSkill, statsJSON.agonSkill, "") + "</td></tr>";
-          delete statsJSON.agonScaledSkill;
-          delete statsJSON.agonSkill;  
-        }
         if ("averageScore" in statsJSON) {
           theHTML += "<tr style='text-align:left'><th>Avg Score</th><td>" + UserInterface.cleanFloat(statsJSON.averageScore[0]) + " over " + statsJSON.averageScore[1] + " matches.</td></tr>";
           delete statsJSON.averageScore;
@@ -165,7 +156,20 @@
         if ("decayedAverageScore" in statsJSON) {
           theHTML += "<tr style='text-align:left'><th>Avg* Score</th><td>" + UserInterface.cleanFloat(statsJSON.decayedAverageScore[0]) + " over " + statsJSON.decayedAverageScore[1] + " matches.</td></tr>";
           delete statsJSON.decayedAverageScore;
+        }
+        if ("eloRank" in statsJSON) {
+          theHTML += "<tr style='text-align:left'><th>Elo Rank</th><td>" + UserInterface.cleanFloat(statsJSON.eloRank) + "</td></tr>";
+          delete statsJSON.eloRank;
         }        
+        if ("agonScaledSkill" in statsJSON) {
+          theHTML += "<tr style='text-align:left'><th>Agon Skill</th><td>" + UserInterface.generateRedGreenBadge(statsJSON.agonScaledSkill, UserInterface.cleanFloat(statsJSON.agonSkill)) + "</td></tr>";
+          delete statsJSON.agonScaledSkill;
+          delete statsJSON.agonSkill;  
+        }
+        if ("errorRateForPlayer" in statsJSON) {
+          theHTML += "<tr style='text-align:left'><th>Error Rate</th><td>" + UserInterface.generateRedGreenBadge(1-statsJSON.errorRateForPlayer[0], UserInterface.cleanFloat(statsJSON.errorRateForPlayer[0]*100) + "%") + " over " + statsJSON.errorRateForPlayer[1] + " matches.</td></tr>";          
+          delete statsJSON.errorRateForPlayer;        
+        }
         theHTML += '<tr><td>' + UserInterface.getHTMLforNode(UserInterface.renderJSON(statsJSON)) + '</td></tr></table>';
         return theHTML;
       }

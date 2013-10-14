@@ -88,7 +88,7 @@
           if (scaledValue != null && realValue != null) {
             var theHTML = '';
             theHTML += '<table style="height: 25px;"><tr>';
-            theHTML += '<td title="' + UserInterface.cleanFloat(realValue) + '" style="width: 25px; text-align: center; background-color: ' + UserInterface.generateAgonViewColor(scaledValue) + ';"></td>';
+            theHTML += '<td title="' + UserInterface.cleanFloat(realValue) + '" style="width: 25px; text-align: center; background-color: ' + UserInterface.generateRedGreenColor(scaledValue) + ';"></td>';
             theHTML += '<td> ' + UserInterface.cleanFloat(realValue) + '</td>';
             theHTML += '</tr></table>';
             return theHTML;

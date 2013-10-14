@@ -261,18 +261,18 @@ var UserInterface = {
   toTitle: function (word) {
 	  return word[0].toUpperCase()+word.substring(1);
   },
-    
-  // Lower is red, higher is green.  
-  generateAgonView : function (scaledRank, realRank, theText) {
-    var theHTML = "<span style='background-color: " + UserInterface.generateAgonViewColor(scaledRank) + ";'>";
-    theHTML += theText + UserInterface.cleanFloat(realRank);
+
+  // For the redGreenValue: lower is red, higher is green.  
+  generateRedGreenBadge: function (redGreenValue, displayValue) {
+    var theHTML = "<span style='background-color: " + UserInterface.generateRedGreenColor(redGreenValue) + ";'>";
+    theHTML += displayValue;
     theHTML += "</span>";
-    return theHTML;
+    return theHTML;	  
   },
-  
-  generateAgonViewColor : function (scaledRank) {
-    if (Math.abs(scaledRank) > 1.5) return "rgb(0,0,0)";
-    var rgb = UserInterface.convertRGB(scaledRank*120,1.0,1.0)
+
+  generateRedGreenColor: function (redGreenValue) {
+    if (Math.abs(redGreenValue) > 1.5) return "rgb(0,0,0)";
+    var rgb = UserInterface.convertRGB(redGreenValue*120,1.0,1.0)
     return "rgb(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ")";
   }
 }
