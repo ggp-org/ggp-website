@@ -8,7 +8,7 @@ function getGameNameForDisplay(gameMetadata, gameMetadataURL) {
 
 function getHostFromView() {
 	// Only allow a specific set of hosts, to avoid confusion if URLs are messed with.
-	var legitHosts = ["all", "artemis", "dresden", "sample", "tiltyard", "unsigned", "cs227b", "key0"];
+	var legitHosts = ["all", "artemis", "dresden", "sample", "tiltyard", "unsigned", "cs227b", "cs227b_0"];
     var theHost = window.location.pathname.split("/")[2];    
     if (!theHost) theHost = "all";
     if (legitHosts.indexOf(theHost) == -1) theHost = "all";
@@ -243,7 +243,8 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
     if (theHostName == "dresden") theHostImage = "//www.ggp.org/viewer/images/hosts/Dresden.png";
     if (theHostName == "artemis") theHostImage = "//www.ggp.org/viewer/images/hosts/Party.png";
     if (theHostName == "cs227b") theHostImage = "//www.ggp.org/viewer/images/hosts/CS227b.png";
-    if (theHostName == "key0") theHostImage = "//www.ggp.org/viewer/images/hosts/Lightbulb.png";
+    if (theHostName == "cs227b_0") theHostImage = "//www.ggp.org/viewer/images/hosts/CS227b.png";
+    // theHostImage = "//www.ggp.org/viewer/images/hosts/Lightbulb.png";
     theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/"><img width=25 height=25 src="' + theHostImage + '" title="Match has a valid digital signature from ' + UserInterface.toTitle(theHostName) + '."></img></a></td>';
   } else {
     theMatchHTML += '<td class="imageHolder"><a href="/view/unsigned/matches/"><img width=25 height=25 src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="Match does not have a valid digital signature."></img></a></td>';
@@ -341,13 +342,13 @@ function loadBellerophonMetadataForGames() {
   }
     
   // TODO: Make this more elegant.
-  if (getHostFromView() == "dresden" || getHostFromView() == "sample" || getHostFromView() == "all" || getHostFromView() == "unsigned") {
+  if (getHostFromView() == "dresden" || getHostFromView() == "sample" || getHostFromView() == "cs227b" || getHostFromView() == "all" || getHostFromView() == "unsigned") {
     loadRepositoryIntoMetadata("//games.ggp.org/dresden/games/");
   }
-  if (getHostFromView() == "cs227b" || getHostFromView() == "all" || getHostHashedPK() == "unsigned") {
+  if (getHostFromView() == "cs227b" || getHostFromView() == "cs227b_0" || getHostFromView() == "all" || getHostHashedPK() == "unsigned") {
 	loadRepositoryIntoMetadata("//games.ggp.org/stanford/games/");
   }
-  if (getHostFromView() != "dresden" && getHostFromView() != "cs227b") {
+  if (getHostFromView() != "dresden" && getHostFromView() != "cs227b_0") {
     loadRepositoryIntoMetadata("//games.ggp.org/base/games/");
   }
   
@@ -390,9 +391,9 @@ function getHostHashedPK() {
   if (hostName == "tiltyard") return "90bd08a7df7b8113a45f1e537c1853c3974006b2";
   if (hostName == "dresden") return "f69721b2f73839e513eed991e96824f1af218ac1";
   if (hostName == "artemis") return "5bc94f8e793772e8585a444f2fc95d2ac087fed0";
-  if (hostName == "sample") return "0ca7065b86d7646166d86233f9e23ac47d8320d4";  
-  if (hostName == "cs227b") return "61fd02210648144d820f57ff06689939159dd2e9";
-  if (hostName == "key0") return "52bd861857f677a2432837fcf2f7d73a4e6b30d7";
+  if (hostName == "sample") return "0ca7065b86d7646166d86233f9e23ac47d8320d4";    
+  if (hostName == "cs227b") return "52bd861857f677a2432837fcf2f7d73a4e6b30d7";
+  if (hostName == "cs227b_0") return "61fd02210648144d820f57ff06689939159dd2e9";
   return hostName;
 }
 
@@ -400,8 +401,8 @@ function getHostFromHashedPK(hostPK) {
     if (hostPK == "90bd08a7df7b8113a45f1e537c1853c3974006b2") return "tiltyard";
     if (hostPK == "f69721b2f73839e513eed991e96824f1af218ac1") return "dresden";
     if (hostPK == "5bc94f8e793772e8585a444f2fc95d2ac087fed0") return "artemis";
-    if (hostPK == "0ca7065b86d7646166d86233f9e23ac47d8320d4") return "sample";    
-    if (hostPK == "61fd02210648144d820f57ff06689939159dd2e9") return "cs227b";
-    if (hostPK == "52bd861857f677a2432837fcf2f7d73a4e6b30d7") return "key0";
+    if (hostPK == "0ca7065b86d7646166d86233f9e23ac47d8320d4") return "sample";
+    if (hostPK == "52bd861857f677a2432837fcf2f7d73a4e6b30d7") return "cs227b";
+    if (hostPK == "61fd02210648144d820f57ff06689939159dd2e9") return "cs227b_0";
     return hostPK;
 }
