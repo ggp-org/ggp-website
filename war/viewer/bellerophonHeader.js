@@ -111,11 +111,13 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
     }
     
     var renderMore = function () {
-    	var nextMatchEntriesResponse = ResourceLoader.load_json('//database.ggp.org/query/' + matchQuery + "," + rMEB_lastCursorForQuery[matchQuery]);
-    	theMatchEntries = theMatchEntries.concat(nextMatchEntriesResponse.queryMatches);
-    	rMEB_extraMatchesForQuery[matchQuery] = rMEB_extraMatchesForQuery[matchQuery].concat(nextMatchEntriesResponse.queryMatches);
-    	rMEB_lastCursorForQuery[matchQuery] = nextMatchEntriesResponse.queryCursor;    	
-    	renderMatchesIntoDiv();
+    	if (rMEB_lastCursorForQuery[matchQuery]) {
+    	  var nextMatchEntriesResponse = ResourceLoader.load_json('//database.ggp.org/query/' + matchQuery + "," + rMEB_lastCursorForQuery[matchQuery]);
+    	  theMatchEntries = theMatchEntries.concat(nextMatchEntriesResponse.queryMatches);
+    	  rMEB_extraMatchesForQuery[matchQuery] = rMEB_extraMatchesForQuery[matchQuery].concat(nextMatchEntriesResponse.queryMatches);
+    	  rMEB_lastCursorForQuery[matchQuery] = nextMatchEntriesResponse.queryCursor;    	
+    	  renderMatchesIntoDiv();
+    	}
     }
 
     renderMatchesIntoDiv();
