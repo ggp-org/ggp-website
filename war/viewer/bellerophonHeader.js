@@ -217,15 +217,15 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
     theMatchHTML += '<td width=5></td>';
     theMatchHTML += '<td class="imageHolder">'
     if (allErrorsForPlayer[j]) {
-      theMatchHTML += '<img src="//www.ggp.org/viewer/images/warnings/YellowAlert.png" title="This player had all errors in this match.">';
+      theMatchHTML += '<img src="//www.ggp.org/viewer/images/warnings/YellowAlert.png" title="This player had all errors in this match." style="width: 29px; height: 24px;">';
     } else if (hasErrorsForPlayer[j]) {
-      theMatchHTML += '<img src="//www.ggp.org/viewer/images/warnings/WhiteAlert.png" title="This player had errors in this match.">';
+      theMatchHTML += '<img src="//www.ggp.org/viewer/images/warnings/WhiteAlert.png" title="This player had errors in this match." style="width: 29px; height: 24px;">';
     }
     theMatchHTML += '</td>'
     if ("goalValues" in theMatchJSON) {
       theMatchHTML += '<td class="padded" style="text-align: right;">' + theMatchJSON.goalValues[j] + '</td>';
     } else if ("isAborted" in theMatchJSON && theMatchJSON.isAborted) {
-      theMatchHTML += '<td class="padded""><img src="//www.ggp.org/viewer/images/warnings/Abort.png" title="This match was aborted midway through." style="float:right;"></td>';
+      theMatchHTML += '<td class="padded""><img src="//www.ggp.org/viewer/images/warnings/Abort.png" title="This match was aborted midway through." style="float:right; width: 20px; height: 20px;"></td>';
     } else {
       theMatchHTML += '<td class="padded"></td>';
     }
