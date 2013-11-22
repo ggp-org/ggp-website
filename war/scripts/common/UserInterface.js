@@ -172,7 +172,9 @@ var UserInterface = {
 
     var nowDate = new Date();
     var timeDelta = nowDate - d;
-    if (timeDelta < 1000) {
+    if (timeDelta < 0) {
+      shortForm = "now";
+    } else if (timeDelta < 1000) {
       shortForm = timeDelta + "ms ago";
     } else {
       timeDelta = Math.floor(timeDelta / 1000);
