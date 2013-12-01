@@ -72,7 +72,7 @@
         }        
         
         if ("roleCorrelationWithSkill" in statsJSON && statsJSON.roleCorrelationWithSkill) {
-          theHTML += "<tr><th>Score/Skill PCC</th>";
+          theHTML += "<tr><th>Skill Correlation</th>";
           var theWidth = (70/statsJSON.roleCorrelationWithSkill.length);
           for (var i = 0; i < statsJSON.roleCorrelationWithSkill.length; i++) {
             theHTML += "<td width=10px></td>";

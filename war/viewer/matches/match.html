@@ -70,7 +70,7 @@
           }
           sidePanelHTML += '</td><td style="text-align: right;">';
           if (hasPlayerName) {
-            sidePanelHTML += '<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + playerName + '">' + UserInterface.trimTo(playerName,12) + '</a>';
+            sidePanelHTML += '<a href="/view/' + window.location.pathname.split("/")[2] + '/players/' + playerName + '" title="' + playerName + '">' + UserInterface.trimTo(playerName,12) + '</a>';
           } else {
             sidePanelHTML += 'Anonymous';
           }

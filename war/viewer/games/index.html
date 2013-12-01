@@ -30,7 +30,7 @@
         loadBellerophonMetadataForGames();
         
         var gameListHTML = '<table class="matchlist" cellpadding="5px">';
-        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded" colspan=6>Contents</th><th>Agon Difficulty</th><th>Score/Skill PCC</th></tr>';
+        gameListHTML += '<tr bgcolor=#E0E0E0><th class="padded">Game Name</th><th class="padded">Players</th><th class="padded">Version</th><th class="padded" colspan=6>Contents</th><th><a title="Computed difficulty faced by players in each role in this game.">Agon Difficulty</a></th><th><a title="Correlation between players having a high Agon skill and players receiving a high score when playing as each role in this game.">Skill Correlation</a></th></tr>';
         for (var i = 0; i < observedGames.length; i++) {
           if (i % 2 == 0) {
             gameListHTML += "<tr bgcolor=#F5F5F5>";

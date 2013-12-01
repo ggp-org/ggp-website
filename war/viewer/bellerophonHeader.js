@@ -209,7 +209,7 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
     if ("playerNamesFromHost" in theMatchJSON && theMatchJSON.playerNamesFromHost[j].length > 0) {
       var playerName = theMatchJSON.playerNamesFromHost[j];
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 title="' + playerName + '" src="' + getPlayerImageURL(playerName, false) + '"/></td>';
-      theMatchHTML += '<td><a href="/view/' + getHostFromView() + '/players/' + playerName + '">' + UserInterface.trimTo(playerName,15) + '</a></td>';
+      theMatchHTML += '<td><a href="/view/' + getHostFromView() + '/players/' + playerName + '" title="' + playerName + '">' + UserInterface.trimTo(playerName,15) + '</a></td>';
     } else {
       theMatchHTML += '<td class="imageHolder" style="width:25px; padding-right:5px"><img width=25 height=25 title="Anonymous" src="//www.ggp.org/viewer/images/hosts/Unsigned.png" title="This player is not identified." /></td>';
       theMatchHTML += '<td>Anonymous</td>';
