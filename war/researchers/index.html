@@ -86,7 +86,7 @@ div.content {
        consider only matches signed by the hosting system, so we know where they came from.
        This can be done with the following command:</p>
        
-<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2012 | jq <span style="color: #BA2121">&#39;if .gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .matchHostPK != null then .moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c</pre></div>
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2012 | jq <span style="color: #BA2121">&#39;if .data.gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .data.matchHostPK != null then .data.moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c</pre></div>
     
     <p>Before we run this, how does it work? First, it lists all of the matches from 2012.
        For every match where Connect Four was played, and a signature was recorded, we output
@@ -96,7 +96,7 @@ div.content {
        
     <p>Okay, let's run that command:</p>
     
-<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2012 | jq <span style="color: #BA2121">&#39;if .gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .matchHostPK != null then .moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2012 | jq <span style="color: #BA2121">&#39;if .data.gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .data.matchHostPK != null then .data.moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c
 <span style="color: #888888">    340 &quot;( drop 1 )&quot;</span>
 <span style="color: #888888">    356 &quot;( drop 2 )&quot;</span>
 <span style="color: #888888">    357 &quot;( drop 3 )&quot;</span>
@@ -113,7 +113,7 @@ div.content {
     
     <p>Let's compare that result with the distribution of opening moves for Connect Four from 2011.</p>
     
-<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2011 | jq <span style="color: #BA2121">&#39;if .gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .matchHostPK != null then .moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2011 | jq <span style="color: #BA2121">&#39;if .data.gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .data.matchHostPK != null then .data.moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c
 <span style="color: #888888">   1447 &quot;( drop 1 )&quot;</span>
 <span style="color: #888888">   1413 &quot;( drop 2 )&quot;</span>
 <span style="color: #888888">   1446 &quot;( drop 3 )&quot;</span>
@@ -128,16 +128,15 @@ div.content {
     
     <p>Well, to begin with, there are similarities between 2011 and 2012. The distributions of
        observed moves are roughly symmetric in both. And both have a peak in the center, for the
-       moves we know to be stronger. But the difference is that in 2012, the peak is much more
-       pronounced than in 2011. It's almost as though the players in 2012 were, across the board,
-       much better in than 2011...</p>
+       moves we know to be stronger. But in 2012 the peak is much more pronounced than in 2011.
+       It's almost as though the players in 2012 were noticeably better than those in 2011...</p>
        
-    <p>... and as it turns out, that's exactly what happened. For the majority of 2011, there were a
-       several robot players on Tiltyard playing randomly, doing load testing of the hosting, publishing,
-       archiving, etc. These players were shut off once real players began to play on Tiltyard consistently,
-       and that's responsible for the sudden improvement in the choice of opening moves in Connect Four
-       between 2011 and 2012. You can confirm this by looking at the data for 2013, which is consistent with
-       the data from 2012.</p>
+    <p>... and indeed, that's true. For the majority of 2011, there were several robot players on
+       Tiltyard playing randomly, doing load testing of the hosting, publishing, archiving, etc.
+       These random players were shut off once real players began to play on Tiltyard consistently.
+       That change explains the sudden improvement in the choice of opening moves in Connect Four
+       between 2011 and 2012. This can be confirmed by looking at the data for 2013, which matches
+       the data for 2012.</p> 
        
     <p>Thus concludes our first discovery based on the historical match archives!</p>
       
