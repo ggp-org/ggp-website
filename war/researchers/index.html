@@ -77,72 +77,19 @@ div.content {
     
     <p>So you've downloaded a bulk archive of historical matches. What now?</p>
     
-    <p>Let's look at an example of an analysis that you might run. This example will use
-       the <a href="//stedolan.github.io/jq/">jq</a> JSON processor command line tool. You
-       can do similar things using the built-in JSON library in Python. Similar tools exist
-       for many other languages.</p>
+    <p>First, we can <a href="//www.ggp.org/researchers/analysis_gettingStarted.html">get started</a> by inspecting
+       individual matches inside the match archives.</p>
        
-    <p>Say we want to know which opening moves are most popular in Connect Four. Let's also
-       consider only matches signed by the hosting system, so we know where they came from.
-       This can be done with the following command:</p>
-       
-<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2012 | jq <span style="color: #BA2121">&#39;if .data.gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .data.matchHostPK != null then .data.moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c</pre></div>
+    <p>Then we can look at an <a href="//www.ggp.org/researchers/analysis_connectFour.html">example analysis</a> that
+       the match archives make possible: studying the distribution of opening moves that players
+       choose in Connect Four, and how it changed between 2011 and 2012.</p>
     
-    <p>Before we run this, how does it work? First, it lists all of the matches from 2012.
-       For every match where Connect Four was played, and a signature was recorded, we output
-       the first move for the first player. For every other match, we output null. Then we drop
-       all of the nulls. Then we sort the output, and print out a count for each unique entry:
-       a histogram, essentially.</p>
-       
-    <p>Okay, let's run that command:</p>
-    
-<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2012 | jq <span style="color: #BA2121">&#39;if .data.gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .data.matchHostPK != null then .data.moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c
-<span style="color: #888888">    340 &quot;( drop 1 )&quot;</span>
-<span style="color: #888888">    356 &quot;( drop 2 )&quot;</span>
-<span style="color: #888888">    357 &quot;( drop 3 )&quot;</span>
-<span style="color: #888888">   1672 &quot;( drop 4 )&quot;</span>
-<span style="color: #888888">   1644 &quot;( drop 5 )&quot;</span>
-<span style="color: #888888">    333 &quot;( drop 6 )&quot;</span>
-<span style="color: #888888">    311 &quot;( drop 7 )&quot;</span>
-<span style="color: #888888">    321 &quot;( drop 8 )&quot;</span>
-</pre></div>
+    <p>And lastly, we can go through a <a href="//www.ggp.org/researchers/analysis_agonRating.html">full-fledged Python program</a>
+       that computes Agon ratings based on the match archives.</p>
 
-    <p>Success! And best of all, these results make sense -- the two center columns are the strongest
-       opening plays in Connect Four, and this confirms that they're chosen most frequently. Also, since
-       the game is symmetric, it makes sense that there's a symmetric distribution of opening moves.</p>
-    
-    <p>Let's compare that result with the distribution of opening moves for Connect Four from 2011.</p>
-    
-<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2011 | jq <span style="color: #BA2121">&#39;if .data.gameMetaURL == &quot;http://games.ggp.org/base/games/connectFour/v0/&quot; and .data.matchHostPK != null then .data.moves[0][0] else null end&#39;</span> | grep -v null | sort | uniq -c
-<span style="color: #888888">   1447 &quot;( drop 1 )&quot;</span>
-<span style="color: #888888">   1413 &quot;( drop 2 )&quot;</span>
-<span style="color: #888888">   1446 &quot;( drop 3 )&quot;</span>
-<span style="color: #888888">   1592 &quot;( drop 4 )&quot;</span>
-<span style="color: #888888">   1506 &quot;( drop 5 )&quot;</span>
-<span style="color: #888888">   1400 &quot;( drop 6 )&quot;</span>
-<span style="color: #888888">   1478 &quot;( drop 7 )&quot;</span>
-<span style="color: #888888">   1470 &quot;( drop 8 )&quot;</span>
-</pre></div>
-   
-    <p>That's different! What happened?</p>
-    
-    <p>Well, to begin with, there are similarities between 2011 and 2012. The distributions of
-       observed moves are roughly symmetric in both. And both have a peak in the center, for the
-       moves we know to be stronger. But in 2012 the peak is much more pronounced than in 2011.
-       It's almost as though the players in 2012 were noticeably better than those in 2011...</p>
-       
-    <p>... and indeed, that's true. For the majority of 2011, there were several robot players on
-       Tiltyard playing randomly, doing load testing of the hosting, publishing, archiving, etc.
-       These random players were shut off once real players began to play on Tiltyard consistently.
-       That change explains the sudden improvement in the choice of opening moves in Connect Four
-       between 2011 and 2012. This can be confirmed by looking at the data for 2013, which matches
-       the data for 2012.</p> 
-       
-    <p>Thus concludes our first discovery based on the historical match archives!</p>
-      
     </div>
     <script>
-      generateHeader(document.getElementById('header'), "for Researchers", "");
+      generateHeader(document.getElementById('header'), "for <a href='//www.ggp.org/researchers'>Researchers</a>", "");
       
       var statsJSON = ResourceLoader.load_json('//database.ggp.org/statistics/all/overall');
       document.getElementById('match_count').innerHTML = statsJSON.matches-1;

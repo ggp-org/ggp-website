@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script async type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <script text="text/javascript" src="//www.ggp.org/scripts/common/ResourceLoader.js"></script>    
+    <title>GGP.org - for Researchers</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <br>
+    <p>We've <a href="//www.ggp.org/researchers/analysis_gettingStarted.html">inspected</a>
+       individual matches in the archives. We've <a href="//www.ggp.org/researchers/analysis_connectFour.html">analyzed</a>
+       matches in aggregate to understand player behavior in a single game. But these still
+       feel like command line parlor tricks. What does a really substantial system for reading
+       and processing match data look like?</p>
+       
+    <p>Let's consider the Agon rating system, which computes a skill rating for each player, and
+       a difficulty rating for each role in each game, based on historical match data. This system
+       builds on the Elo rating system for Chess, expanding it in ways that are important for GGP:
+       support for single-player games, many-player games, asymmetric games, cross-game skill ratings,
+       and so on.</p>
+       
+    <p>How can we compute Agon ratings based on the match archives?</p>
+    
+    <p>Let's look at a Python program that reads matches using the built-in json library
+       and computes Agon ratings over all of the matches it reads.</p>
+
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">json</span>
+
+dataPoints <span style="color: #666666">=</span> []
+
+f <span style="color: #666666">=</span> <span style="color: #008000">open</span>(<span style="color: #BA2121">&quot;matchesFrom2011&quot;</span>, <span style="color: #BA2121">&#39;r&#39;</span>)
+<span style="color: #008000; font-weight: bold">for</span> line <span style="color: #AA22FF; font-weight: bold">in</span> f<span style="color: #666666">.</span>readlines():
+  <span style="color: #408080; font-style: italic"># Load the match data in JSON format.</span>
+  match <span style="color: #666666">=</span> json<span style="color: #666666">.</span>loads(line)[<span style="color: #BA2121">&#39;data&#39;</span>]
+  <span style="color: #408080; font-style: italic"># Discard matches that aren&#39;t signed.</span>
+  <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> <span style="color: #BA2121">&#39;matchHostPK&#39;</span> <span style="color: #AA22FF; font-weight: bold">in</span> match:
+    <span style="color: #008000; font-weight: bold">continue</span>
+  <span style="color: #408080; font-style: italic"># Discard matches that aren&#39;t signed by Tiltyard.</span>
+  <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000">hash</span>(match[<span style="color: #BA2121">&#39;matchHostPK&#39;</span>]) <span style="color: #666666">!=</span> <span style="color: #666666">-859967508381652683</span>:
+    <span style="color: #008000; font-weight: bold">continue</span>
+  <span style="color: #408080; font-style: italic"># Discard matches that didn&#39;t record player names.</span>
+  <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> <span style="color: #BA2121">&#39;playerNamesFromHost&#39;</span> <span style="color: #AA22FF; font-weight: bold">in</span> match:
+    <span style="color: #008000; font-weight: bold">continue</span>
+  <span style="color: #408080; font-style: italic"># Discard matches that didn&#39;t complete successfully.</span>
+  <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> match[<span style="color: #BA2121">&#39;isCompleted&#39;</span>]:
+    <span style="color: #008000; font-weight: bold">continue</span>
+  <span style="color: #408080; font-style: italic"># Discard matches where a player had errors.</span>
+  <span style="color: #008000; font-weight: bold">if</span> <span style="color: #BA2121">&#39;errors&#39;</span> <span style="color: #AA22FF; font-weight: bold">in</span> match:
+    hasErrors <span style="color: #666666">=</span> <span style="color: #008000">False</span>
+    <span style="color: #008000; font-weight: bold">for</span> errorsForTurn <span style="color: #AA22FF; font-weight: bold">in</span> match[<span style="color: #BA2121">&#39;errors&#39;</span>]:
+      <span style="color: #008000; font-weight: bold">for</span> error <span style="color: #AA22FF; font-weight: bold">in</span> errorsForTurn:
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000">len</span>(error) <span style="color: #666666">&gt;</span> <span style="color: #666666">0</span>:
+          hasErrors <span style="color: #666666">=</span> <span style="color: #008000">True</span>
+    <span style="color: #008000; font-weight: bold">if</span> hasErrors:
+      <span style="color: #008000; font-weight: bold">continue</span>
+  <span style="color: #408080; font-style: italic"># Store the relevant parts for computing ratings: when the match started,</span>
+  <span style="color: #408080; font-style: italic"># the players involved, and the final scores.</span>
+  dataPoints<span style="color: #666666">.</span>append((match[<span style="color: #BA2121">&#39;startTime&#39;</span>], match[<span style="color: #BA2121">&#39;gameMetaURL&#39;</span>], match[<span style="color: #BA2121">&#39;playerNamesFromHost&#39;</span>], match[<span style="color: #BA2121">&#39;goalValues&#39;</span>]))
+
+<span style="color: #408080; font-style: italic"># Agon rating, like Elo rating, is order dependant: if a player that&#39;s currently weak</span>
+<span style="color: #408080; font-style: italic"># beats a player that&#39;s currently strong, that&#39;s more important than if a player that</span>
+<span style="color: #408080; font-style: italic"># was once weak (but is now average) beats a player that was once strong (but is now</span>
+<span style="color: #408080; font-style: italic"># also average). Thus we need to process matches in the order in which they occurred.</span>
+<span style="color: #408080; font-style: italic"># This is done by sorting them by start time.</span>
+dataPoints<span style="color: #666666">.</span>sort()
+
+<span style="color: #408080; font-style: italic"># Ratings will be tracked in this map.</span>
+agonRating <span style="color: #666666">=</span> {}
+
+<span style="color: #408080; font-style: italic"># An essential part of Agon rating, like Elo rating, is determining the expected score</span>
+<span style="color: #408080; font-style: italic"># for players when they&#39;re matched against each other, based on their current ratings.</span>
+<span style="color: #408080; font-style: italic"># This is done exactly as it is done in ordinary Elo rating.</span>
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">getExpectedScore</span>(aPlayer, bPlayer):
+  <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> aPlayer <span style="color: #AA22FF; font-weight: bold">in</span> agonRating:
+    agonRating[aPlayer] <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+  <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> bPlayer <span style="color: #AA22FF; font-weight: bold">in</span> agonRating:
+    agonRating[bPlayer] <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+  RA <span style="color: #666666">=</span> agonRating[aPlayer]
+  RB <span style="color: #666666">=</span> agonRating[bPlayer]
+  QA <span style="color: #666666">=</span> <span style="color: #008000">pow</span>(<span style="color: #666666">10.0</span>, RA <span style="color: #666666">/</span> <span style="color: #666666">400.0</span>)
+  QB <span style="color: #666666">=</span> <span style="color: #008000">pow</span>(<span style="color: #666666">10.0</span>, RB <span style="color: #666666">/</span> <span style="color: #666666">400.0</span>)
+  <span style="color: #008000; font-weight: bold">return</span> QA <span style="color: #666666">/</span> (QA <span style="color: #666666">+</span> QB)
+
+<span style="color: #408080; font-style: italic"># Updating ratings also works exactly like in Elo rating: compute the expected score,</span>
+<span style="color: #408080; font-style: italic"># and then increase ratings if the players exceeded that score, and decrease ratings</span>
+<span style="color: #408080; font-style: italic"># if the players fell below the expected score.</span>
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">updateRating</span>(aPlayer, bPlayer, aScore, bScore):
+  <span style="color: #008000; font-weight: bold">if</span> aScore <span style="color: #666666">+</span> bScore <span style="color: #666666">!=</span> <span style="color: #666666">100</span>:
+    <span style="color: #008000; font-weight: bold">return</span>
+  EA <span style="color: #666666">=</span> getExpectedScore(aPlayer, bPlayer)
+  EB <span style="color: #666666">=</span> <span style="color: #666666">1.0</span> <span style="color: #666666">-</span> EA
+  agonRating[aPlayer] <span style="color: #666666">=</span> agonRating[aPlayer] <span style="color: #666666">+</span> (aScore<span style="color: #666666">/100.0</span> <span style="color: #666666">-</span> EA)
+  agonRating[bPlayer] <span style="color: #666666">=</span> agonRating[bPlayer] <span style="color: #666666">+</span> (bScore<span style="color: #666666">/100.0</span> <span style="color: #666666">-</span> EB)
+
+<span style="color: #408080; font-style: italic"># For every recorded match, we do pairwise ratings updates between all of the players</span>
+<span style="color: #408080; font-style: italic"># involved in the match, *and* we do a ratings update between each player in the match</span>
+<span style="color: #408080; font-style: italic"># and their role in the game, representing the roles in the game as distinct players</span>
+<span style="color: #408080; font-style: italic"># with their own ratings that vary just like player ratings.</span>
+<span style="color: #008000; font-weight: bold">for</span> dataPoint <span style="color: #AA22FF; font-weight: bold">in</span> dataPoints:
+  gameURL <span style="color: #666666">=</span> dataPoint[<span style="color: #666666">1</span>]
+  playerNames <span style="color: #666666">=</span> dataPoint[<span style="color: #666666">2</span>]
+  goalValues <span style="color: #666666">=</span> dataPoint[<span style="color: #666666">3</span>]
+  <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #008000">len</span>(goalValues)):
+    updateRating(playerNames[i], gameURL <span style="color: #666666">+</span> <span style="color: #BA2121">&#39;_role&#39;</span> <span style="color: #666666">+</span> <span style="color: #008000">str</span>(i), goalValues[i], <span style="color: #666666">100</span> <span style="color: #666666">-</span> goalValues[i])
+    <span style="color: #008000; font-weight: bold">for</span> j <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(i<span style="color: #666666">+1</span>,<span style="color: #008000">len</span>(goalValues)):
+      updateRating(playerNames[i], playerNames[j], goalValues[i], goalValues[j])
+
+<span style="color: #408080; font-style: italic"># Display a list of (rating,player) sorted by rating in ascending order.</span>
+ratingsForPlayers <span style="color: #666666">=</span> [ (i,j) <span style="color: #008000; font-weight: bold">for</span> (j,i) <span style="color: #AA22FF; font-weight: bold">in</span> agonRating<span style="color: #666666">.</span>items() ]
+ratingsForPlayers<span style="color: #666666">.</span>sort()
+<span style="color: #008000; font-weight: bold">for</span> rating, playerName <span style="color: #AA22FF; font-weight: bold">in</span> ratingsForPlayers:
+  <span style="color: #008000; font-weight: bold">print</span> <span style="color: #008000">str</span>(rating)<span style="color: #666666">.</span>rjust(<span style="color: #666666">20</span>), playerName
+</pre></div>       
+      
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), "for <a href='//www.ggp.org/researchers'>Researchers</a>", "");
+    </script>
+  </body>
+</html>

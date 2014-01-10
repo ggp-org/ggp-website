@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script async type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <script text="text/javascript" src="//www.ggp.org/scripts/common/ResourceLoader.js"></script>    
+    <title>GGP.org - for Researchers</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <br>    
+    <p>So you've downloaded a bulk archive of historical matches. What now?</p>
+    
+    <p>First, let's take a look and see what's inside these archives. Each archive file
+       can be unzipped to get a text file where each line contains a JSON object. Every
+       one of those JSON objects represents a single match. There is a "url" field that
+       lists a unique URL for that match, and a "data" field that contains information
+       about the match.</p>
+       
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2013 | head -n 1
+<span style="color: #888888">{&quot;url&quot;:&quot;http://matches.ggp.org/matches/0be6972fbcfcf7ccbb7bf9ba0106ee31a2c68ff7/&quot;, &quot;data&quot;:{&quot;randomToken&quot;:&quot;00f46f2f8128f5a2bcd9699357bc73b14322ff4e&quot;,&quot;playerNamesFromHost&quot;:[&quot;Random&quot;,&quot;FakePlayer&quot;],&quot;moves&quot;:[[&quot;(MARK 1 1)&quot;,&quot;NOOP&quot;],[&quot;NOOP&quot;,&quot;(MARK 3 1)&quot;],[&quot;(MARK 2 2)&quot;,&quot;NOOP&quot;],[&quot;NOOP&quot;,&quot;(MARK 2 1)&quot;]],&quot;states&quot;:[&quot;((CELL 1 1 B)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 1 B)(CELL 2 2 B)(CELL 2 3 B)(CELL 3 1 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL WHITE))&quot;,&quot;((CELL 1 1 X)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 1 B)(CELL 2 2 B)(CELL 2 3 B)(CELL 3 1 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL BLACK))&quot;,&quot;((CELL 3 1 O)(CELL 1 1 X)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 1 B)(CELL 2 2 B)(CELL 2 3 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL WHITE))&quot;,&quot;((CELL 2 2 X)(CELL 3 1 O)(CELL 1 1 X)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 1 B)(CELL 2 3 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL BLACK))&quot;,&quot;((CELL 2 1 O)(CELL 2 2 X)(CELL 3 1 O)(CELL 1 1 X)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 3 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL WHITE))&quot;],&quot;isPlayerHuman&quot;:[false,false],&quot;startTime&quot;:1361141887000,&quot;playClock&quot;:15,&quot;stateTimes&quot;:[1361141887000,1361141888000,1361141889000,1361141890000,1361141891000],&quot;errors&quot;:[[&quot;&quot;,&quot;&quot;],[&quot;&quot;,&quot;&quot;],[&quot;&quot;,&quot;&quot;],[&quot;&quot;,&quot;&quot;],[&quot;&quot;,&quot;&quot;]],&quot;matchHostSignature&quot;:&quot;A0TvYXrYFg5zbzeJNbZtqGQkyZEnx2SgwHljbW9V29fBUcyqUgIGtOYoaV/Igevu+wXqoTCmQ5xkWSaNKX9rOdW8pSL+fvk2abdO/z3/UznmkcD65PKygXiJt9fGOZUk4stY0zUtCwDJr+alTipmSHlvDItA2hvB8kg19MynhgiMND3mbd5VmobXK6az7BLMPZQYLan1B8OYvhyf2inb1WOfbOlK870G2c9axqCEOQ6ZZqE4m5bfgP8eehVVGoA/YheDe6MLim+1e4gZm2GyuNFiJQY87ePt5yDSY9RNt+E1hkfLv+k5I2aehSK6I5sEIhOUogtAya2k+u/GizWjjYFQ==&quot;,&quot;startClock&quot;:35,&quot;matchId&quot;:&quot;eotcatcit.1361141887499&quot;,&quot;gameMetaURL&quot;:&quot;http://games.ggp.org/dresden/games/eotcatcit/v0/&quot;,&quot;matchHostPK&quot;:&quot;0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgjgpQmdHCwKOrM1KS3u4d6CwAqbr715o0ARK+bQKXH8aSXfQCPUdyjCG6KQ1CENr4VdBWS8UYvPlMcCmjfPQkFJ+u7XF7/TDuDgYMUDAC5qJ4UmMD49bzlE7nW+4dVHSUsJr2WWSMgh7vbSbvIUhpCsTxG0OxIcwZ0cY0NwnF2RVXBLVH1nsey4ExjtuyI3Jp21yKzX1CDUwhrczp69j4wVSEFzeiyfNk70SZhi14q5lxZ1O/h3ZlhnIAU5Ko7Cej9Kh6Xd6OfBriav4yBTBcVV+uPQvRsyAgRQpKe/5qVxCnVejcTpaNPXZcjH3GMB/F3IZPSVZ2uluaf1U3EPUrwIDAQAB&quot;,&quot;isAborted&quot;:false,&quot;isCompleted&quot;:false}}</span>
+</pre></div>
+    
+    <p>All of the match data is available online via the GGP.org match archive server.
+       The unique URL can be used to find the match data online. Let's use the
+       <a href="//stedolan.github.io/jq/">jq</a> JSON processor command line tool to extract
+       the match data from the archive for the first match, and compare that to the contents
+       found at the URL for the first match.</p>
+
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2013 | head -n 1 | jq .data | md5sum
+<span style="color: #888888">99a655713ac7effb17e70bf43445b0f9  -</span>
+<span style="color: #000080; font-weight: bold">$</span> curl <span style="color: #BA2121">`</span>cat matchesFrom2013 | head -n 1 | jq .url | tr -d <span style="color: #BA2121">&#39;&quot;&#39;`</span> | jq . | md5sum
+<span style="color: #888888">99a655713ac7effb17e70bf43445b0f9  -</span>
+</pre></div>       
+
+    <p>As expected, they are identical: this makes sense, because the archives were produced
+       by dumping the contents of the matches.ggp.org database verbatim.</p>
+       
+    <p>Okay, so we have some match data. What now?</p>
+    
+    <p>Let's start by using the jq tool to print out the match data
+       in a nice format, so we can inspect it.</p>
+    
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2013 | head -n 1 | jq .    
+{
+  <span style="color: #008000; font-weight: bold">&quot;data&quot;</span>: {
+    <span style="color: #008000; font-weight: bold">&quot;isCompleted&quot;</span>: <span style="color: #008000; font-weight: bold">false</span>,
+    <span style="color: #008000; font-weight: bold">&quot;isAborted&quot;</span>: <span style="color: #008000; font-weight: bold">false</span>,
+    <span style="color: #008000; font-weight: bold">&quot;matchHostPK&quot;</span>: <span style="color: #BA2121">&quot;0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgjgpQmdHCwKOrM1KS3u4d6CwAqbr715o0ARK+bQKXH8aSXfQCPUdyjCG6KQ1CENr4VdBWS8UYvPlMcCmjfPQkFJ+u7XF7/TDuDgYMUDAC5qJ4UmMD49bzlE7nW+4dVHSUsJr2WWSMgh7vbSbvIUhpCsTxG0OxIcwZ0cY0NwnF2RVXBLVH1nsey4ExjtuyI3Jp21yKzX1CDUwhrczp69j4wVSEFzeiyfNk70SZhi14q5lxZ1O/h3ZlhnIAU5Ko7Cej9Kh6Xd6OfBriav4yBTBcVV+uPQvRsyAgRQpKe/5qVxCnVejcTpaNPXZcjH3GMB/F3IZPSVZ2uluaf1U3EPUrwIDAQAB&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;gameMetaURL&quot;</span>: <span style="color: #BA2121">&quot;http://games.ggp.org/dresden/games/eotcatcit/v0/&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;matchId&quot;</span>: <span style="color: #BA2121">&quot;eotcatcit.1361141887499&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;startClock&quot;</span>: <span style="color: #666666">35</span>,
+    <span style="color: #008000; font-weight: bold">&quot;matchHostSignature&quot;</span>: <span style="color: #BA2121">&quot;A0TvYXrYFg5zbzeJNbZtqGQkyZEnx2SgwHljbW9V29fBUcyqUgIGtOYoaV/Igevu+wXqoTCmQ5xkWSaNKX9rOdW8pSL+fvk2abdO/z3/UznmkcD65PKygXiJt9fGOZUk4stY0zUtCwDJr+alTipmSHlvDItA2hvB8kg19MynhgiMND3mbd5VmobXK6az7BLMPZQYLan1B8OYvhyf2inb1WOfbOlK870G2c9axqCEOQ6ZZqE4m5bfgP8eehVVGoA/YheDe6MLim+1e4gZm2GyuNFiJQY87ePt5yDSY9RNt+E1hkfLv+k5I2aehSK6I5sEIhOUogtAya2k+u/GizWjjYFQ==&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;errors&quot;</span>: [
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ]
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;randomToken&quot;</span>: <span style="color: #BA2121">&quot;00f46f2f8128f5a2bcd9699357bc73b14322ff4e&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;playerNamesFromHost&quot;</span>: [
+      <span style="color: #BA2121">&quot;Random&quot;</span>,
+      <span style="color: #BA2121">&quot;FakePlayer&quot;</span>
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;moves&quot;</span>: [
+      [
+        <span style="color: #BA2121">&quot;(MARK 1 1)&quot;</span>,
+        <span style="color: #BA2121">&quot;NOOP&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;NOOP&quot;</span>,
+        <span style="color: #BA2121">&quot;(MARK 3 1)&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;(MARK 2 2)&quot;</span>,
+        <span style="color: #BA2121">&quot;NOOP&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;NOOP&quot;</span>,
+        <span style="color: #BA2121">&quot;(MARK 2 1)&quot;</span>
+      ]
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;states&quot;</span>: [
+      <span style="color: #BA2121">&quot;((CELL 1 1 B)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 1 B)(CELL 2 2 B)(CELL 2 3 B)(CELL 3 1 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL WHITE))&quot;</span>,
+      <span style="color: #BA2121">&quot;((CELL 1 1 X)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 1 B)(CELL 2 2 B)(CELL 2 3 B)(CELL 3 1 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL BLACK))&quot;</span>,
+      <span style="color: #BA2121">&quot;((CELL 3 1 O)(CELL 1 1 X)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 1 B)(CELL 2 2 B)(CELL 2 3 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL WHITE))&quot;</span>,
+      <span style="color: #BA2121">&quot;((CELL 2 2 X)(CELL 3 1 O)(CELL 1 1 X)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 1 B)(CELL 2 3 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL BLACK))&quot;</span>,
+      <span style="color: #BA2121">&quot;((CELL 2 1 O)(CELL 2 2 X)(CELL 3 1 O)(CELL 1 1 X)(CELL 1 2 B)(CELL 1 3 B)(CELL 2 3 B)(CELL 3 2 B)(CELL 3 3 B)(CONTROL WHITE))&quot;</span>
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;isPlayerHuman&quot;</span>: [
+      <span style="color: #008000; font-weight: bold">false</span>,
+      <span style="color: #008000; font-weight: bold">false</span>
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;startTime&quot;</span>: <span style="color: #666666">1361141887000</span>,
+    <span style="color: #008000; font-weight: bold">&quot;playClock&quot;</span>: <span style="color: #666666">15</span>,
+    <span style="color: #008000; font-weight: bold">&quot;stateTimes&quot;</span>: [
+      <span style="color: #666666">1361141887000</span>,
+      <span style="color: #666666">1361141888000</span>,
+      <span style="color: #666666">1361141889000</span>,
+      <span style="color: #666666">1361141890000</span>,
+      <span style="color: #666666">1361141891000</span>
+    ]
+  },
+  <span style="color: #008000; font-weight: bold">&quot;url&quot;</span>: <span style="color: #BA2121">&quot;http://matches.ggp.org/matches/0be6972fbcfcf7ccbb7bf9ba0106ee31a2c68ff7/&quot;</span>
+}
+</pre></div>
+       
+    <p>Okay! What's relevant here? This is a game of "eotcatcit", which is
+       a Tic-Tac-Toe variant. Four joint moves have been submitted. The match
+       was neither completed (isCompleted) nor aborted (isAborted), and since
+       it was started a long time ago (Feb 17th 2013) and has no human players,
+       this likely means it was abandoned. Most matches run to completion, but
+       occasionally match hosts will abandon matches due to internal errors.</p>
+       
+    <p>Let's inspect another match:</p>
+    
+<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> cat matchesFrom2012 | head -n 1 | jq .
+{
+  <span style="color: #008000; font-weight: bold">&quot;data&quot;</span>: {
+    <span style="color: #008000; font-weight: bold">&quot;isCompleted&quot;</span>: <span style="color: #008000; font-weight: bold">true</span>,
+    <span style="color: #008000; font-weight: bold">&quot;matchHostPK&quot;</span>: <span style="color: #BA2121">&quot;0MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAgjPUn3Zkr1u+BQb2fMOUcypSsJY4c/IRFDaA5Gjg022gZCY+a5yC61nSIwYnfTdWcnDEadUvbLWvD3IXmhxKZY69k6GpfgGZBp90bS918vuFiRQ16UcEzSloeVQs0jt7Nq+9EKvBBlULGxZcwXH30G+wIyoo/9qGJOwN+XmhFj9PC/WbPGvzB8ABKo08XIGyqDbv+xF0xVw0Pdfd2sYKUuSQawIFHxQBztbySTydl5r5qUwETxw5JuZkuK0c3cNer7M24/fokGuyukmnBI3k6V9lkguAOzVXjnknKaEAh4KassLwQK9Byc84hEyFFZk4USTneS2Kz3ZcjxRGOYjWKMHEVJVsbR2rHA7nN1PZbk14bNdemwwAbwYB2ONWe3Bhmg9JY2USdChqlR+dD0NfWPzEWV1hgt2o7X9OhB2B5sOrnsaJrkBDkbwa7yC4Y3E8AEV8KekQrNLOynoKbh7cZHs4bPKBKULnhAKzy22XoHYMw9G5vsXlMx+jLpyUhwrzAgMBAAE=&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;gameMetaURL&quot;</span>: <span style="color: #BA2121">&quot;http://games.ggp.org/base/games/connectFour/v0/&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;matchId&quot;</span>: <span style="color: #BA2121">&quot;apollo.connectFour.1341162953311&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;startClock&quot;</span>: <span style="color: #666666">120</span>,
+    <span style="color: #008000; font-weight: bold">&quot;matchHostSignature&quot;</span>: <span style="color: #BA2121">&quot;A0LKQoyYg3nBqZDTW5dMTRyHgOetSLZz3OdIs9p4t8agw1UZJnCP83l3BU2KDy37Hd6REAbZPAMsyp8CbBVHJdShw2ayBMPkCTMtDySspAMlb/Jg5pbI/qHarOnKYE7umtrDKBnyMM7KDO1w9tH7CeABB40T3V3gHQ1klb+w0vaf3VscGLm139GTaGezfssCMQnmbzQbv23a9UVX1RYxvNXLAd52LCgdZgZLYueoRJu8jSCa95YhbI1RMC5aiTSCdCWiSZZ/Cvt0S3F+AAaKXxf0ypmIN1zXn/uwdTFb/Y7H1GFW/Rbhw/TelmMvyLjnLMFCf58tQCL1FdgqKmXTCgNCtqrOWtgkWzuZbk5Fxb/UNXZIndE8ww0UAS3e+Ovd22FBJhlftIk8EUfd0Jo5Krz0yTPfoe8JhtcvmXePRQGqP4EgFpIjB38VGM+L7uOCzDq98/MW1pQr+RWEIrpPnnCdRrCKCdFfB5ppygYHGvJcQAANGnSqnbdtAtamaeoMza&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;errors&quot;</span>: [
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;TO&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;TO&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;TO&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;&quot;</span>,
+        <span style="color: #BA2121">&quot;&quot;</span>
+      ]
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;randomToken&quot;</span>: <span style="color: #BA2121">&quot;7G2rqfgZJrUTiNxNAEGNgYyjeJtEr2Fn&quot;</span>,
+    <span style="color: #008000; font-weight: bold">&quot;playerNamesFromHost&quot;</span>: [
+      <span style="color: #BA2121">&quot;GreenShell&quot;</span>,
+      <span style="color: #BA2121">&quot;Testplayer_1&quot;</span>
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;moves&quot;</span>: [
+      [
+        <span style="color: #BA2121">&quot;( drop 5 )&quot;</span>,
+        <span style="color: #BA2121">&quot;noop&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;noop&quot;</span>,
+        <span style="color: #BA2121">&quot;( drop 8 )&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;( drop 4 )&quot;</span>,
+        <span style="color: #BA2121">&quot;noop&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;noop&quot;</span>,
+        <span style="color: #BA2121">&quot;( drop 8 )&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;( drop 6 )&quot;</span>,
+        <span style="color: #BA2121">&quot;noop&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;noop&quot;</span>,
+        <span style="color: #BA2121">&quot;( drop 8 )&quot;</span>
+      ],
+      [
+        <span style="color: #BA2121">&quot;( drop 7 )&quot;</span>,
+        <span style="color: #BA2121">&quot;noop&quot;</span>
+      ]
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;states&quot;</span>: [
+      <span style="color: #BA2121">&quot;( ( control red ) )&quot;</span>,
+      <span style="color: #BA2121">&quot;( ( cell 5 1 red ) ( control black ) )&quot;</span>,
+      <span style="color: #BA2121">&quot;( ( control red ) ( cell 5 1 red ) ( cell 8 1 black ) )&quot;</span>,
+      <span style="color: #BA2121">&quot;( ( cell 5 1 red ) ( control black ) ( cell 8 1 black ) ( cell 4 1 red ) )&quot;</span>,
+      <span style="color: #BA2121">&quot;( ( control red ) ( cell 5 1 red ) ( cell 8 2 black ) ( cell 8 1 black ) ( cell 4 1 red ) )&quot;</span>,
+      <span style="color: #BA2121">&quot;( ( cell 5 1 red ) ( cell 6 1 red ) ( cell 8 2 black ) ( control black ) ( cell 8 1 black ) ( cell 4 1 red ) )&quot;</span>,
+      <span style="color: #BA2121">&quot;( ( control red ) ( cell 8 3 black ) ( cell 5 1 red ) ( cell 6 1 red ) ( cell 8 2 black ) ( cell 8 1 black ) ( cell 4 1 red ) )&quot;</span>,
+      <span style="color: #BA2121">&quot;( ( cell 8 3 black ) ( cell 5 1 red ) ( cell 7 1 red ) ( cell 6 1 red ) ( cell 8 2 black ) ( control black ) ( cell 8 1 black ) ( cell 4 1 red ) )&quot;</span>
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;goalValues&quot;</span>: [
+      <span style="color: #666666">100</span>,
+      <span style="color: #666666">0</span>
+    ],
+    <span style="color: #008000; font-weight: bold">&quot;startTime&quot;</span>: <span style="color: #666666">1341162756463</span>,
+    <span style="color: #008000; font-weight: bold">&quot;playClock&quot;</span>: <span style="color: #666666">20</span>,
+    <span style="color: #008000; font-weight: bold">&quot;stateTimes&quot;</span>: [
+      <span style="color: #666666">1341162756464</span>,
+      <span style="color: #666666">1341162897063</span>,
+      <span style="color: #666666">1341162918375</span>,
+      <span style="color: #666666">1341162939751</span>,
+      <span style="color: #666666">1341162961055</span>,
+      <span style="color: #666666">1341162981318</span>,
+      <span style="color: #666666">1341163002145</span>,
+      <span style="color: #666666">1341163022409</span>
+    ]
+  },
+  <span style="color: #008000; font-weight: bold">&quot;url&quot;</span>: <span style="color: #BA2121">&quot;http://matches.ggp.org/matches/0be6c2c7e834683f232d24182d137cddd4ffef93/&quot;</span>
+}
+</pre></div>    
+
+    <p>This match was completed successfully after seven moves. It was playing
+       Connect Four. One of the players timed out on the 3rd, 4th, and 5th moves.
+       The players were named "GreenShell" and "Testplayer_1". GreenShell was the
+       first player, had no errors, and won. The match started on "1341162756463",
+       which is a number of milliseconds since the epoch. To decode that, you can
+       use the Javascript console in your favorite web browser:</p>
+       
+<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #666666">&gt;</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #008000">Date</span>(<span style="color: #666666">1341162756463</span>)
+Sun Jul <span style="color: #666666">01</span> <span style="color: #666666">2012</span> <span style="color: #666666">10:12:36</span> GMT<span style="color: #666666">-0700</span> (PDT)
+</pre></div>
+
+    <p>What else? The match had a start clock of 120 seconds, and a play clock of
+       20 seconds. If you look at the "stateTimes" array, which shows when each state
+       was actually recorded (again, in milliseconds since the epoch), you'll notice
+       that they're roughly -- but not exactly -- 20 seconds apart. This makes sense,
+       because the timing in the match host isn't perfect; it's aiming for 20 seconds
+       between moves, but it's not a hard real-time system, and network latencies are
+       involved, so the actual figure varies from the desired "playClock" slightly.</p>
+       
+    <p>Most matches contain large opaque blobs called "matchHostPK" and "matchHostSignature".
+       These allow you to verify the authenticity of the match data. Each match hosting system
+       has a public key that identifies it. When it hosts a match, it can sign the match data
+       using the corresponding secret key, and the public key can be used to validate the signed
+       match data. All of the matches with the same "matchHostPK" came from the same match hosting
+       system (e.g. Tiltyard, Dresden, Stanford, etc).</p>
+
+    <p>Thus concludes our initial inspection of the historical match archives!</p>
+      
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), "for <a href='//www.ggp.org/researchers'>Researchers</a>", "");
+    </script>
+  </body>
+</html>
