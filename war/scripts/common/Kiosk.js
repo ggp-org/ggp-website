@@ -299,6 +299,14 @@ var Kiosk = {
   
   waitingForProcessResponse: false,
 
+  symbolizeMoves: function (arr) {
+	  var arr2 = [];
+	  for (var i = 0; i < arr.length; i++) {
+		  arr2.push(SymbolList.arrayIntoSymbolList(arr[i]));
+	  }
+	  return arr2;
+  },
+  
   processResponsesForMatch: function () {
     this.waitingForProcessResponse = false;
     if (this.matchData.isCompleted) return;
@@ -327,8 +335,8 @@ var Kiosk = {
           jointErrors.push("CE");
         }
       }
-      // Advance to the next state
-      this.matchData.moves.push(jointMove);
+      // Advance to the next state      
+      this.matchData.moves.push(this.symbolizeMoves(jointMove));
       this.matchData.errors.push(jointErrors);
       this.updateState(this.machine.get_next_state(this.state, jointMove));
       this.spectator.publish(this.matchData);
