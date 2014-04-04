@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script async type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <title>GGP.org - for Developers</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <h1>Developing Players: the GDL Class Hierarchy</h1>
+        
+    <p>GGP Base processes game rules in the following way: after being read from the
+    rulesheet file, the rules of a game are represented as a collection of Gdl objects.
+    Everything that follows (building a state machine, determining roles, analyzing the
+    game) uses this collection of Gdl objects as the authoritative rules of the game.</p>
+    
+    <p>These diagrams show the relationship between the Gdl classes in GGP Base.</p>
+    
+    <img src="GdlClasses1.png"></img>
+    
+    <img src="GdlClasses2.png"></img>
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), "for Developers", "");
+    </script>
+  </body>
+</html>
