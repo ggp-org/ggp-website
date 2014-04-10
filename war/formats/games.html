@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script async type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <title>GGP.org - Data Formats</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <h1>GGP.org Game Packaging Format</h1>
+
+    <center><i>"If you want to make something old-fashioned, why not build a wooden sailing boat, or a steam engine? They're just as complicated and demanding as a mechanistic game, and you'll keep fit at the same time." (Iain Banks)</i></center>
+
+    <p>All of the game in GGP are based on GDL. But in many cases, we are interested in more
+       than just the GDL rules of the game. We might also want a human readable name and
+       description of the game, or a way to visualize an ongoing match, or an easy way for
+       a human to select moves. We might want metadata that allows us to quickly identify
+       two player games when showing choices on a website. We might want to know whether
+       we're using the latest version of the game, or if there are bug fixes available.
+       And so on.</p>
+
+    <p>For handling all of these cases, GGP.org games are packaged in a format that combines
+       GDL rules, metadata, and other resources like stylesheets, together in a useful way.
+       Once we've found the game metadata, we can discover what resources are available, and
+       load the ones we need.</p>
+
+    <p>The first thing you'll encounter is the game metadata. This metadata is stored in a
+       JSON object that contains facts about the game and links to resources. Some resources
+       are required, like a game rulesheet. Other resources are optional, like a stylesheet
+       or a human-readable description of the game rules.</p>
+
+    <p>The following table describes the resources fields allowed in the game metadata JSON object.</p>
+    
+    <table class="wikitable"><tbody><tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>rulesheet</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> <strong>REQUIRED</strong> </td><td style="border: 1px solid #ccc; padding: 5px;"> The resource containing the GDL description of the game. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>stylesheet</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> <strong>OPTIONAL</strong> </td><td style="border: 1px solid #ccc; padding: 5px;"> The resource containing an XSLT stylesheet for visualizing game states. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>user_interface</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> <strong>OPTIONAL</strong> </td><td style="border: 1px solid #ccc; padding: 5px;"> The resource containing a JS library that lets users interact with the game. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>description</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> <strong>OPTIONAL</strong> </td><td style="border: 1px solid #ccc; padding: 5px;"> The resource containing a human-readable text block that describes the rules of the game. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>icon</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> <strong>OPTIONAL</strong> </td><td style="border: 1px solid #ccc; padding: 5px;"> The resource containing a small image that represents the game. </td></tr> </tbody></table>
+    
+    <p>The game metadata JSON object can also contain facts about the game. The following table
+       describes the facts that can be contained in the game metadata JSON object.</p>
+       
+    <table class="wikitable"><tbody><tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>gameName</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> <strong>OPTIONAL</strong> </td><td style="border: 1px solid #ccc; padding: 5px;"> String </td><td style="border: 1px solid #ccc; padding: 5px;"> The full human-readable name of the game. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>numRoles</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> <strong>OPTIONAL</strong> </td><td style="border: 1px solid #ccc; padding: 5px;"> Number </td><td style="border: 1px solid #ccc; padding: 5px;"> The number of available roles for players in the game. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>version</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> <strong>REQUIRED</strong> </td><td style="border: 1px solid #ccc; padding: 5px;"> Number </td><td style="border: 1px solid #ccc; padding: 5px;"> A non-negative integer that indicates the version number of the game resources being displayed. </td></tr> </tbody></table>
+
+    <p>Game metadata objects may have additional fields that are not defined here, but such
+       fields must be prefixes with "x-". This ensure that they don't collide with future
+       official fields.</p>
+
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), " Data Formats", "");
+    </script>
+  </body>
+</html>
