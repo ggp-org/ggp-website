@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script async type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <script text="text/javascript" src="//www.ggp.org/scripts/common/ResourceLoader.js"></script>    
+    <title>GGP.org - for Researchers</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <br>
+    <p>So, we've <a href="//www.ggp.org/researchers/analysis_agonRating.html">computed player ratings</a>
+       by processing match archives using a Python script. That's great, but for many developers coming from
+       using GGP Base and building players in Java, it raises the question: can we do similar match processing
+       using the tools we're already comfortable with, in GGP Base?</p>
+       
+    <p>The answer is yes. The org.ggp.base.apps.research package contains an example program that reads
+       a serialized match archive and processes each individual match. The example program that's included
+       with GGP Base aggregates several useful statistics during this processing, that can be used to answer
+       interesting questions about the matches in the archive.</p>
+    
+    <p>Let's start with something easy: how long does the average nine-board tic-tac-toe match last? To compute
+       this, we introduce a WeightedAverage object to track the average length of the matches, and as we process
+       each match, for the completed nine-board tic-tac-toe matches, we extract the length and add it as a data
+       point in the weighted average. At the end of the processing, we display the WeightedAverage object. Done!</p>
+       
+    <p>Next, let's look at the frequency that games are played. For each match in the archive, the sample program
+       adds a data point to a histogram that tracks how frequently each game is played. After all of the matches
+       are processed, it sorts the histogram and prints it out. This makes it easy to see which games are played
+       most frequently and which are played least frequently.</p>
+       
+    <p>That's cool, but what if we have a very specific question? Let's say we're interested in finding out whether
+       there are any games that tend to be won by the second player, rather than the first. To do this, we can find
+       out for each match, whether the second player won, and then aggregate an average of those scores broken down
+       by game. This is done using the "FrequencyTable" class, which is essentially a table that maps keys (in this
+       case, game URLs) to weighted averages (in this case, frequencies that the second player wins). And again, after
+       processing all of the matches, we can sort them by frequency and print out a list that shows, for each game,
+       the frequency that the second player wins. Intriguingly, games like "endgame" top the list, even though "endgame"
+       is a chess puzzle in which the first player (white) has a king and a rook and the second player (black) has only
+       a king: while in theory white has a win, black will win if white isn't able to achieve checkmate in 15 moves, and
+       so in practice the game is frequently won by black.</p>
+       
+    <p>Thus, using the tools available in GGP Base, you can perform sophisticated processing of the match archives
+       to answer interesting questions, using all of the Java tools that you're already familiar with.</p>
+      
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), "for <a href='//www.ggp.org/researchers'>Researchers</a>", "");
+    </script>
+  </body>
+</html>
