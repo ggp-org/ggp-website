@@ -83,6 +83,14 @@ var SpectatorView = {
     });
   },
   
+  getErrorExplanation: function (err) {
+	  err = err.substring(0,2);
+	  if (err == "IL") return "Illegal move: player responded with a move that wasn't legal.";
+	  if (err == "TO") return "Timeout: player didn't respond in a timely fashion.";
+	  if (err == "CE") return "Connection error: network connection to player was lost.";
+	  return "";
+  },
+  
   renderTextPage: function () {
     if (!("moves" in this.matchData) || this.matchData.moves.length == 0) {
       this.textDiv.innerHTML = "";
@@ -109,7 +117,7 @@ var SpectatorView = {
         }
         for (var j = 0; j < roleCols; j++) {
           if (("errors" in this.matchData) && (this.matchData.errors.length > i)) {
-            textHTML += "<td>" + this.matchData.errors[i][j] + "</td>";
+            textHTML += "<td><span title=\"" + this.getErrorExplanation(this.matchData.errors[i][j]) + "\">" + this.matchData.errors[i][j] + "</span></td>";
           } else {
             textHTML += "<td>???</td>";
           }
