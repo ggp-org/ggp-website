@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script async type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <title>GGP.org - Services</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <h1>GGP.org Games Service</h1>
+
+    <center><i>"Finishing games has been something I'm really proud of, seeing something through to the end." (Felicia Day)</i></center>
+
+    <p>GGP.org provides a service that developers can use to programmatically discover and
+       download game resources. All of the game resources are structured using the ordinary
+       <a href="//www.ggp.org/formats/games.html">game packaging format</a>.</p>
+       
+    <p>Games are collected into <u>game repositories</u>. Each game repository has a specific
+       URL prefix. After that URL prefix it must have the following directory structure:</p>
+
+    <table class="wikitable"><tbody><tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> Undefined: may have any content or be inaccessible. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> A listing of available games, as a JSON array. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/X/</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> Game metadata, as a JSON map, for game X. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/X/Y</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> A resource Y listed in the above metadata file. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/X/vN/</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> Game metadata for game X version N. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/X/vN/Y</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> A resource Y listed in the above metadata file. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/A/B/C</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> A resource in the repository, referenced by another resource; can have any path. </td></tr> </tbody></table>
+
+    <p>Game repositories provide a listing of all of their available games at <tt>/games/</tt> as a
+       JSON list. For every entry <tt>X</tt> in this list, there is a metadata file provided at <tt>/games/X/</tt>
+       as a JSON map, as described by the game packaging format. The other files referenced by
+       the metadata file must also be in that directory. For example, if the metadata file refers
+       to resource <tt>Y</tt>, that resource will be found in <tt>/games/X/Y</tt>.</p>
+       
+    <p>Requesting a game resource without including a version number in the URL will return the latest
+       version of that resource. Metadata files include the version number, so you can determine the
+       current version of a game from them. Old versions of games will continue to be available indefinitely
+       so that recorded matches which refer to them will continue to be intelligible. Games will increment
+       their version numbers whenever they are changed in a way that would otherwise render older matches
+       unintelligible: for example, tweaks to the visualization do not require a version number increase,
+       but changes to the game rules that alter the structure of the game do.</p>
+       
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), " Services", "");
+    </script>
+  </body>
+</html>

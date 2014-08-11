@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/viewer/bellerophon.css" />
+    <script async type='text/javascript' src='//www.ggp.org/scripts/Analytics.js'></script>
+    <script type="text/javascript" src="/viewer/bellerophonHeader.js"></script>
+    <title>GGP.org - Services</title>
+    <style>
+div.content h2 {
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #aaa;
+  text-align: justify;
+}
+div.content {
+  font-size: 20px;
+}
+div.content p {
+  text-indent: 2em;
+}
+div.content {
+  margin: 15%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div class="header" id="header"></div>
+    <div class="content">
+    <h1>GGP.org Matches Service</h1>
+
+    <center><i>"This box of matches contains a secret life much more intense than that of certain human beings." (Joan Miro)</i></center>
+
+    <p>GGP.org provides a service that developers can use to programmatically publish, discover,
+       and download match data. All of the match data that goes through this service is structured
+       using the ordinary <a href="//www.ggp.org/formats/matches.html">match data format</a>.</p>
+
+    <p>Publishing is done by sending a POST request to matches.ggp.org with an AUTH field and a DATA field.
+    The AUTH field is used as a token that authorizes the bearer to publish updates to this match. The DATA
+    field should contain JSON match data, in the format described above. The response from the service
+    will contain the key under which the newly-published match is available.</p>
+    
+    <p>Every match is given a key K, and can be found at http://matches.ggp.org/K/. For any given match,
+    live updates can be received by subscribing to the syndicated feed at http://matches.ggp.org/K/feed.atom,
+    which is PuSH-enabled (PubSubHubBub).</p>
+    
+    <p>There are also two global feeds: one which contains all match updates, and one which only contains
+    match completions. Systems can subscribe to these feeds to get live updates about all ongoing or completed
+    matches as they happen. These can be found here:</p>
+    <ul>      
+      <li><a href="http://matches.ggp.org/matches/feeds/updatedFeed.atom">Match Updates</a></li>
+      <li><a href="http://matches.ggp.org/matches/feeds/completedFeed.atom">Match Completions</a></li>
+    </ul>
+    
+    <p>Not enough? Download historical match archives in bulk <a href="//www.ggp.org/researchers">here</a>.</p>
+       
+    </div>
+    <script>
+      generateHeader(document.getElementById('header'), " Services", "");
+    </script>
+  </body>
+</html>
