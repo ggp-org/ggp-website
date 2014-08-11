@@ -46,23 +46,25 @@ div.content {
        like communicating with players, parsing GDL rules, representing the game as a
        state machine, determining which moves are legal, and so on.       
     
-    <p>GGP Base also includes built-in support for publishing to the GGP.org matches service,
+    <p>GGP Base also includes built-in support for publishing to GGP.org match services,
        so that everyone involved can view the match online as it happens, and so researchers can
        include it when doing bulk analyses of the historical match archives.</p>    
        
-    <h2>Publishing via the GGP.org Matches Service</h2>
+    <h2>Publishing via GGP.org Match Services</h2>
     
-    <p>The <a href="//www.ggp.org/services/matches.html">GGP.org Matches Service</a> lets you easily
-       publish matches to GGP.org, making it possible to watch them live in the GGP.org viewer, and
-       adding them to the historical match archives. If you're using GGP Base, it includes built-in
-       support for publishing matches to GGP.org; otherwise, you can use an HTTP POST request to directly
+    <p><a href="//www.ggp.org/services/matches.html">GGP.org Match Services</a> lets you easily
+       publish matches to GGP.org, so they can be watched live in the GGP.org viewer and included
+       in historical match archives. If you're using GGP Base, it includes built-in support for
+       publishing matches to GGP.org; otherwise, you can use an HTTP POST request to directly
        send matches to GGP.org for publishing.</p>
        
-    <p>Furthermore, if you sign all of your matches using a unique cryptographic key, GGP.org will be able
-       to identify that they all came from the same hosting system, and will compute statistics for the players
-       on your server, display a timeline of the most recently played matches, and do many other useful things.
-       To see this in effect for a match hosting system that's not based on GGP Base, look at the GGP.org viewer
-       pages for the <a href="//www.ggp.org/view/dresden/matches/">Dresden GGP Server</a>.</p>
+    <p>Furthermore, if you sign all of your matches using a cryptographic key that's unique to your
+       match host, GGP.org match services will recognize that they all came from the same hosting
+       system, and do several useful things, including computing statistics for the players on your
+       server, displaying a timeline of the most recently played matches, determining the relative
+       difficulties of the games being played, etc. To see this in effect for a match hosting system
+       that's not based on GGP Base, look at the GGP.org viewer pages for the
+       <a href="//www.ggp.org/view/dresden/matches/">Dresden GGP Server</a>.</p>
        
     <p>This is the same service that Tiltyard uses to publish matches!</a>
     

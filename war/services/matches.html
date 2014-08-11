@@ -28,22 +28,22 @@ div.content {
   <body>
     <div class="header" id="header"></div>
     <div class="content">
-    <h1>GGP.org Matches Service</h1>
+    <h1>GGP.org Match Services</h1>
 
     <center><i>"This box of matches contains a secret life much more intense than that of certain human beings." (Joan Miro)</i></center>
 
-    <p>GGP.org provides a service that developers can use to programmatically publish, discover,
-       and download match data. All of the match data that goes through this service is structured
-       using the ordinary <a href="//www.ggp.org/formats/matches.html">match data format</a>.</p>
+    <p>GGP.org match services are a collection of HTTP-based APIs that developers can use to publish,
+       discover, and download match data for their applications. All of the match data that goes through
+       these services is structured the same way, using a <a href="//www.ggp.org/formats/matches.html">standard format</a>.</p>
 
     <p>Publishing is done by sending a POST request to matches.ggp.org with an AUTH field and a DATA field.
     The AUTH field is used as a token that authorizes the bearer to publish updates to this match. The DATA
     field should contain JSON match data, in the format described above. The response from the service
     will contain the key under which the newly-published match is available.</p>
     
-    <p>Every match is given a key K, and can be found at http://matches.ggp.org/K/. For any given match,
-    live updates can be received by subscribing to the syndicated feed at http://matches.ggp.org/K/feed.atom,
-    which is PuSH-enabled (PubSubHubBub).</p>
+    <p>Every match is given a key <i>K</i>, and can be found at matches.ggp.org/<i>K</i>/. For any given match,
+    live updates can be received by subscribing to matches.ggp.org/<i>K</i>/feed.atom,
+    which is a <a href="//code.google.com/p/pubsubhubbub/">PuSH</a>-enabled Atom feed.</p>
     
     <p>There are also two global feeds: one which contains all match updates, and one which only contains
     match completions. Systems can subscribe to these feeds to get live updates about all ongoing or completed

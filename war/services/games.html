@@ -28,16 +28,49 @@ div.content {
   <body>
     <div class="header" id="header"></div>
     <div class="content">
-    <h1>GGP.org Games Service</h1>
+    <h1>GGP.org Game Services</h1>
 
     <center><i>"Finishing games has been something I'm really proud of, seeing something through to the end." (Felicia Day)</i></center>
 
-    <p>GGP.org provides a service that developers can use to programmatically discover and
-       download game resources. All of the game resources are structured using the ordinary
-       <a href="//www.ggp.org/formats/games.html">game packaging format</a>.</p>
+    <p>GGP.org game services are a collection of HTTP-based APIs that developers can use to discover
+       games and download game resources for their applications.</p>
        
-    <p>Games are collected into <u>game repositories</u>. Each game repository has a specific
-       URL prefix. After that URL prefix it must have the following directory structure:</p>
+    <p>First, let's introduce the concept of a game repository. A game repository is a server that
+       hosts a collection of games. Each game repository has its own URL. Given the URL for a game
+       repository, you can discover the list of games available in that repository, and then access
+       the individual games. All of the games are packaged in the same way, using a <a href="//www.ggp.org/formats/games.html">standard format</a>.
+    
+    <p>GGP.org hosts several game repositories:</p>
+    <ul>
+      <li><b><a href="//games.ggp.org/base/">base</a></b> - This is the main game repository for GGP.org and Tiltyard.</li>
+      <li><b><a href="//games.ggp.org/dresden/">dresden</a></b> - This repository contains games imported from the Dresden GGP Server.</li>
+      <li><b><a href="//games.ggp.org/stanford/">stanford</a></b> - This repository contains games imported from the Stanford Gamemaster.</li>
+    </ul>
+    
+    <p>So, given the URL for a game repository, how can you discover what games are available?</p>
+    
+    <p>Easy: go to the "/games/" page on the game repository you're interested in. This will list
+       all of the available games in that repository as a JSON list. For example, if you look at
+       <a href="http://games.ggp.org/base/games/">http://games.ggp.org/base/games/</a>, you'll find
+       a list that looks like this:</p>
+       
+    <tt>["maze", "snake_2008_tweaked", "amazons", ...</tt>
+    
+    <p>Okay! So let's say we'd like to get more information about the game "maze". Well, simply add that
+       name onto the end of the previous URL, and look at <a href="http://games.ggp.org/base/games/maze/">http://games.ggp.org/base/games/maze/</a>,
+       where you will find:</p>
+       
+    <tt>{"numRoles":1, "stylesheet":"maze.xsl", "rulesheet":"maze.kif", "gameName":"Maze", "roleNames":["robot"], "version":0}</tt>
+    
+    <p>This is the metadata about the game "maze": the name, the number of roles, and links to several important resource
+       files for the game. The resources can include the game rulesheet, a visualization, a human-readable description of
+       the game rules, a javascript-based user interface, and more. Let's say we want to look at the game rulesheet, because
+       we'd like to run a match. To do that, we just look at the "rulesheet" entry in the JSON metadata above, and add that
+       value to the end of our URL, yielding <a href="http://games.ggp.org/base/games/maze/maze.kif">http://games.ggp.org/base/games/maze/maze.kif</a>;
+       and indeed, loading that page gives us the rulesheet for that game. 
+
+    <p>Looking for a more formal specification for how game repositories work? Well, here you go.
+       After the URL prefix, each game repository has a specific directory structure:</p>
 
     <table class="wikitable"><tbody><tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> Undefined: may have any content or be inaccessible. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> A listing of available games, as a JSON array. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/X/</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> Game metadata, as a JSON map, for game X. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/X/Y</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> A resource Y listed in the above metadata file. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/X/vN/</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> Game metadata for game X version N. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/games/X/vN/Y</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> A resource Y listed in the above metadata file. </td></tr> <tr><td style="border: 1px solid #ccc; padding: 5px;"> <tt>/A/B/C</tt> </td><td style="border: 1px solid #ccc; padding: 5px;"> A resource in the repository, referenced by another resource; can have any path. </td></tr> </tbody></table>
 
