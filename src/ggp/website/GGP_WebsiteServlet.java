@@ -50,6 +50,7 @@ public class GGP_WebsiteServlet extends CachedStaticServlet {
         while( (line = br.readLine()) != null ) {
             response += line + "\n";
         }
+        br.close();
         
         return response;
     }
