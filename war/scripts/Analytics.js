@@ -11,8 +11,10 @@ _gaq.push(['_trackPageview']);
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 
+/*
 (function() {
   var gcs = document.createElement('script'); gcs.type = 'text/javascript'; gcs.async = true;
   gcs.src = '//survey.g.doubleclick.net/async_survey?site=rvcmi2ytg6h2djkz2wujenyrae';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcs, s);
 })();
+*/
