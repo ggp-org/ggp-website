@@ -1,0 +1,46 @@
+<link rel="import" href="/components/polymer/polymer.html">
+<link rel="import" href="match-service.html">
+<link rel="import" href="match-card.html">
+
+<polymer-element name="match-list" attributes="show">
+  <template>
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+    match-card {
+      margin-bottom: 30px;
+    }
+    </style>
+ 
+<match-service id="service" matches="{{matches}}">
+</match-service>
+
+<div layout vertical center>
+
+  <template repeat="{{match in matches}}">
+    <match-card favorite="{{match.favorite}}"
+      on-favorite-tap="{{handleFavorite}}"
+      hidden?="{{show == 'favorites' && !match.favorite}}">
+      <!-- <img src="//www.ggp.org/" width="70" height="70"> -->
+      <h2>{{match.gameMetaURL}}</h2>
+      <p>{{match.playerNamesFromHost}}</p>
+    </match-card>
+  </template>
+  
+</div>
+    
+  </template>
+
+  <script>
+Polymer({
+  handleFavorite: function(event, detail, sender) {
+    var match = sender.templateInstance.model.match;
+    console.log('foo');
+    //this.$.service.setFavorite(match.matchId, match.favorite);
+  }
+});
+  </script>
+
+</polymer-element>
