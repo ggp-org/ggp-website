@@ -74,9 +74,9 @@ function getPlayerImageURL(playerName, fullSize) {
 		}
 	} else {
 		if (fullSize) {
-			return 'http://placekitten.com/150/150';
+			return 'http://placekitten.com/g/150/150';
 		} else {
-			return 'http://placekitten.com/25/25';
+			return 'http://placekitten.com/g/25/25';
 		}
 	}
 }
