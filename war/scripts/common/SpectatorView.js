@@ -81,6 +81,11 @@ var SpectatorView = {
         thisRef.render();
       }
     });
+
+    if ("update" in this.callbacks)
+    {
+      this.callbacks.update();
+    }
   },
   
   getErrorExplanation: function (err) {
