@@ -81,11 +81,6 @@ var SpectatorView = {
         thisRef.render();
       }
     });
-
-    if ("update" in this.callbacks)
-    {
-      this.callbacks.update();
-    }
   },
   
   getErrorExplanation: function (err) {
@@ -267,11 +262,19 @@ var SpectatorView = {
         if (thisRef.visibleStateIndex > 0) {
           thisRef.visibleStateIndex--;
         }
+        if ("update" in thisRef.callbacks) {
+          // For clients that need to track updates to the visible state
+          thisRef.callbacks.update();
+        }        
       }
       if (key == 39) {
         if (thisRef.visibleStateIndex < thisRef.matchData.states.length-1) {
           thisRef.visibleStateIndex++;
         }
+        if ("update" in thisRef.callbacks) {
+          // For clients that need to track updates to the visible state        	
+          thisRef.callbacks.update();
+        }        
       }
       
       if (key == 65) {
