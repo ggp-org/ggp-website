@@ -83,8 +83,9 @@
         sidePanelHTML += '</table><br>';
         
         var nSteps = spectatorMatch.moves.length;
+        var nViewingStep = spectatorView.visibleStateIndex;
         if (spectatorMatch.isCompleted) {
-          sidePanelHTML += '<b>Match done!</b> (in ' + nSteps + ' steps)';
+          sidePanelHTML += '<b>Match done!</b> (in ' + nSteps + ' steps).  Viewing step ' + nViewingStep + '.';
         } else if (spectatorMatch.isAborted) {
           sidePanelHTML += '<b>Match aborted.</b> (after ' + nSteps + ' steps)';
         } else {
