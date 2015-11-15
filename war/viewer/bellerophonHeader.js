@@ -15,6 +15,12 @@ function getHostFromView() {
     return theHost;
 }
 
+function getTournamentFromView() {
+	if (window.location.hash) {
+		return window.location.hash.substr(1);
+	}
+}
+
 function generateHeaderForViewer(theDiv) {
 	var theHost = getHostFromView();
 	var thePageTitle = '<a href="/view/' + theHost + '/">' + UserInterface.toTitle(theHost) + '</a>';
@@ -407,4 +413,12 @@ function getHostFromHashedPK(hostPK) {
     if (hostPK == "52bd861857f677a2432837fcf2f7d73a4e6b30d7") return "cs227b";
     if (hostPK == "61fd02210648144d820f57ff06689939159dd2e9") return "cs227b_0";
     return hostPK;
+}
+
+function getTournamentName() {
+	var tournamentID = getTournamentFromView();
+	if (tournamentID == "tiltyard_continuous") return "Tiltyard Continuous Matches";
+	if (tournamentID == "tiltyard_requests") return "Tiltyard Requested Matches";
+	if (tournamentID == "tiltyard_open_20151204") return "2015-12-04 Tiltyard Open";
+	return tournamentID;
 }

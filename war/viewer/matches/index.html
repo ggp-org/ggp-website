@@ -24,12 +24,21 @@
       generateHeaderForViewer(document.getElementById('header'));
 
       function updateMatchList() {
-        renderMatchEntryBox(document.getElementById('recentMatchesInfo'),
-                            'filter,recent,'+getHostHashedPK(),
-                            'filterActiveSet,recent,'+getHostHashedPK(),
-                            'Listing of the most recently played matches:',
-                            "No recent matches found.",
-                            null);
+        if (getTournamentFromView()) {
+          renderMatchEntryBox(document.getElementById('recentMatchesInfo'),
+                              'filterTournament,recent,'+getHostHashedPK()+','+getTournamentFromView(),
+                              'filterActiveSet,recent,'+getHostHashedPK(),
+                              'Listing of the most recently played matches<br>in the "' + getTournamentName() + '" tournament:',
+                              "No recent matches found.",
+                              null);        
+        } else {
+          renderMatchEntryBox(document.getElementById('recentMatchesInfo'),
+                              'filter,recent,'+getHostHashedPK(),
+                              'filterActiveSet,recent,'+getHostHashedPK(),
+                              'Listing of the most recently played matches:',
+                              "No recent matches found.",
+                              null);
+        }
       }
       updateMatchList();
       
