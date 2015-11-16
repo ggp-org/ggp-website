@@ -418,7 +418,7 @@ function getHostFromHashedPK(hostPK) {
 function getTournamentName() {
 	var tournamentID = getTournamentFromView();
 	if (tournamentID == "tiltyard_continuous") return "Tiltyard Continuous Matches";
-	if (tournamentID == "tiltyard_requests") return "Tiltyard Requested Matches";
+	if (tournamentID == "tiltyard_requested") return "Tiltyard Requested Matches";
 	if (tournamentID == "tiltyard_open_20151204") return "2015-12-04 Tiltyard Open";
 	return tournamentID;
 }
