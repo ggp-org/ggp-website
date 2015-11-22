@@ -25,9 +25,16 @@
     </div>
         
     <center>
-    <table id="server_stats" border=1px bgcolor=#CCC cellpadding=5px>
-      <th class="top_th" colspan=2>Server Statistics</th>
-    </table>
+    <table><tr><td>
+	    <table id="server_stats" border=1px bgcolor=#CCC cellpadding=5px>
+	      <th class="top_th" colspan=2>Server Statistics</th>
+	    </table>
+	</td><td>
+	    <table id="tourney_list" border=1px bgcolor=#CCC cellpadding=5px>
+	      <th class="top_th" colspan=3>Tournament List</th>
+	      <tr><th>Tournament</th><th>Matches</th><th>Last Updated</th></tr>
+	    </table>	
+	</td></tr></table>
     </center>
     
     <script type='text/javascript'>
@@ -84,6 +91,25 @@
       );
       
       // ===========================
+      
+      if ("observedTournaments" in statsJSON) {
+        tourneysHTML = "";
+        tourneys = [];
+        for (var i in statsJSON.observedTournaments) {
+          var tourney = {};
+          tourney.key = statsJSON.observedTournaments[i];
+          tourney.matches = statsJSON.tournamentMatchesCompleted[tourney.key];
+          if (!tourney.matches) tourney.matches = 0;
+          tourney.lastUpdated = statsJSON.lastTournamentUpdate[tourney.key];
+          if (!tourney.lastUpdated) tourney.lastUpdated = 0;
+          tourneys.push(tourney);
+        }
+        tourneys.sort(function(x,y){return y.lastUpdated - x.lastUpdated;});
+        for (var i in tourneys) {
+          tourneysHTML += '<tr><td><a href="//www.ggp.org/view/' + getHostFromView() + '/matches/#' + tourneys[i].key + '">' + UserInterface.trimTo(tourneys[i].key,16) + '</a></td><td>' + tourneys[i].matches + '</td><td>' + UserInterface.renderDateTime(new Date(tourneys[i].lastUpdated)) + '</td></tr>';
+        }
+        document.getElementById('tourney_list').children[0].innerHTML += tourneysHTML;
+      }
       
       for(var x in statsJSON) {
         if (typeof(statsJSON[x]) == "object" && "length" in statsJSON[x] && statsJSON[x].length == 2) {
