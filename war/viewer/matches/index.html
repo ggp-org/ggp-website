@@ -18,6 +18,18 @@
     
     <div id='header' class='header'></div>
     <br>
+    <div id='tournamentPane' style="display:none">
+	    <div id='tournamentInfo'>
+	    <center><table style="border-style:double">
+	      <th id="tournament_name" colspan=2></th>
+	      <tr><td><b>Participants</b></td><td id="tournament_players"></td></tr>
+	      <tr><td><b>Standings</b></td><td id="tournament_standings"></td></tr>
+	      <tr><td><b>Has Begun?</b></td><td id="tournament_hasBegun"></td></tr>
+	      <tr><td><b>Has Finished?</b></td><td id="tournament_hasFinished"></td></tr>
+	    </table></center>
+	    </div>
+	    <br>
+	</div>
     <div id='recentMatchesInfo'></div>
 
     <script type='text/javascript'>
@@ -25,12 +37,32 @@
 
       function updateMatchList() {
         if (getTournamentFromView()) {
-          renderMatchEntryBox(document.getElementById('recentMatchesInfo'),
+           var tourneyName = getTournamentName();
+           if (getHostFromView() == "tiltyard") {
+             try {
+               var tourneyData = ResourceLoader.load_json('//tiltyard.ggp.org/data/tournaments/' + getTournamentFromView());
+               tourneyName = tourneyData.name;
+               var playersHTML = "";
+               for (var i in tourneyData.players) {
+                 playersHTML += '<a href="//www.ggp.org/view/' + getHostFromView() + '/players/' + tourneyData.players[i] + '">' + tourneyData.players[i] + '</a><br>';
+               }
+               document.getElementById('tournament_players').innerHTML = playersHTML;
+               document.getElementById('tournament_name').innerHTML = 'Tournament Information for ' + tourneyName;
+               document.getElementById('tournament_standings').innerHTML = tourneyData.standings;
+               document.getElementById('tournament_hasBegun').innerHTML = UserInterface.renderYesNo(tourneyData.hasBegun);
+               document.getElementById('tournament_hasFinished').innerHTML = UserInterface.renderYesNo(tourneyData.hasFinished);
+               document.getElementById('tournamentPane').style.display = "";
+             } catch(err) {
+               console.log("Could not retrieve tournament data from Tiltyard for " + getTournamentFromView() + ": " + err);
+             }             
+           }
+           renderMatchEntryBox(document.getElementById('recentMatchesInfo'),
                               'filterTournament,recent,'+getHostHashedPK()+','+getTournamentFromView(),
                               'filterActiveSet,recent,'+getHostHashedPK(),
-                              'Listing of the most recently played matches<br>in the "' + getTournamentName() + '" tournament:',
+                              'Listing of the most recently played matches<br>in the "' + tourneyName + '" tournament:',
                               "No recent matches found.",
-                              null);        
+                              null);
+           
         } else {
           renderMatchEntryBox(document.getElementById('recentMatchesInfo'),
                               'filter,recent,'+getHostHashedPK(),
