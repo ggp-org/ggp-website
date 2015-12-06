@@ -104,7 +104,7 @@ function renderMatchEntryBox(renderIntoDiv, matchQuery, ongoingQuery, topCaption
     
     function renderMatchesIntoDiv() {
 	    var theHTML = '<center><table class="matchlist">';
-	    theHTML += '<tr class="zebra"><th height=30px colspan=10>' + topCaption + '</th></tr>';
+	    theHTML += '<tr class="zebra"><th height=30px colspan=12>' + topCaption + '</th></tr>';
 	    if (theMatchEntries == null || theMatchEntries.length == 0) {
 	    	theHTML += "<td>" + emptyCaption + "</td>";
 	    } else {
@@ -243,9 +243,26 @@ function renderMatchEntry(theMatchJSON, theOngoingMatches, playerToHighlight) {
   theMatchHTML += '<td class="padded"><a href="/view/' + getHostFromView() + '/games/' + translateRepositoryIntoCodename(theMatchJSON.gameMetaURL) + '">' + UserInterface.trimTo(getGameName(theMatchJSON.gameMetaURL),20) + '</a></td>';
   theMatchHTML += '<td width=5></td>';
   
+  // Tournament badge.
+  if ("tournamentNameFromHost" in theMatchJSON) {
+	  var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);
+	  if (theHostName == "tiltyard" && theMatchJSON.tournamentNameFromHost == "tiltyard_continuous") {
+		  theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/matches/#' + theMatchJSON.tournamentNameFromHost + '"><core-icon icon="schedule" style="color:black;" title="Continuous play match"></core-icon></a></td>';
+	  } else if (theHostName == "tiltyard" && theMatchJSON.tournamentNameFromHost == "tiltyard_requested") {
+		  theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/matches/#' + theMatchJSON.tournamentNameFromHost + '"><core-icon icon="add-circle-outline" style="color:black;" title="Manually requested match"></core-icon></a></td>';
+	  } else if (theHostName == "dresden" && theMatchJSON.tournamentNameFromHost == "manual_matches") {
+		  theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/matches/#' + theMatchJSON.tournamentNameFromHost + '"><core-icon icon="add-circle-outline" style="color:black;" title="Manually requested match"></core-icon></a></td>';
+	  } else {
+		  theMatchHTML += '<td class="imageHolder"><a href="/view/' + theHostName + '/matches/#' + theMatchJSON.tournamentNameFromHost + '"><core-icon icon="group-work" style="color:black;" title="Tournament match"></core-icon></a></td>';
+	  }
+  } else {
+	  theMatchHTML += '<td></td>';
+  }
+  theMatchHTML += '<td width=5></td>';
+  
   // Signature badge.
   if ("hashedMatchHostPK" in theMatchJSON) {
-    var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);    
+    var theHostName = getHostFromHashedPK(theMatchJSON.hashedMatchHostPK);
     var theHostImage = "//www.ggp.org/viewer/images/hosts/Unknown.png";
     if (theHostName == "tiltyard") theHostImage = "//www.ggp.org/viewer/images/hosts/Tiltyard.png";
     if (theHostName == "dresden") theHostImage = "//www.ggp.org/viewer/images/hosts/Dresden.png";
